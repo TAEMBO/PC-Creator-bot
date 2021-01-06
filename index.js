@@ -9,6 +9,7 @@ client.on("ready", () => {
 	});
 });
 
+// command handler
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -16,23 +17,13 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
+// give access to #voice-chat-text to members when they join vc
 client.on('voiceStateUpdate', (oldState, newState) => {
-	const newUserChannel = newState.channelID;
-	const oldUserChannel = oldState.channelID;
-	const newMember = newState.member;
-	
-	const oldMember = oldState.member;
-	const textChannel = oldState.guild.channels.cache.get('572673322891083776');
-	// ^ These variables arent used?
-	
 	const memberRole = oldState.guild.roles.cache.get("747630391392731218");
-	
-	if (newUserChannel) {
-		console.log('newmember joined vc');
-		newMember.roles.add(memberRole);
-	} else if (oldUserChannel && !newUserChannel) {
-		console.log('newmember left vc');
-		newMember.roles.remove(memberRole);
+	if (newState.channelID) {
+		newState.member.roles.add(memberRole);
+	} else if (oldState.channelID && !newState.channelID) {
+		newState.member.roles.remove(memberRole);
 	}
 });
 
@@ -47,6 +38,7 @@ client.on("message", (message) => {
 			command.run(client, message, args);
 		} catch (error) {
 			console.log(`An error occured while running command "${command.name}"`, error, error.stack);
+			message.channel.send('An error occured while executing that command.');
 		}
 	}
 	
