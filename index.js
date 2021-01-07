@@ -41,10 +41,6 @@ client.on("message", (message) => {
 			message.channel.send('An error occured while executing that command.');
 		}
 	}
-	if (message.content.startsWith(prefix + "pcpp")) {
-		message.delete();
-		message.channel.send("US: <https://pcpartpicker.com/list/>\nUK: <https://uk.pcpartpicker.com/list/>\nCanada: <https://ca.pcpartpicker.com/list/>\nGermany: <https://de.pcpartpicker.com/list/>\n*Note: Countries not included in list: Australia, Belgium, Spain, France, India, Ireland, Italy, Netherlands, New Zealand and Sweden. Please select the appropriate location using the dropdown menu on the top right of the pcpartpicker webpage.")
-	}
 	if (message.content.startsWith(prefix + "b&")) {
 		message.delete();
 		message.channel.send("You received an honorary ban!")
