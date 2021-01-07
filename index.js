@@ -41,11 +41,6 @@ client.on("message", (message) => {
 			message.channel.send('An error occured while executing that command.');
 		}
 	}
-	
-	if (message.content.startsWith(prefix + "leave")) {
-		message.delete();
-		message.channel.send({files: ["https://cdn.discordapp.com/attachments/723158335985025124/785214690678538290/Leave_server_2020_11_08_17_40_41_UTC.mp4"]})
-	}
 	if (message.content.startsWith(prefix + "unded")) {
 		message.delete();
 		message.channel.send("https://tenor.com/view/the-dancing-dorito-i-revive-this-chat-dance-gif-14308244")
