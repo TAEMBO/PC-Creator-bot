@@ -41,14 +41,6 @@ client.on("message", (message) => {
 			message.channel.send('An error occured while executing that command.');
 		}
 	}
-	if (message.content.startsWith(prefix + "cable")) {
-		message.delete();
-		message.channel.send({files: ["https://cdn.discordapp.com/attachments/787590275110273035/789403313329405952/A511drhyO4AAAAASUVORK5CYII.png"]});
-		message.channel.send({embed: {
-			"title": "__Bandwidth Calculator__",
-			"color": 3971825,
-			"url": "https://k.kramerav.com/support/bwcalculator.asp"}});
-	}
 	if (message.content.startsWith(prefix + "data")) {
 		message.delete();
 		message.channel.send("https://dontasktoask.com")
