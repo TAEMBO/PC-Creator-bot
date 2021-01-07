@@ -41,10 +41,6 @@ client.on("message", (message) => {
 			message.channel.send('An error occured while executing that command.');
 		}
 	}
-	if (message.content.startsWith(prefix + "b&")) {
-		message.delete();
-		message.channel.send("You received an honorary ban!")
-	}
 	if (message.content.startsWith(prefix + "build")) {
 		message.delete();
 		message.channel.send("https://www.youtube.com/watch?v=v7MYOpFONCU")
