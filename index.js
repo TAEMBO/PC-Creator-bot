@@ -41,10 +41,6 @@ client.on("message", (message) => {
 			message.channel.send('An error occured while executing that command.');
 		}
 	}
-	if (message.content.startsWith(prefix + "unded")) {
-		message.delete();
-		message.channel.send("https://tenor.com/view/the-dancing-dorito-i-revive-this-chat-dance-gif-14308244")
-	}
 	if (message.content.startsWith(prefix + "cable")) {
 		message.delete();
 		message.channel.send({files: ["https://cdn.discordapp.com/attachments/787590275110273035/789403313329405952/A511drhyO4AAAAASUVORK5CYII.png"]});
