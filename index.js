@@ -41,10 +41,6 @@ client.on("message", (message) => {
 			message.channel.send('An error occured while executing that command.');
 		}
 	}
-	if (message.content.startsWith(prefix + "after")) {
-		message.delete();
-		message.channel.send("https://www.youtube.com/watch?v=RYYoCXh2gtw")
-	}
 	if (message.content.startsWith(prefix + "link")) {
 		message.delete();
 		message.channel.send({files: ["https://cdn.discordapp.com/attachments/741171217393778778/786107691352850472/unknown.png"]})
