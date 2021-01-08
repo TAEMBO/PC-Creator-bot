@@ -41,48 +41,6 @@ client.on("message", (message) => {
 			message.channel.send('An error occured while executing that command.');
 		}
 	}
-	if (message.content.startsWith(prefix + "gpuinfo")) {
-		message.channel.send({embed: {
-			"title": "Command Infomation (__Very Very Early Beta Alpha New Unfinished In Progress Thingy Yes__)",
-			"description": "This command does not search the web, TÆMBØ and Finn have to manually add each GPU and search it's specs (why? cuz TÆ still learning how to code a bot) so don't expect your GPU to be on here. To use the command, type ``,gpuamd`` or ``,gpunvidia``, space, then the gpu model, keep in mind that there should be no spaces in the model name if it has letters after it such as a 1080 Ti.\n**Example:** ,gpuamd 5700xt\n\n**Please note:** If the card model has no founders edition such as the nvidia 16 series, the specs will be of the lowest end aib card for that model."
-		}})
-	}
-	if (message.content.startsWith(prefix + "hidden")) {
-		message.delete();
-		message.channel.send({embed: {
-			"title": "__Hidden Commands__",
-			"description": "``,leave`` - how to leave a server\n``,google`` for people who have questions simple enough that google can answer them\n``,pcpp`` - Sends PCPartPicker links\n``,data`` for those people that ask if someone can help, but not tell their issue first. *tldr read the site yourself*\n``,b&`` - A special prize\n``,build`` - Shows a POV of how to build a PC by LTT\n``,after`` - Shows a video by JayzTwoCents on what to do after you build your PC\n``,link`` Shows the propper PCPP link to use\n``,cable`` - Shows bandwidth for each HDMI and DisplayPort revision\n ``,unded`` brings the chat back to life",
-			"color": 12794193}})
-			.then(message => message.delete({timeout:10000}));
-	}
-	if (message.content.startsWith(prefix + "macos")) {
-		message.channel.send("If you want to use MacOS on a PC, you need an **Intol** CPU, and an **RMD** gpu. You can also use the iGPU on the CPU as well.")
-	}
-	if (message.content.startsWith(prefix + "main")) {
-		message.channel.send({files: ["https://media.discordapp.net/attachments/571031705109135361/698154118270681168/20200410_113651.jpg?width=1168&height=657"]})
-	}
-	if (message.content.startsWith(prefix + "items")) {
-		message.channel.send({files: ["https://cdn.discordapp.com/attachments/696448442989543445/744440058580303983/image0.jpg"]})
-	}
-	if (args[0] === prefix + 'scores') {
-		if (!args[1]) return;
-	    if (args[1].toUpperCase() === 'CPU') {
-			message.channel.send({files: ["https://cdn.discordapp.com/attachments/696448442989543445/778856180260405268/unknown.png"]})
-		} else if (args[1].toUpperCase() === 'GPU') {
-			message.channel.send({files: ["https://cdn.discordapp.com/attachments/696448442989543445/778858824260911114/unknown.png"]})
-		} else if (args[1].toUpperCase() === 'RAM') {
-			message.channel.send({files: ["https://cdn.discordapp.com/attachments/696448442989543445/778857937429987368/n0YejA7d8Lr9pY6u3s7P0qi0ofdoBNmBeIREDQ04S8lQvsUG5o8i0Xq6x8g5DLCmTdrb6iSF45wo2I3t8BU5dZDXjB6kT47PloVm.png"]})
-		}
-	}
-	if (message.content.startsWith(prefix + "drive")) {
-		message.channel.send({files: ["https://media.discordapp.net/attachments/696448442989543445/778668549207490570/IMG_0720_2020_11_08_17_40_41_UTC.png?width=1090&height=658"]})
-	}
-	if (message.content.startsWith(prefix + "gaming")) {
-		message.channel.send({files: ["https://cdn.discordapp.com/attachments/696448442989543445/778741485968687194/IMG_0717_2020_11_08_17_40_41_UTC.JPG"]})
-	}
-	if (message.content.startsWith(prefix + "aio")) {
-		message.channel.send({files: ["https://cdn.discordapp.com/attachments/696448442989543445/778674903749492736/IMG_0716_2020_11_08_17_40_41_UTC.PNG"]})
-	}
 	if (message.content.startsWith(prefix + "games")) {
 		message.channel.send("Go to the online shop in the menu, and under the OS section you will find a list of programs. Select the game and buy it. Then go to customer’s PC and turn it on to the desktop, next press the install button, followed by the small backpack icon, you will then see your game there where you can download it.")
 	}
