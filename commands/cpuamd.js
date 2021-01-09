@@ -380,7 +380,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "AMD Ryzen Threadripper 3970x",
-					"description": "**Cores**: 32\n**Threads**: 46\n**Base clock**: 3.7GHz\n**Boost clock**: 4.5GHz\n**MSRP**: $1999 USD\n**Socket**: sTRX4\n**TDP**: 280w",
+					"description": "**Cores**: 32\n**Threads**: 64\n**Base clock**: 3.7GHz\n**Boost clock**: 4.5GHz\n**MSRP**: $1999 USD\n**Socket**: sTRX4\n**TDP**: 280w",
 					"color": 15547654
 				}
 			})
