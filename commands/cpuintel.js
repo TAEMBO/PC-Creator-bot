@@ -8,6 +8,8 @@ module.exports = {
 					"color": 2793983
 				}
 			})
+		} else if (args[1].toUpperCase() === '11TH') {
+			message.channel.send("Coming soon after CES 2021.\nCurrent info,\nThe flagship 11900 model will go down to 8 cores 16 threads, due to 10900 getting close to the x299 multi-core platform. 11th gen Core i5, i7, and i9 are rumored to be on the new Rocket Lake architecture, while Core i3 is rumored to stay on 10th gen's Commet Lake architecture. Rocket lake is confirmed to have PCIe gen 4 compatability with there also being 4 more PCIe lanes towards an M.2 slots which is also apparent on AMD Ryzen. Board makers such as EVGA, ASUS, and Gigabyte have already announced their Z590 motherboard models which can be found on their respective sites. Intel also claims to have a 19% uplift in IPC on their new architecture.\n\n-tae")
 		} else if (args[1].toUpperCase() === '10900') {
 			message.channel.send({
 				embed: {

@@ -41,21 +41,21 @@ client.on("message", (message) => {
 			message.channel.send('An error occured while executing that command.');
 		}
 	}
-	if (message.content.startsWith(prefix + "pprr")) {
+	if (message.content.startsWith(prefix + "no")) {
         const member = message.mentions.members.first();
         if (!member) return
             let testRole = message.guild.roles.cache.find(role => role.id == "775736993018806322")
             member.roles.remove(testRole)
             message.channel.send("Role removed (PRO PLAYER)")
 	}
-	if (message.content.startsWith(prefix + "ppra")) {
+	if (message.content.startsWith(prefix + "noo")) {
         const member = message.mentions.members.first();
         if (!member) return
             let testRole = message.guild.roles.cache.find(role => role.id == "775736993018806322")
             member.roles.add(testRole)
             message.channel.send("Role added (PRO PLAYER)")
 	}
-	if (message.content.startsWith(prefix + "etum")) {
+	if (message.content.startsWith(prefix + "nooo")) {
 		message.delete();
         const member = message.mentions.members.first();
         if (!member) return
@@ -63,7 +63,7 @@ client.on("message", (message) => {
             member.roles.add(testRole)
             message.channel.send("User Muted")
 	}
-	if (message.content.startsWith(prefix + "unetum")) {
+	if (message.content.startsWith(prefix + "noooo")) {
 		message.delete();
         const member = message.mentions.members.first();
         if (!member) return
