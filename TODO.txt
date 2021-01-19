@@ -1,0 +1,3 @@
+DONE command handler alias
+DONE mute / pro player role commands
+help command (exclude hidden commands)

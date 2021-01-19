@@ -66,5 +66,6 @@ module.exports = {
             })
 		} 
 	},
-	name: 'gpuamd'
+	name: 'gpuamd',
+	description: 'Info about AMD GPUs'
 };

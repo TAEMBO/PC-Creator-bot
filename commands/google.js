@@ -9,5 +9,6 @@ module.exports = {
 			}
 		});
 	},
-	name: 'google'
+	name: 'google',
+	hidden: true
 };

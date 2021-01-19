@@ -7,5 +7,6 @@ module.exports = {
 			}
 		});
 	},
-	name: 'gpuinfo'
+	name: 'gpuinfo',
+	description: 'Explains `gpunvidia` and `gpuamd`'
 };

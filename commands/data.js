@@ -3,5 +3,7 @@ module.exports = {
 		message.delete();
 		message.channel.send("https://dontasktoask.com");
 	},
-	name: 'data'
+	name: 'data',
+	alias: ['dontasktoask'],
+	hidden: true
 };

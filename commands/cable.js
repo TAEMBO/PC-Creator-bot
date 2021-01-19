@@ -10,5 +10,7 @@ module.exports = {
 			}
 		});
 	},
-	name: 'cable'
+	name: 'cable',
+	alias: ['bandwidth', 'hdmi'],
+	hidden: true
 };

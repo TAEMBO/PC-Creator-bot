@@ -1,9 +1,27 @@
 module.exports = {
     run: (client, message, args) => {
-        message.channel.send({embed: {
+		const embed = new client.embed()
+			.setTitle('__Commands__')
+			.setColor(3971825);
+		let text = { Misc: '' };
+		client.commands.filter(x => !x.hidden).forEach(command => {
+			let desc = `:small_blue_diamond: \`${client.prefix}${command.name}${command.usage ? ' [' + command.usage.join('] [') + ']' : ''}\`${command.description ? '\n' + command.description : ''}${command.alias ? '\nAliases: ' + command.alias.map(x => '`' + x + '`').join(', ') : ''}`;
+			if (command.category) {
+				if (!text[command.category]) text[command.category] = '';
+				text[command.category] += desc + '\n';
+			} else {
+				text.Misc += desc + '\n';
+			}
+		});
+		Object.keys(text).sort().forEach(ctgr => {
+			embed.addField(ctgr, text[ctgr], true);
+		});
+		message.channel.send(embed);
+        /*message.channel.send({embed: {
 			"title": "__Commands__",
-			"description": "\n``,ping`` - Shows amount of time it takes for the bot to respond\n``,staff`` - Shows all the current staff members\n``,virus`` - Provides help with viruses task\n``,socket`` - Provides help with motherboard and CPU socket\n``,games`` - Provides help with game installation\n``,items`` - Provides a picture of each type of item\n``,scores cpu`` - Provides a picture of the CPU spreadsheet\n``,scores ram`` - Provides a picture of the RAM spreadsheet\n``,scores gpu`` - Provides a picture of the GPU spreadsheet\n``,drive`` - Provides a picture of each type of storage drive\n``,aio`` - Provides a picture of what a watercooler looks like\n``,macos`` - Tells you what parts are needed to make a working PC with MacOS\n``,gaming`` - Provides a picture of how to make a PC's purpose for gaming\n``,record`` - Shows the current World Record PC in the game\n``,main`` - provides a picture of where every section of the game is\n``,overclocking`` - explains how to overclock a component",
-			"color": 3971825}});
+			"description": "\n``,ping`` - \n``,staff`` - \n``,virus`` - \n``,socket`` - \n``,games`` - \n``,items`` - \n``,scores cpu`` - \n``,scores ram`` - Provides a picture of the RAM spreadsheet\n``,scores gpu`` - Provides a picture of the GPU spreadsheet\n``,drive`` - \n``,aio`` - \n``,macos`` - \n``,gaming`` - \n``,record`` - \n``,main`` - \n``,overclocking`` - ",
+			"color": 3971825}});*/
     },
-    name: 'help'
+	name: 'help',
+	description: 'Info about command and their usage'
 };

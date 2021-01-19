@@ -3,5 +3,6 @@ module.exports = {
 		message.delete();
 		message.channel.send("https://www.youtube.com/watch?v=RYYoCXh2gtw");
 	},
-	name: 'after'
+	name: 'after',
+	hidden: true
 };

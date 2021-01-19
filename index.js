@@ -1,13 +1,16 @@
 const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: true});
 const fs = require('fs');
-const config = require("./config.json");
-const prefix = ',';
-client.on("ready", () => {
-	client.user.setActivity(",help", {
+client.config = require("./config.json");
+client.prefix = ',';
+client.on("ready", async () => {
+	await client.user.setActivity(",help", {
 		type: "LISTENING", 
 	});
+	console.log(`Bot active as ${client.user.tag}`);
 });
+
+client.embed = Discord.MessageEmbed;
 
 // command handler
 client.commands = new Discord.Collection();
@@ -20,6 +23,7 @@ for (const file of commandFiles) {
 // give access to #voice-chat-text to members when they join vc
 client.on('voiceStateUpdate', (oldState, newState) => {
 	const memberRole = oldState.guild.roles.cache.get("747630391392731218");
+	if (!memberRole) return;
 	if (newState.channelID) {
 		newState.member.roles.add(memberRole);
 	} else if (oldState.channelID && !newState.channelID) {
@@ -28,48 +32,16 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 });
 
 client.on("message", (message) => {
-	const args = message.content.split(' ');
-	
-	if (!message.guild) return;
-	if (!message.content.startsWith(prefix)) return;
-	const command = client.commands.get(args[0].slice(prefix.length));
-	if (command) {
+	if (!message.guild || !message.content.startsWith(client.prefix)) return;
+	const args = message.content.slice(client.prefix.length).split(' ');
+	const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
+	if (commandFile) {
 		try {
-			command.run(client, message, args);
+			commandFile.run(client, message, args);
 		} catch (error) {
-			console.log(`An error occured while running command "${command.name}"`, error, error.stack);
+			console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
 			message.channel.send('An error occured while executing that command.');
 		}
 	}
-	if (message.content.startsWith(prefix + "pprr")) {
-        const member = message.mentions.members.first();
-        if (!member) return
-            let testRole = message.guild.roles.cache.find(role => role.id == "775736993018806322")
-            member.roles.remove(testRole)
-            message.channel.send("Role removed (PRO PLAYER)")
-	}
-	if (message.content.startsWith(prefix + "ppra")) {
-        const member = message.mentions.members.first();
-        if (!member) return
-            let testRole = message.guild.roles.cache.find(role => role.id == "775736993018806322")
-            member.roles.add(testRole)
-            message.channel.send("Role added (PRO PLAYER)")
-	}
-	if (message.content.startsWith(prefix + "etum")) {
-		message.delete();
-        const member = message.mentions.members.first();
-        if (!member) return
-            let testRole = message.guild.roles.cache.find(role => role.id == "634438185363046440")
-            member.roles.add(testRole)
-            message.channel.send("User Muted")
-	}
-	if (message.content.startsWith(prefix + "unetum")) {
-		message.delete();
-        const member = message.mentions.members.first();
-        if (!member) return
-            let testRole = message.guild.roles.cache.find(role => role.id == "634438185363046440")
-            member.roles.add(testRole)
-            message.channel.send("User Unmuted")
-	}
 });
-client.login(config.token);
+client.login(client.config.token);

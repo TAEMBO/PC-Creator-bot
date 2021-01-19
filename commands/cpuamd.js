@@ -554,5 +554,6 @@ module.exports = {
 			})
 		}
 	},
-	name: 'cpuamd'
+	name: 'cpuamd',
+	description: 'Info about AMD CPUs'
 };

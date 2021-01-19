@@ -3,5 +3,6 @@ module.exports = {
 		message.delete();
 		message.channel.send("You received an honorary ban!");
 	},
-	name: 'b&'
+	name: 'b&',
+	hidden: true
 };

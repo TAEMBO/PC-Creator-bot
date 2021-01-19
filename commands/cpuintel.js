@@ -1410,5 +1410,6 @@ module.exports = {
 			})
 		} 
 	},
-	name: 'cpuintel'
+	name: 'cpuintel',
+	description: 'Info about Intel CPUs'
 };

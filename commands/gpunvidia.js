@@ -202,5 +202,6 @@ module.exports = {
             })
 		} 
 	},
-	name: 'gpunvidia'
+	name: 'gpunvidia',
+	description: 'Info about NVidia GPUs'
 };

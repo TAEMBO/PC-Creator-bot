@@ -7,5 +7,6 @@ module.exports = {
 			}
 		})
 	},
-	name: 'cpuinfo'
+	name: 'cpuinfo',
+	description: 'Explains `cpuintel` and `cpuamd`'
 };
