@@ -11,6 +11,7 @@ client.on("ready", async () => {
 });
 
 client.embed = Discord.MessageEmbed;
+client.memberCount_LastGuildFetchTimestamp = 0;
 
 // command handler
 client.commands = new Discord.Collection();
