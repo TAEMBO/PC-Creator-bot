@@ -1,27 +1,36 @@
 module.exports = {
     run: (client, message, args) => {
-		const embed = new client.embed()
-			.setTitle('__Commands__')
-			.setColor(3971825);
-		let text = { Misc: '' };
-		client.commands.filter(x => !x.hidden).forEach(command => {
-			let desc = `:small_blue_diamond: \`${client.prefix}${command.name}${command.usage ? ' [' + command.usage.join('] [') + ']' : ''}\`${command.description ? '\n' + command.description : ''}${command.alias ? '\nAliases: ' + command.alias.map(x => '`' + x + '`').join(', ') : ''}`;
-			if (command.category) {
-				if (!text[command.category]) text[command.category] = '';
-				text[command.category] += desc + '\n';
-			} else {
-				text.Misc += desc + '\n';
-			}
-		});
-		Object.keys(text).sort().forEach(ctgr => {
-			embed.addField(ctgr, text[ctgr], true);
-		});
-		message.channel.send(embed);
-        /*message.channel.send({embed: {
-			"title": "__Commands__",
-			"description": "\n``,ping`` - \n``,staff`` - \n``,virus`` - \n``,socket`` - \n``,games`` - \n``,items`` - \n``,scores cpu`` - \n``,scores ram`` - Provides a picture of the RAM spreadsheet\n``,scores gpu`` - Provides a picture of the GPU spreadsheet\n``,drive`` - \n``,aio`` - \n``,macos`` - \n``,gaming`` - \n``,record`` - \n``,main`` - \n``,overclocking`` - ",
-			"color": 3971825}});*/
+		let commandFile;
+		if (args[1]) {
+			commandFile = client.commands.find(x => x.name === args[1] || x.alias?.includes(args[1]));
+		}
+		if (commandFile) {
+			const embed = new client.embed()
+				.setTitle('__Commands: ' + commandFile.name[0].toUpperCase() + commandFile.name.slice(1) + '__')
+				.setColor(3971825)
+				.setDescription(`:small_blue_diamond: \`${client.prefix}${commandFile.name}${commandFile.usage ? ' [' + commandFile.usage.join('] [') + ']' : ''}\`${commandFile.description ? '\n\n' + commandFile.description : ''}${commandFile.alias ? '\n\nAliases: ' + commandFile.alias.map(x => '`' + x + '`').join(', ') : ''}\n\nCategory: ${commandFile.category ? commandFile.category : 'Misc'}`);
+			message.channel.send(embed)
+		} else {
+			const embed = new client.embed()
+				.setTitle('__Commands__')
+				.setColor(3971825);
+			let text = { Misc: '' };
+			client.commands.filter(x => !x.hidden).forEach(command => {
+				let desc = `:small_blue_diamond: \`${client.prefix}${command.name}${command.usage ? ' [' + command.usage.join('] [') + ']' : ''}\`${command.description ? '\n' + command.description : ''}${command.alias ? '\nAliases: ' + command.alias.map(x => '`' + x + '`').join(', ') : ''}`;
+				if (command.category) {
+					if (!text[command.category]) text[command.category] = '';
+					text[command.category] += desc + '\n';
+				} else {
+					text.Misc += desc + '\n';
+				}
+			});
+			Object.keys(text).sort().forEach(ctgr => {
+				embed.addField(ctgr, text[ctgr], true);
+			});
+			message.channel.send(embed);
+		}
     },
 	name: 'help',
-	description: 'Info about command and their usage'
+	description: 'Info about commands and their usage',
+	usage: ['Command']
 };
