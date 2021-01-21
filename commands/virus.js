@@ -5,5 +5,5 @@ module.exports = {
 	name: 'virus',
 	alias: ['antivirus'],
 	description: 'Provides help with viruses task',
-	category: 'PC Creator - Page 2'
+	category: 'PC Creator'
 };

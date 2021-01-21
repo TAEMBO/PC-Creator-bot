@@ -4,5 +4,5 @@ module.exports = {
 	},
 	name: 'main',
 	description: 'provides a picture of where every section of the game is',
-	category: 'PC Creator - Page 2'
+	category: 'PC Creator'
 };

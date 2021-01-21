@@ -8,5 +8,5 @@ module.exports = {
     },
 	name: 'record',
 	description: 'Shows the current World Record PC in the game',
-	category: 'PC Creator - Page 2'
+	category: 'PC Creator'
 };
