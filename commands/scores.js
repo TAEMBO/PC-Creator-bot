@@ -14,5 +14,5 @@ module.exports = {
 	name: 'scores',
 	usage: ['CPU/GPU/RAM'],
 	description: 'Provides overclocking spreadsheets of in-game items',
-	category: 'PC Creator'
+	category: 'PC Creator - Page 2'
 };

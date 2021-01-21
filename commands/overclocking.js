@@ -4,5 +4,5 @@ module.exports = {
     },
 	name: 'overclocking',
 	description: 'Explains how to overclock a component',
-	category: 'PC Creator'
+	category: 'PC Creator - Page 2'
 };
