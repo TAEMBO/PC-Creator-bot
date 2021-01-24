@@ -5,6 +5,5 @@ module.exports = {
 	},
 	name: 'unded',
 	alias: ['dancingdorito', 'revivechat'],
-	description: 'Bring the chat back to life',
 	hidden: true
 };

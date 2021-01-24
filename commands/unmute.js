@@ -29,6 +29,6 @@ module.exports = {
 	name: 'unmute',
 	alias: ['removemute'],
 	usage: ['Mention or User ID'],
-	description: 'Unmute someone',
+	description: 'Remove a mute from someone',
 	category: 'Moderation'
 };
