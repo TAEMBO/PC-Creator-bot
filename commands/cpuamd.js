@@ -468,7 +468,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "AMD FX 8320",
-					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: .5GHz\n**Boost clock**: 4.0GHz\n**MSRP**: $169 USD\n**Socket**: AM3+\n**TDP**: 125w",
+					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 3.5GHz\n**Boost clock**: 4.0GHz\n**MSRP**: $169 USD\n**Socket**: AM3+\n**TDP**: 125w",
 					"color": 15547654
 				}
 			})
