@@ -32,5 +32,5 @@ module.exports = {
     },
 	name: 'help',
 	description: 'Info about commands and their usage',
-	usage: ['Command']
+	usage: ['Commands']
 };

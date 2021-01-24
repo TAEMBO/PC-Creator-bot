@@ -28,6 +28,6 @@ module.exports = {
 	},
 	name: 'mute',
 	usage: ['Mention or User ID'],
-	description: 'Add a mute to someone',
+	description: 'Mute someone',
 	category: 'Moderation'
 };
