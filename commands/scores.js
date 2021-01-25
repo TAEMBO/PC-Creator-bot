@@ -13,6 +13,7 @@ module.exports = {
 	},
 	name: 'scores',
 	usage: ['CPU/GPU/RAM'],
+	alias: ['benchmarks', 'benchmark', 'score'],
 	description: 'Provides overclocking spreadsheets of in-game items',
 	category: 'PC Creator'
 };

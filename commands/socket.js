@@ -4,5 +4,6 @@ module.exports = {
 		message.channel.send("Motherboard and CPU socket have to be the same. If you try to build a PC with lets say a motherboard that has FM2+ socket along with a cpu that has AM4 socket, it won’t work.")
     },
 	name: 'socket',
-	description: 'Provides help with motherboard and CPU socket'
+	description: 'Provides help with motherboard and CPU socket',
+	category: 'PC Creator'
 };

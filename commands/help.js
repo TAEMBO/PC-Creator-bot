@@ -1,36 +1,68 @@
+function helpPage(pageNumber, client, message, args, toEdit = false) {
+	let pageIndex = pageNumber || 0;
+	const pageInfo = client.commands.pages[pageIndex];
+	let text = '';
+	client.commands.filter(command => !command.hidden && command.category === pageInfo.category && command.page === pageInfo.page).forEach(command => {
+		text += client.commandInfo(command);
+	});
+	const embed = new client.embed()
+		.setTitle(`__Commands: ${pageInfo.name}__`)
+		.setColor(3971825)
+		.setDescription(text);
+	if (toEdit) {
+		return embed;
+	} else {
+		message.channel.send(embed)
+			// add reactions to go forward or backward pages
+			.then(async botMessage => {
+				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id, { time: 40000 });
+				collector.on('collect', async (reaction, user) => {
+					if (reaction.emoji.name === '◀️') {
+						if (pageIndex - 1 < 0) pageIndex = client.commands.pages.length;
+						pageIndex--;
+					} else if (reaction.emoji.name === '▶️') {
+						if (pageIndex + 1 >= client.commands.pages.length) pageIndex = -1;
+						pageIndex++;
+					}
+					await Promise.all([botMessage.edit(helpPage(pageIndex, client, message, args, true)), botMessage.reactions.removeAll()]);
+					await botMessage.react('◀️');
+					await botMessage.react('▶️');
+				});
+				collector.on('end', () => {
+					botMessage.reactions.removeAll();
+				});
+				await botMessage.react('◀️');
+				await botMessage.react('▶️');
+			});
+	}
+	
+}
+
 module.exports = {
     run: (client, message, args) => {
-		let commandFile;
-		if (args[1]) {
-			commandFile = client.commands.find(x => x.name === args[1] || x.alias?.includes(args[1]));
+		// if they ask for a specific page (number)
+		if (parseInt(args[1])) {
+			console.log(client.commands.pages[parseInt(args[1]) - 1]);
+			if (!client.commands.pages[parseInt(args[1]) - 1]) return message.channel.send('That page doesnt exist');
+			return helpPage(parseInt(args[1]) - 1, client, message, args);
 		}
-		if (commandFile) {
+		// category (name)
+		if (client.commands.pages.some(x => x.category.toLowerCase() === args.slice(1).join(' ').toLowerCase())) {
+			return helpPage(client.commands.pages.map(x => x.category.toLowerCase()).indexOf(args.slice(1).join(' ').toLowerCase()), client, message, args);
+		}
+		// or command (name)
+		const command = client.commands.find(x => x.name === args[1] || x.alias?.includes(args[1]));
+		if (command) {
 			const embed = new client.embed()
-				.setTitle('__Commands: ' + commandFile.name[0].toUpperCase() + commandFile.name.slice(1) + '__')
+				.setTitle(`__Commands: ${command.name}__`)
+				.setDescription(client.commandInfo(command, { includeCategory: true, insertEmpty: true }))
 				.setColor(3971825)
-				.setDescription(`:small_blue_diamond: \`${client.prefix}${commandFile.name}${commandFile.usage ? ' [' + commandFile.usage.join('] [') + ']' : ''}\`${commandFile.description ? '\n\n' + commandFile.description : ''}${commandFile.alias ? '\n\nAliases: ' + commandFile.alias.map(x => '`' + x + '`').join(', ') : ''}\n\nCategory: ${commandFile.category ? commandFile.category : 'Misc'}`);
-			message.channel.send(embed)
-		} else {
-			const embed = new client.embed()
-				.setTitle('__Commands__')
-				.setColor(3971825);
-			let text = { Misc: '' };
-			client.commands.filter(x => !x.hidden).forEach(command => {
-				let desc = `:small_blue_diamond: \`${client.prefix}${command.name}${command.usage ? ' [' + command.usage.join('] [') + ']' : ''}\`${command.description ? '\n' + command.description : ''}${command.alias ? '\nAliases: ' + command.alias.map(x => '`' + x + '`').join(', ') : ''}`;
-				if (command.category) {
-					if (!text[command.category]) text[command.category] = '';
-					text[command.category] += desc + '\n';
-				} else {
-					text.Misc += desc + '\n';
-				}
-			});
-			Object.keys(text).sort().forEach(ctgr => {
-				embed.addField(ctgr, text[ctgr], true);
-			});
-			message.channel.send(embed);
-		}
+			return message.channel.send(embed);
+		} 
+		// if run() still hasnt been returned, send category 0 page 1
+		return helpPage(undefined, client, message, args);
     },
 	name: 'help',
 	description: 'Info about commands and their usage',
-	usage: ['Command']
+	usage: ['Command / Category / Page']
 };

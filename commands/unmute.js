@@ -20,7 +20,7 @@ module.exports = {
 		const role = message.guild.roles.cache.find(role => role.id === client.config.mutedRole);
 		if (!role) message.channel.send('Indicated role does not exist');
 		if (!member.roles.cache.has(role.id)) return message.channel.send(`Cannot unmute **${member.user.tag}** because they are not muted.`);
-		member.roles.remove(role, `Command done by @${msg.author.tag} (${msg.author.id})`).then(() => {
+		member.roles.remove(role, `Command done by @${message.author.tag} (${message.author.id})`).then(() => {
 			message.channel.send(`Unmuted **${member.user.tag}**`);
 		}).catch(() => {
 			message.channel.send('Failed.')
@@ -28,7 +28,7 @@ module.exports = {
 	},
 	name: 'unmute',
 	alias: ['removemute'],
-	usage: ['Mention or User ID'],
+	usage: ['Mention / User ID'],
 	description: 'Remove a mute from someone',
 	category: 'Moderation'
 };
