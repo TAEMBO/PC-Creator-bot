@@ -842,6 +842,390 @@ module.exports = {
 					"color": 2793983
 				}
 			})
+		} else if (args[1].toUpperCase() === '4790K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4790k",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 4.0GHz\n**Boost clock**: 4.4Ghz\n**MSRP**: $339 USD\n**Socket**: LGA 1150\n**TDP**: 88w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4790S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4790S",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.2GHz\n**Boost clock**: 4.0Ghz\n**MSRP**: $303 USD\n**Socket**: LGA 1150\n**TDP**: 65w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '4790') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4790",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 4.0Ghz\n**MSRP**: $303 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4790T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4790T",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 2.7GHz\n**Boost clock**: 3.9GHz\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 45w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '4785T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4785T",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 2.2GHz\n**Boost clock**: 3.2GHz\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4771') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4771",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.5GHz\n**Boost clock**: 3.9GHz\n**MSRP**: $320 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '4770K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4770k",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.5GHz\n**Boost clock**: 3.9GHz\n**MSRP**: $350 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4770') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4770",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.4GHz\n**Boost clock**: 3.9GHz\n**MSRP**: $312 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4770S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4770S",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.1GHz\n**Boost clock**: 3.9GHz\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4770T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4770T",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 2.5GHz\n**Boost clock**: 3.7GHz\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 45w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '4765T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4765T",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 2.0GHz\n**Boost clock**: 3.0GHz\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4670K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4670k",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.4GHz\n**Boost clock**: 3.8GHz\n**MSRP**: $243 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4670S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4670S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.1GHz\n**Boost clock**: 3.8GHz\n**MSRP**: Not available\n**Socket**: LGA 1150\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4670') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4670",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.4GHz\n**Boost clock**: 3.8GHz\n**MSRP**: $224 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4670T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4670T",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.3GHz\n**Boost clock**: 3.3GHz\n**MSRP**: $213 USD\n**Socket**: LGA 1150\n**TDP**: 45w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4590') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4590",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.3GHz\n**Boost clock**: 3.7GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4590S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4590S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.0GHz\n**Boost clock**: 3.0GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1150\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4590T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4590S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.0GHz\n**Boost clock**: 3.0GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4570') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4570",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.2GHz\n**Boost clock**: 3.6GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4570S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4570S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.9GHz\n**Boost clock**: 3.6GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1150\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4570TE') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4570S",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 2.7GHz\n**Boost clock**: 3.3GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4570T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4570T",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 2.9GHz\n**Boost clock**: 3.6GHz\n**MSRP**: $195 USD\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4460') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4460",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.2GHz\n**Boost clock**: 3.4GHz\n**MSRP**: $182 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4460S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4460S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.9GHz\n**Boost clock**: 3.4GHz\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4460T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4460T",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 1.9GHz\n**Boost clock**: 2.7GHz\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4440') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4440",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.1GHz\n**Boost clock**: 3.3GHz\n**MSRP**: $187 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4440S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4440S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.8GHz\n**Boost clock**: 3.3GHz\n**MSRP**: $187 USD\n**Socket**: LGA 1150\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4430') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4430",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.0GHz\n**Boost clock**: 3.2GHz\n**MSRP**: $187 USD\n**Socket**: LGA 1150\n**TDP**: 84w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4430S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-4430S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.7GHz\n**Boost clock**: 3.2GHz\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4370') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4370",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.8GHz\n**Boost clock**: N/A\n**MSRP**: $147 USD\n**Socket**: LGA 1150\n**TDP**: 54w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4360') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4360",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.7GHz\n**Boost clock**: N/A\n**MSRP**: $147 USD\n**Socket**: LGA 1150\n**TDP**: 54w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '4350') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4350",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.6GHz\n**Boost clock**: N/A\n**MSRP**: $147 USD\n**Socket**: LGA 1150\n**TDP**: 54w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4340') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4340",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.6GHz\n**Boost clock**: N/A\n**MSRP**: $157 USD\n**Socket**: LGA 1150\n**TDP**: 54w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '4330') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4330",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.5GHz\n**Boost clock**: N/A\n**MSRP**: $147 USD\n**Socket**: LGA 1150\n**TDP**: 54w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4370T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4370T",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.3GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4360T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4360T",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.2GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4350T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4350T",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.1GHz\n**Boost clock**: N/A\n**MSRP**: $138 USD\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4330T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4330T",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.0GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4340TE') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4340TE",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $138 USD\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4330TE') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4330TE",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 2.4GHz\n**Boost clock**: N/A\n**MSRP**: $122 USD\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4170') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4170",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.7GHz\n**Boost clock**: N/A\n**MSRP**: $117 USD\n**Socket**: LGA 1150\n**TDP**: 54w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4160') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4160",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.6GHz\n**Boost clock**: N/A\n**MSRP**: $117 USD\n**Socket**: LGA 1150\n**TDP**: 54w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4150') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4150",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.5GHz\n**Boost clock**: N/A\n**MSRP**: $117 USD\n**Socket**: LGA 1150\n**TDP**: 54w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4130') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4130",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.4GHz\n**Boost clock**: N/A\n**MSRP**: $117 USD\n**Socket**: LGA 1150\n**TDP**: 54w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4170T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4170T",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.2GHz\n**Boost clock**: N/A\n**MSRP**: $117 USD\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4160T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4160T",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.1GHz\n**Boost clock**: N/A\n**MSRP**: $117 USD\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4150T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4150T",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.0GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === '4130T') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i3-4130T",
+                    "description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 2.9GHz\n**Boost clock**: N/A\n**MSRP**: $117 USD\n**Socket**: LGA 1150\n**TDP**: 35w",
+                    "color": 2793983
+                }
+            })
 		} else if (args[1].toUpperCase() === '3220T') {
 			message.channel.send({
 				embed: {
@@ -1393,6 +1777,462 @@ module.exports = {
 					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.2GHz\n**Boost clock**: 3.4GHz\n**MSRP**: $305 USD\n**Socket**: LGA 1366\n**TDP**: 130w",
 					"color": 2793983
 				}
+			})
+		} else if (args[1].toUpperCase() === 'E4300') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E4300",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 1.8GHz\n**Boost clock**: N/A\n**MSRP**: $163 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E4400') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E4400",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.2GHz\n**Boost clock**: N/A\n**MSRP**: $133 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E4500') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E4500",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.2GHz\n**Boost clock**: N/A\n**MSRP**: $133 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E4600') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E4600",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.4GHz\n**Boost clock**: N/A\n**MSRP**: $163 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E4700') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E4700",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $133 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6300') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6300",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 1.8GHz\n**Boost clock**: N/A\n**MSRP**: $183 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6320') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6320",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 1.8GHz\n**Boost clock**: N/A\n**MSRP**: $163 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6400') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6400",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.1GHz\n**Boost clock**: N/A\n**MSRP**: $224 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6420') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6420",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.1GHz\n**Boost clock**: N/A\n**MSRP**: $183 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6600') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6600",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.4GHz\n**Boost clock**: N/A\n**MSRP**: $316 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6700') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6700",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $530 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6540') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6540",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.3GHz\n**Boost clock**: N/A\n**MSRP**: $163 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6550') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6550",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.3GHz\n**Boost clock**: N/A\n**MSRP**: $163 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6750') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6750",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $266 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6850') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6850",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $133 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6305') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6305",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 1.8GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E6405') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E6405",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.1GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E7200') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E7200",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.5GHz\n**Boost clock**: N/A\n**MSRP**: $133 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E7300') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E7300",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $133 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E7400') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E7400",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.8GHz\n**Boost clock**: N/A\n**MSRP**: $133 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+		} else if (args[1].toUpperCase() === 'E7500') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E7500",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.9GHz\n**Boost clock**: N/A\n**MSRP**: $133 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E7600') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E7600",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 3.0GHz\n**Boost clock**: N/A\n**MSRP**: $133 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E8190') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E8190",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $163 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E8200') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E8200",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $163 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E8290') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E8290",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.8GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E8300') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E8300",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.8GHz\n**Boost clock**: N/A\n**MSRP**: $163 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E8400') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E8400",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 3.0GHz\n**Boost clock**: N/A\n**MSRP**: $183 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E8500') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E8500",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 3.1GHz\n**Boost clock**: N/A\n**MSRP**: $266 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E8600') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E8600",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 3.3GHz\n**Boost clock**: N/A\n**MSRP**: $266 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'E8700') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Duo E8700",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 3.5GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'X6800') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Extreme X6800",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 2.9GHz\n**Boost clock**: N/A\n**MSRP**: $999 USD\n**Socket**: LGA 775\n**TDP**: 75w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'X6900') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Extreme X6900",
+                    "description": "**Cores**: 2\n**Threads**: 2\n**Base clock**: 3.2GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 775\n**TDP**: 75w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q6400') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q6400",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.1GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 775\n**TDP**: 105w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q6600') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q6600",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.4GHz\n**Boost clock**: N/A\n**MSRP**: $530 USD\n**Socket**: LGA 775\n**TDP**: 105w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q6700') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q6700",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $851 USD\n**Socket**: LGA 775\n**TDP**: 105w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q8200') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q8200",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.3GHz\n**Boost clock**: N/A\n**MSRP**: $224 USD\n**Socket**: LGA 775\n**TDP**: 105w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q8200S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q8200S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.3GHz\n**Boost clock**: N/A\n**MSRP**: $245 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q8300') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q8300",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.5GHz\n**Boost clock**: N/A\n**MSRP**: $224 USD\n**Socket**: LGA 775\n**TDP**: 95w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q8400') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q8400",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $183 USD\n**Socket**: LGA 775\n**TDP**: 95w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q8400S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q8400S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $245 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9300') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9300",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.5GHz\n**Boost clock**: N/A\n**MSRP**: $266 USD\n**Socket**: LGA 775\n**TDP**: 95w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9400') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9400",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $266 USD\n**Socket**: LGA 775\n**TDP**: 95w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9400S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9400S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $320 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9500') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9500",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.8GHz\n**Boost clock**: N/A\n**MSRP**: $183 USD\n**Socket**: LGA 775\n**TDP**: 95w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9505') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9505",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.8GHz\n**Boost clock**: N/A\n**MSRP**: $213 USD\n**Socket**: LGA 775\n**TDP**: 95w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9505S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9505S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.8GHz\n**Boost clock**: N/A\n**MSRP**: $277 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9450') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9450",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $316 USD\n**Socket**: LGA 775\n**TDP**: 95w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9550') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9550",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.8GHz\n**Boost clock**: N/A\n**MSRP**: $530 USD\n**Socket**: LGA 775\n**TDP**: 95w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9550S') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9550S",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $369 USD\n**Socket**: LGA 775\n**TDP**: 65w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'Q9650') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Quad Q9650",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.0GHz\n**Boost clock**: N/A\n**MSRP**: $530 USD\n**Socket**: LGA 775\n**TDP**: 95w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'QX6700') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Extreme QX6700",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.6GHz\n**Boost clock**: N/A\n**MSRP**: $999 USD\n**Socket**: LGA 775\n**TDP**: 130w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'QX6800') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Extreme QX6800",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 2.9GHz\n**Boost clock**: N/A\n**MSRP**: $1199 USD\n**Socket**: LGA 775\n**TDP**: 130w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'QX6850') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Extreme QX6850",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.0GHz\n**Boost clock**: N/A\n**MSRP**: $999 USD\n**Socket**: LGA 775\n**TDP**: 130w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'QX9650') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Extreme QX9650",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.0GHz\n**Boost clock**: N/A\n**MSRP**: $999 USD\n**Socket**: LGA 775\n**TDP**: 130w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'QX9750') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Extreme QX9750",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.1GHz\n**Boost clock**: N/A\n**MSRP**: N/A\n**Socket**: LGA 775\n**TDP**: 130w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'QX9770') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Extreme QX9770",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.2GHz\n**Boost clock**: N/A\n**MSRP**: $1399 USD\n**Socket**: LGA 775\n**TDP**: 136w",
+                    "color": 2793983
+                }
+			})
+        } else if (args[1].toUpperCase() === 'QX9775') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core 2 Extreme QX9775",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.2GHz\n**Boost clock**: N/A\n**MSRP**: $1499 USD\n**Socket**: LGA 775\n**TDP**: 150w",
+                    "color": 2793983
+                }
 			})
 		} else if (args[1].toUpperCase() === '10980XE') {
 			message.channel.send({
