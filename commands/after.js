@@ -1,8 +1,7 @@
 module.exports = {
 	run: (client, message, args) => {
-		message.delete();
 		message.channel.send("https://www.youtube.com/watch?v=RYYoCXh2gtw");
 	},
 	name: 'after',
-	hidden: true
+	description: 'what to do after you build your PC'
 };
