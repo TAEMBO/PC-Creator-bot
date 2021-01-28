@@ -86,16 +86,62 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 	}
 });
 
-client.on("message", (message) => {
-	if (!message.guild || !message.content.startsWith(client.prefix)) return;
-	const args = message.content.slice(client.prefix.length).split(' ');
-	const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
-	if (commandFile) {
+client.on("message", async (message) => {
+	if (!message.guild) return;
+	if (message.content.startsWith(client.prefix)) {
+		const args = message.content.slice(client.prefix.length).split(' ');
+		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
+		if (commandFile) {
+			try {
+				return commandFile.run(client, message, args);
+			} catch (error) {
+				console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
+				return message.channel.send('An error occured while executing that command.');
+			}
+		}
+	} else {
+		const msg = message.content.toLowerCase();
+		if (!['how', 'what', 'where', 'when'].some(x => msg.includes(x))) return;
+		const ranks = [];
+		client.commands.forEach(command => {
+			if (!command.autores) return ranks.push([command.name, 0]);
+			let points = 0;
+			command.autores.forEach(keyword => {
+				if (keyword.startsWith('OPT-')) {
+					keyword = keyword.slice(4);
+					if (keyword.includes('/')) {
+						if (msg.includes(keyword.slice(0, keyword.indexOf('/')))) points += 1
+						if (msg.includes(keyword.slice(keyword.indexOf('/') + 1))) points += 1
+					} else {
+						if (msg.includes(keyword)) points += 2
+					}
+				} else {
+					if (keyword.includes('/')) {
+						if (msg.includes(keyword.slice(0, keyword.indexOf('/')))) points += 3
+						if (msg.includes(keyword.slice(keyword.indexOf('/') + 1))) points += 3
+					} else {
+						if (msg.includes(keyword)) points += 4
+					}
+				}
+			});
+			return ranks.push([command.name, points]);
+
+
+
+			if (command.autores.every(x => x.includes('/') ? msg.includes(x.slice(x.indexOf('/') + 1)) || msg.includes(x.slice(0, x.indexOf('/'))) : msg.includes(x))) {
+				
+			}
+		});
+		console.log(ranks);
+		ranks.sort((a, b) => b[1] - a[1]);
+		console.log('----------------------', ranks);
+
+		const command = client.commands.get(ranks[0][0])
+		await message.channel.send(`AutoResponse™ was summoned. Running command \`${client.prefix}${command.name}\`...`);
 		try {
-			commandFile.run(client, message, args);
+			return command.run(client, Object.assign(message, { content: `${client.prefix}${command.name}` }), [command.name]);
 		} catch (error) {
-			console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
-			message.channel.send('An error occured while executing that command.');
+			return console.log(`An error occured while running command "${command.name}"`, error, error.stack);
 		}
 	}
 });

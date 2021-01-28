@@ -4,5 +4,6 @@ module.exports = {
 	},
 	name: 'macos',
 	description: 'Tells you what parts are needed to make a working PC with MacOS',
-	category: 'PC Creator'
+	category: 'PC Creator',
+	autores: ['how/what', 'mac/apple', 'OPT-blue/screen', 'OPT-install']
 };
