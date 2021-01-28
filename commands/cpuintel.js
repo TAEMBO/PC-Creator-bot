@@ -4,17 +4,105 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-10900K",
-					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.7GHz\n**Boost clock**: 5.3Ghz single core\n**MSRP**: $500 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.7GHz\n**Boost clock**: 5.3GHz single core\n**MSRP**: $500 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
 					"color": 2793983
 				}
 			})
 		} else if (args[1].toUpperCase() === '11TH') {
-			message.channel.send("Coming soon after CES 2021.\nCurrent info,\nThe flagship 11900 model will go down to 8 cores 16 threads, due to 10900 getting close to the x299 multi-core platform. 11th gen Core i5, i7, and i9 are rumored to be on the new Rocket Lake architecture, while Core i3 is rumored to stay on 10th gen's Commet Lake architecture. Rocket lake is confirmed to have PCIe gen 4 compatability with there also being 4 more PCIe lanes towards an M.2 slots which is also apparent on AMD Ryzen. Board makers such as EVGA, ASUS, and Gigabyte have already announced their Z590 motherboard models which can be found on their respective sites. Intel also claims to have a 19% uplift in IPC on their new architecture.\n\n-tae")
+			message.channel.send("Coming soon after CES 2021.\nCurrent info,\nThe flagship 11900 model will go down to 8 cores 16 threads, due to 10900 getting close to the x299 multi-core platform. 11th gen Core i5, i7, and i9 are rumored to be on the new Rocket Lake architecture, while Core i3 is rumored to stay on 10th gen's Comet Lake architecture. Rocket lake is confirmed to have PCIe gen 4 compatability with there also being 4 more PCIe lanes towards an M.2 slots which is also apparent on AMD Ryzen. Board makers such as EVGA, ASUS, and Gigabyte have already announced their Z590 motherboard models which can be found on their respective sites. Intel also claims to have a 19% uplift in IPC on their new architecture on Rocket Lake vs their older Comet Lake.\n\n-tae")
+		} else if (args[1].toUpperCase() === '11900') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i9-11900 (Rumored)",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.5GHz\n**Boost clock**: 4.7Ghz all core\n**Boost clock**: 5.2GHz single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11900K') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i9-11900K (Rumored)",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.5GHz\n**Boost clock**: 4.8GHz all core\n**Boost clock**: 5.3GHz single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11700') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i7-11700 (Rumored)",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.8GHz\n**Boost clock**: 4.4GHz all core\n**Boost clock**: 4.9GHz single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11700K') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i7-11700K (Rumored)",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.6GHz\n**Boost clock**: 4.6GHz all core\n**Boost clock**: 5.0GHz single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11600') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i5-11600 (Rumored)",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.8GHz\n**Boost clock**: 4.3GHz all core\n**Boost clock**: 4.9GHz single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11600K') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i5-11600K (Rumored)",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.9GHz\n**Boost clock**: 4.6GHz all core\n**Boost clock**: 4.9GHz single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11500') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i5-11500 (Rumored)",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.7GHz\n**Boost clock**: 4.2GHz all core\n**Boost clock**: 4.6GHz single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11400') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i5-11400 (Rumored)",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.6GHz\n**Boost clock**: 4.2GHz all core\n**Boost clock**: 4.4GHz single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11305') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i3-11305 (Rumored)",
+					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.8GHz\n**Boost clock**: N/A all core\n**Boost clock**: N/A single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11105') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i3-11105 (Rumored)",
+					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.7GHz\n**Boost clock**: N/A all core\n**Boost clock**: N/A single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"color": 2793983
+				}
+			})
+		} else if (args[1].toUpperCase() === '11100') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i3-11100 (Rumored)",
+					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.7GHz\n**Boost clock**: N/A all core\n**Boost clock**: N/A single core\n**MSRP**: N/A\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"color": 2793983
+				}
+			})
 		} else if (args[1].toUpperCase() === '10900') {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-10900",
-					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 2.8GHz\n**Boost clock**: 5.2Ghz single core\n**MSRP**: $438 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 2.8GHz\n**Boost clock**: 5.2Gz single core\n**MSRP**: $438 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -22,7 +110,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-10900F",
-					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 2.8GHz\n**Boost clock**: 5.2Ghz single core\n**MSRP**: $422 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 2.8GHz\n**Boost clock**: 5.2GHz single core\n**MSRP**: $422 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -30,7 +118,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-10900KF",
-					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.7GHz\n**Boost clock**: 5.3Ghz single core\n**MSRP**: $472 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.7GHz\n**Boost clock**: 5.3GHz single core\n**MSRP**: $472 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
 					"color": 2793983
 				}
 			})
@@ -38,7 +126,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-10900T",
-					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 1.9GHz\n**Boost clock**: 4.6Ghz\n**MSRP**: $438 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
+					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 1.9GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $438 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -46,7 +134,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-10910",
-					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.6GHz\n**Boost clock**: 5.0Ghz\n**MSRP**: OEM only\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.6GHz\n**Boost clock**: 5.0GHz\n**MSRP**: OEM only\n**Socket**: LGA 1200\n**TDP**: 125w",
 					"color": 2793983
 				}
 			})
@@ -54,7 +142,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-10850K",
-					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.6GHz\n**Boost clock**: 5.2Ghz\n**MSRP**: $453 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.6GHz\n**Boost clock**: 5.2GHz\n**MSRP**: $453 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
 					"color": 2793983
 				}
 			})
@@ -62,7 +150,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-10700K",
-					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.8GHz\n**Boost clock**: 5.1Ghz\n**MSRP**: $374 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.8GHz\n**Boost clock**: 5.1GHz\n**MSRP**: $374 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
 					"color": 2793983
 				}
 			})
@@ -70,7 +158,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-10700KF",
-					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.8GHz\n**Boost clock**: 5.1Ghz\n**MSRP**: $349 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.8GHz\n**Boost clock**: 5.1GHz\n**MSRP**: $349 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
 					"color": 2793983
 				}
 			})
@@ -78,7 +166,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-10700",
-					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.9GHz\n**Boost clock**: 4.8Ghz\n**MSRP**: $323 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.9GHz\n**Boost clock**: 4.8GHz\n**MSRP**: $323 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -86,7 +174,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-10700F",
-					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.9GHz\n**Boost clock**: 4.8Ghz\n**MSRP**: $298 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.9GHz\n**Boost clock**: 4.8GHz\n**MSRP**: $298 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -94,7 +182,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-10700T",
-					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.0GHz\n**Boost clock**: 4.5Ghz\n**MSRP**: $325 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.0GHz\n**Boost clock**: 4.5GHz\n**MSRP**: $325 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -102,7 +190,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-10600K",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 4.1GHz\n**Boost clock**: 4.8Ghz\n**MSRP**: $262 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 4.1GHz\n**Boost clock**: 4.8GHz\n**MSRP**: $262 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
 					"color": 2793983
 				}
 			})
@@ -110,7 +198,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-10600KF",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 4.1GHz\n**Boost clock**: 4.8Ghz\n**MSRP**: $237 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 4.1GHz\n**Boost clock**: 4.8GHz\n**MSRP**: $237 USD\n**Socket**: LGA 1200\n**TDP**: 125w",
 					"color": 2793983
 				}
 			})
@@ -118,7 +206,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-10600",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.3GHz\n**Boost clock**: 4.8Ghz\n**MSRP**: $213 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.3GHz\n**Boost clock**: 4.8GHz\n**MSRP**: $213 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -126,7 +214,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-10600T",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.4GHz\n**Boost clock**: 4.0Ghz\n**MSRP**: $213 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.4GHz\n**Boost clock**: 4.0GHz\n**MSRP**: $213 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -134,7 +222,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-10500",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.1GHz\n**Boost clock**: 4.5Ghz\n**MSRP**: $192 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.1GHz\n**Boost clock**: 4.5GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -142,7 +230,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-10500T",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.8GHz\n**Boost clock**: 3.8Ghz\n**MSRP**: $192 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.8GHz\n**Boost clock**: 3.8GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -150,7 +238,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-10400",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.9GHz\n**Boost clock**: 4.3Ghz\n**MSRP**: $182 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.9GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $182 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -158,7 +246,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-10400F",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.9GHz\n**Boost clock**: 4.3Ghz\n**MSRP**: $157 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.9GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $157 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -166,7 +254,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-10400T",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.0GHz\n**Boost clock**: 3.6Ghz\n**MSRP**: $182 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 2.0GHz\n**Boost clock**: 3.6GHz\n**MSRP**: $182 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -174,7 +262,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-10320",
-					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.8GHz\n**Boost clock**: 4.6Ghz\n**MSRP**: $154 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.8GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $154 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -182,7 +270,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-10300",
-					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.7GHz\n**Boost clock**: 4.4Ghz\n**MSRP**: $143 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.7GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $143 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -190,7 +278,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-10300T",
-					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.0GHz\n**Boost clock**: 3.9Ghz\n**MSRP**: $143 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
+					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.0GHz\n**Boost clock**: 3.9GHz\n**MSRP**: $143 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -198,7 +286,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-10100",
-					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 4.3Ghz\n**MSRP**: $122 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $122 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -206,7 +294,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-10100F",
-					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 4.3Ghz\n**MSRP**: $85 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
+					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $85 USD\n**Socket**: LGA 1200\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -214,7 +302,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-10100T",
-					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.0GHz\n**Boost clock**: 3.8Ghz\n**MSRP**: $122 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
+					"description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.0GHz\n**Boost clock**: 3.8GHz\n**MSRP**: $122 USD\n**Socket**: LGA 1200\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -222,7 +310,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-9900K",
-					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.6GHz\n**Boost clock**: 5.0Ghz single core\n**MSRP**: $500 USD\n**Socket**: LGA 1151\n**TDP**: 125w",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.6GHz\n**Boost clock**: 5.0GHz single core\n**MSRP**: $500 USD\n**Socket**: LGA 1151\n**TDP**: 125w",
 					"color": 2793983
 				}
 			})
@@ -230,7 +318,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-9900KF",
-					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.6GHz\n**Boost clock**: 5.0Ghz single core\n**MSRP**: $470 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.6GHz\n**Boost clock**: 5.0GHz single core\n**MSRP**: $470 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
 					"color": 2793983
 				}
 			})
@@ -238,7 +326,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-9900",
-					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.1GHz\n**Boost clock**: 5.0Ghz single core\n**MSRP**: $423 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.1GHz\n**Boost clock**: 5.0GHz single core\n**MSRP**: $423 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -246,7 +334,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i9-9900T",
-					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.1GHz\n**Boost clock**: 4.4Ghz\n**MSRP**: $423 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 2.1GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $423 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -254,7 +342,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-9700K",
-					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 4.9Ghz\n**MSRP**: $374 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
+					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 4.9GHz\n**MSRP**: $374 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
 					"color": 2793983
 				}
 			})
@@ -262,7 +350,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-9700KF",
-					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 4.9Ghz\n**MSRP**: $374 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
+					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 4.9GHz\n**MSRP**: $374 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
 					"color": 2793983
 				}
 			})
@@ -270,7 +358,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-9700",
-					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 3.0GHz\n**Boost clock**: 4.7Ghz\n**MSRP**: $323 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 3.0GHz\n**Boost clock**: 4.7GHz\n**MSRP**: $323 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -278,7 +366,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-9700F",
-					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 3.0GHz\n**Boost clock**: 4.7Ghz\n**MSRP**: $323 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 3.0GHz\n**Boost clock**: 4.7GHz\n**MSRP**: $323 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -286,7 +374,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-9700T",
-					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 2.0GHz\n**Boost clock**: 4.3Ghz\n**MSRP**: $323 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 8\n**Threads**: 8\n**Base clock**: 2.0GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $323 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -294,7 +382,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9600K",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.7GHz\n**Boost clock**: 4.6Ghz\n**MSRP**: $262 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.7GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $262 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
 					"color": 2793983
 				}
 			})
@@ -302,7 +390,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9600KF",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.7GHz\n**Boost clock**: 4.6Ghz\n**MSRP**: $237 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.7GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $237 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
 					"color": 2793983
 				}
 			})
@@ -310,7 +398,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9600",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.1GHz\n**Boost clock**: 4.6Ghz\n**MSRP**: $215 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.1GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $215 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -318,7 +406,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9600T",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.3GHz\n**Boost clock**: 3.9Ghz\n**MSRP**: $213 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.3GHz\n**Boost clock**: 3.9GHz\n**MSRP**: $213 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -326,7 +414,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9500",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.0GHz\n**Boost clock**: 4.4Ghz\n**MSRP**: $192 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.0GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -334,7 +422,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9500F",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.0GHz\n**Boost clock**: 4.4Ghz\n**MSRP**: $169 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.0GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $169 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -342,7 +430,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9500T",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.2GHz\n**Boost clock**: 3.7Ghz\n**MSRP**: $192 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.2GHz\n**Boost clock**: 3.7GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -350,7 +438,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9400",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.9GHz\n**Boost clock**: 4.1Ghz\n**MSRP**: $182 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.9GHz\n**Boost clock**: 4.1GHz\n**MSRP**: $182 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -358,7 +446,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9400F",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.9GHz\n**Boost clock**: 4.6Ghz\n**MSRP**: $147 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.9GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $147 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -366,7 +454,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-9400T",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 1.8GHz\n**Boost clock**: 3.4Ghz\n**MSRP**: $182 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 1.8GHz\n**Boost clock**: 3.4GHz\n**MSRP**: $182 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -374,7 +462,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-9350KF",
-					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 4.0GHz\n**Boost clock**: 4.6Ghz\n**MSRP**: $150 USD\n**Socket**: LGA 1151\n**TDP**: 91w",
+					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 4.0GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $150 USD\n**Socket**: LGA 1151\n**TDP**: 91w",
 					"color": 2793983
 				}
 			})
@@ -382,7 +470,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-9350K",
-					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 4.0GHz\n**Boost clock**: 4.6Ghz\n**MSRP**: $150 USD\n**Socket**: LGA 1151\n**TDP**: 91w",
+					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 4.0GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $150 USD\n**Socket**: LGA 1151\n**TDP**: 91w",
 					"color": 2793983
 				}
 			})
@@ -390,7 +478,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-9320",
-					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.7GHz\n**Boost clock**: 4.4Ghz\n**MSRP**: $156 USD\n**Socket**: LGA 1151\n**TDP**: 62w",
+					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.7GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $156 USD\n**Socket**: LGA 1151\n**TDP**: 62w",
 					"color": 2793983
 				}
 			})
@@ -398,7 +486,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-9300",
-					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.7GHz\n**Boost clock**: 4.3Ghz\n**MSRP**: $145 USD\n**Socket**: LGA 1151\n**TDP**: 62w",
+					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.7GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $145 USD\n**Socket**: LGA 1151\n**TDP**: 62w",
 					"color": 2793983
 				}
 			})
@@ -406,7 +494,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-9300T",
-					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.2GHz\n**Boost clock**: 3.8Ghz\n**MSRP**: $143 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.2GHz\n**Boost clock**: 3.8GHz\n**MSRP**: $143 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -414,7 +502,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-9100",
-					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.6GHz\n**Boost clock**: 4.2Ghz\n**MSRP**: $122 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.6GHz\n**Boost clock**: 4.2GHz\n**MSRP**: $122 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -422,7 +510,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-9100F",
-					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.6GHz\n**Boost clock**: 4.2Ghz\n**MSRP**: $85 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.6GHz\n**Boost clock**: 4.2GHz\n**MSRP**: $85 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -430,7 +518,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i3-9100T",
-					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.1GHz\n**Boost clock**: 3.7Ghz\n**MSRP**: $122 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 3.1GHz\n**Boost clock**: 3.7GHz\n**MSRP**: $122 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -438,7 +526,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-8086K",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 4.0GHz\n**Boost clock**: 5.0Ghz\n**MSRP**: OEM only\n**Socket**: LGA 1151\n**TDP**: 95w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 4.0GHz\n**Boost clock**: 5.0GHz\n**MSRP**: OEM only\n**Socket**: LGA 1151\n**TDP**: 95w",
 					"color": 2793983
 				}
 			})
@@ -446,7 +534,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-8700K",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.7GHz\n**Boost clock**: 4.7Ghz\n**MSRP**: $360 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.7GHz\n**Boost clock**: 4.7GHz\n**MSRP**: $360 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
 					"color": 2793983
 				}
 			})
@@ -454,7 +542,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-8700",
-					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.2GHz\n**Boost clock**: 4.6Ghz\n**MSRP**: $303 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.2GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $303 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -462,7 +550,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i7-8700T",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.4GHz\n**Boost clock**: 4.0Ghz\n**MSRP**: $303 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.4GHz\n**Boost clock**: 4.0GHz\n**MSRP**: $303 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -470,7 +558,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-8600K",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.6GHz\n**Boost clock**: 4.3Ghz\n**MSRP**: $257 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.6GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $257 USD\n**Socket**: LGA 1151\n**TDP**: 95w",
 					"color": 2793983
 				}
 			})
@@ -478,7 +566,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-8600",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.1GHz\n**Boost clock**: 4.3Ghz\n**MSRP**: $215 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.1GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $215 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -486,7 +574,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-8600T",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.3GHz\n**Boost clock**: 3.7Ghz\n**MSRP**: $213 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.3GHz\n**Boost clock**: 3.7GHz\n**MSRP**: $213 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -494,7 +582,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-8500",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.0GHz\n**Boost clock**: 4.1Ghz\n**MSRP**: $195 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 3.0GHz\n**Boost clock**: 4.1GHz\n**MSRP**: $195 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -502,7 +590,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-8500T",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.1GHz\n**Boost clock**: 3.5Ghz\n**MSRP**: $192 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.1GHz\n**Boost clock**: 3.5GHz\n**MSRP**: $192 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
@@ -510,7 +598,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-8400",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.8GHz\n**Boost clock**: 4.0Ghz\n**MSRP**: $180 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 2.8GHz\n**Boost clock**: 4.0GHz\n**MSRP**: $180 USD\n**Socket**: LGA 1151\n**TDP**: 65w",
 					"color": 2793983
 				}
 			})
@@ -518,7 +606,7 @@ module.exports = {
 			message.channel.send({
 				embed: {
 					"title": "Intel Core i5-8400T",
-					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 1.7GHz\n**Boost clock**: 3.3Ghz\n**MSRP**: $182 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
+					"description": "**Cores**: 6\n**Threads**: 6\n**Base clock**: 1.7GHz\n**Boost clock**: 3.3GHz\n**MSRP**: $182 USD\n**Socket**: LGA 1151\n**TDP**: 35w",
 					"color": 2793983
 				}
 			})
