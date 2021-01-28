@@ -125,23 +125,16 @@ client.on("message", async (message) => {
 				}
 			});
 			return ranks.push([command.name, points]);
-
-
-
-			if (command.autores.every(x => x.includes('/') ? msg.includes(x.slice(x.indexOf('/') + 1)) || msg.includes(x.slice(0, x.indexOf('/'))) : msg.includes(x))) {
-				
-			}
 		});
-		console.log(ranks);
 		ranks.sort((a, b) => b[1] - a[1]);
-		console.log('----------------------', ranks);
-
-		const command = client.commands.get(ranks[0][0])
-		await message.channel.send(`AutoResponse™ was summoned. Running command \`${client.prefix}${command.name}\`...`);
-		try {
-			return command.run(client, Object.assign(message, { content: `${client.prefix}${command.name}` }), [command.name]);
-		} catch (error) {
-			return console.log(`An error occured while running command "${command.name}"`, error, error.stack);
+		if (ranks[0][1] > 4) {
+			const command = client.commands.get(ranks[0][0])
+			await message.channel.send(`AutoResponse™ was summoned. Running command \`${client.prefix}${command.name}\`...`);
+			try {
+				return command.run(client, Object.assign(message, { content: `${client.prefix}${command.name}` }), [command.name]);
+			} catch (error) {
+				return console.log(`An error occured while running command "${command.name}"`, error, error.stack);
+			}
 		}
 	}
 });

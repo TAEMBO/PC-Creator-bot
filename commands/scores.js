@@ -3,9 +3,9 @@ module.exports = {
 		if (!args[1]) {
 			await message.channel.send('Which component\'s chart would you like to view? Respond with "CPU", "GPU" or "RAM"').then(async w => {
 				const x = await w.channel.awaitMessages(y => ['cpu', 'gpu', 'ram'].includes(y.content.toLowerCase()) && y.author.id === message.author.id, { time: 12000, max: 1, errors: ['time']}).catch(z => {
-					return message.channel.send('You failed.');
+					return message.channel.send('You failed to specify the component.');
 				});
-				args[1] = x.first().content || '';
+				args[1] = x.content || '';
 			});
 		}
 		if (args[1].toUpperCase() === 'CPU') {
