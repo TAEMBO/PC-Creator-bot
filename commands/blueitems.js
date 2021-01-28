@@ -5,5 +5,6 @@ module.exports = {
 	name: 'blueitems',
 	alias: ['wheel', 'wheelblue'],
 	category: 'PC Creator',
-	description: 'Provides a table about blue item availability'
+	description: 'Provides a table about blue item availability',
+	autores: ['OPT-how/why', 'wheel', 'impossible/chance', 'OPT-item', 'dark blue/blue']
 };

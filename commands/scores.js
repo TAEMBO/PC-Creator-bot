@@ -2,10 +2,13 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (!args[1]) {
 			await message.channel.send('Which component\'s chart would you like to view? Respond with "CPU", "GPU" or "RAM"').then(async w => {
+				let timedOut = false;
 				const x = await w.channel.awaitMessages(y => ['cpu', 'gpu', 'ram'].includes(y.content.toLowerCase()) && y.author.id === message.author.id, { time: 12000, max: 1, errors: ['time']}).catch(z => {
+					timedOut = true;
 					return message.channel.send('You failed to specify the component.');
 				});
-				args[1] = x.content || '';
+				if (timedOut) return;
+				args[1] = x.content || x.first().content || '';
 			});
 		}
 		if (args[1].toUpperCase() === 'CPU') {
@@ -23,5 +26,5 @@ module.exports = {
 	alias: ['benchmarks', 'benchmark', 'score'],
 	description: 'Provides overclocking spreadsheets of in-game items',
 	category: 'PC Creator',
-	autores: ['how', 'benchmark', 'OPT-video/card', 'OPT-cpu/processor', 'OPT-task']
+	autores: ['how', 'benchmark', 'OPT-video/card', 'OPT-cpu/processor', 'OPT-task', 'OPT-overclock', 'OPT-score']
 };

@@ -101,7 +101,7 @@ client.on("message", async (message) => {
 		}
 	} else {
 		const msg = message.content.toLowerCase();
-		if (!['how', 'what', 'where', 'when'].some(x => msg.includes(x))) return;
+		if (!['how', 'what', 'where', 'when', 'see', 'help', 'why', 'is'].some(x => msg.includes(x)) || message.author.bot) return;
 		const ranks = [];
 		client.commands.forEach(command => {
 			if (!command.autores) return ranks.push([command.name, 0]);

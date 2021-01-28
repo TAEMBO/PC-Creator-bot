@@ -4,5 +4,5 @@ module.exports = {
 	},
 	name: 'gaming',
 	description: 'Provides a picture of how to make a PC\'s purpose for gaming',
-	category: 'PC Creator'
+	category: 'PC Creator',
 };

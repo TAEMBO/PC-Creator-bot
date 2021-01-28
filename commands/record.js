@@ -8,5 +8,6 @@ module.exports = {
     },
 	name: 'record',
 	description: 'Shows the current World Record PC in the game',
-	category: 'PC Creator'
+	category: 'PC Creator',
+	autores: ['OPT-what', 'record', 'pc', 'OPT-benchmark']
 };

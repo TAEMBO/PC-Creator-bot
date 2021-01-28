@@ -4,5 +4,6 @@ module.exports = {
     },
 	name: 'games',
 	description: 'Provides help with game installation',
-	category: 'PC Creator'
+	category: 'PC Creator',
+	autores: ['OPT-how', 'game/driver', 'install/update']
 };

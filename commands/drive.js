@@ -4,5 +4,6 @@ module.exports = {
 	},
 	name: 'drive',
 	description: 'Provides a picture of each type of storage drive',
-	category: 'PC Creator'
+	category: 'PC Creator',
+	autores: ['OPT-what/how', 'ssd', 'task', 'OPT-have', 'is']
 };

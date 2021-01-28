@@ -5,5 +5,6 @@ module.exports = {
 	name: 'virus',
 	alias: ['antivirus'],
 	description: 'Provides help with viruses task',
-	category: 'PC Creator'
+	category: 'PC Creator',
+	autores: ['OPT-how/where', 'remove', 'virus', 'antivirus', 'get']
 };
