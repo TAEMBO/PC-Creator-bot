@@ -6,5 +6,6 @@
 	"evalAllowed": false,
 	"evalWhitelist": [
 		"615761944154210305"
-	]
+	],
+	"enableAutoResponse": true
 }

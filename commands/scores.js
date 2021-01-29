@@ -3,7 +3,7 @@ module.exports = {
 		if (!args[1]) {
 			await message.channel.send('Which component\'s chart would you like to view? Respond with "CPU", "GPU" or "RAM"').then(async w => {
 				let timedOut = false;
-				const x = await w.channel.awaitMessages(y => ['cpu', 'gpu', 'ram'].includes(y.content.toLowerCase()) && y.author.id === message.author.id, { time: 12000, max: 1, errors: ['time']}).catch(z => {
+				const x = await w.channel.awaitMessages(y => ['cpu', 'gpu', 'ram'].includes(y.content.toLowerCase()) && y.author.id === message.author.id, { time: 20000, max: 1, errors: ['time']}).catch(z => {
 					timedOut = true;
 					return message.channel.send('You failed to specify the component.');
 				});
@@ -11,6 +11,7 @@ module.exports = {
 				args[1] = x.content || x.first().content || '';
 			});
 		}
+		args[1] = args[1].replace(/"/g, '')
 		if (args[1].toUpperCase() === 'CPU') {
 			message.channel.send({ files: ["https://cdn.discordapp.com/attachments/696448442989543445/778856180260405268/unknown.png"] });
 		} else if (args[1].toUpperCase() === 'GPU') {
@@ -26,5 +27,5 @@ module.exports = {
 	alias: ['benchmarks', 'benchmark', 'score'],
 	description: 'Provides overclocking spreadsheets of in-game items',
 	category: 'PC Creator',
-	autores: ['how', 'benchmark', 'OPT-video/card', 'OPT-cpu/processor', 'OPT-task', 'OPT-overclock', 'OPT-score']
+	autores: ['benchmark', 'video/card/cpu/processor', 'more/>']
 };

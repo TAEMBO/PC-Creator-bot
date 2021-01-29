@@ -5,5 +5,5 @@ module.exports = {
 	name: 'overclocking',
 	description: 'Explains how to overclock a component',
 	category: 'PC Creator',
-	autores: ['OPT-how', 'overclock', 'pc']
+	autores: ['how', 'overclock', 'pc']
 };

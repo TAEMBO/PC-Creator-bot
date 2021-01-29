@@ -28,7 +28,7 @@ for (const file of commandFiles) {
 // commandinfo function
 client.commandInfo = (command, options = {}) => {
 	const { includeCategory, insertEmpty } = options;
-	return `:small_blue_diamond: \`${client.prefix}${command.name}${command.usage ? ' [' + command.usage.join('] [') + ']' : ''}\`${command.description ? '\n' + (insertEmpty ? '\n' : '') + command.description : ''}${command.alias ? (insertEmpty ? '\n' : '') + '\nAliases: ' + command.alias.map(x => '`' + x + '`').join(', ') : ''}${includeCategory ? (insertEmpty ? '\n' : '') + '\nCategory: ' + command.category : ''}\n\n`;
+	return `:small_blue_diamond: \`${client.prefix}${command.name}${command.usage ? ' [' + command.usage.join('] [') + ']' : ''}\`${command.description ? '\n' + (insertEmpty ? '\n' : '') + command.description : ''}${command.alias ? (insertEmpty ? '\n' : '') + '\nAliases: ' + command.alias.map(x => '`' + x + '`').join(', ') : ''}${includeCategory ? (insertEmpty ? '\n' : '') + '\nCategory: ' + command.category : ''}\n`;
 };
 
 // assign page number to commands
@@ -38,7 +38,7 @@ while (client.commands.some(command => !command.hidden && !command.page)) {
 	if (!command.category) command.category = 'Misc';
 	if (!categories[command.category]) categories[command.category] = { text: '', currentPage: 1}
 	const commandInfo = client.commandInfo(command);
-	if (categories[command.category].text.length + commandInfo.length > 1536) {
+	if (categories[command.category].text.length + commandInfo.length > 1024) {
 		categories[command.category].text = commandInfo;
 		categories[command.category].currentPage++;
 	} else {
@@ -100,40 +100,37 @@ client.on("message", async (message) => {
 			}
 		}
 	} else {
-		const msg = message.content.toLowerCase();
-		if ((!['how', 'what', 'where', 'when', 'see', 'help', 'why'].some(x => msg.includes(x)) || !msg.startsWith('is')) || message.author.bot) return;
-		const ranks = [];
-		client.commands.forEach(command => {
-			if (!command.autores) return ranks.push([command.name, 0]);
-			let points = 0;
-			command.autores.forEach(keyword => {
-				if (keyword.startsWith('OPT-')) {
-					keyword = keyword.slice(4);
+		if (client.config.enableAutoResponse) {
+			const msgContentLowercase = message.content.toLowerCase();
+			const questionWords = ['how', 'what', 'where', 'when', 'help', 'why', 'is'];
+			let trigger;
+			if (!questionWords.some(x => {
+				if ((' ' + msgContentLowercase + ' ').includes(' ' + x + ' ')) {
+					trigger = x;
+					return true;
+				} else return false;
+			}) || message.author.bot) return;
+			const msg = msgContentLowercase.slice(msgContentLowercase.indexOf(trigger));
+			let match;
+			client.commands.forEach(command => {
+				if (!command.autores) return;
+				if (command.autores.every(keyword => {
 					if (keyword.includes('/')) {
-						if (msg.includes(keyword.slice(0, keyword.indexOf('/')))) points += 1
-						if (msg.includes(keyword.slice(keyword.indexOf('/') + 1))) points += 1
+						const keywordsSplit = keyword.split('/');
+						if (keywordsSplit.some(x => msg.includes(x))) return true;
+						else return false;
 					} else {
-						if (msg.includes(keyword)) points += 2
+						return msg.includes(keyword)
 					}
-				} else {
-					if (keyword.includes('/')) {
-						if (msg.includes(keyword.slice(0, keyword.indexOf('/')))) points += 3
-						if (msg.includes(keyword.slice(keyword.indexOf('/') + 1))) points += 3
-					} else {
-						if (msg.includes(keyword)) points += 4
-					}
-				}
+				})) match = command;
 			});
-			return ranks.push([command.name, points]);
-		});
-		ranks.sort((a, b) => b[1] - a[1]);
-		if (ranks[0][1] > 4) {
-			const command = client.commands.get(ranks[0][0])
-			await message.channel.send(`AutoResponse™ was summoned. Running command \`${client.prefix}${command.name}\`...`);
-			try {
-				return command.run(client, Object.assign(message, { content: `${client.prefix}${command.name}` }), [command.name]);
-			} catch (error) {
-				return console.log(`An error occured while running command "${command.name}"`, error, error.stack);
+			if (match) {
+				await message.channel.send(`AutoResponse™ was summoned. Running command \`${client.prefix}${match.name}\`...`);
+				try {
+					return match.run(client, Object.assign(message, { content: `${client.prefix}${match.name}` }), [match.name]);
+				} catch (error) {
+					return console.log(`An error occured while running command "${match.name}"`, error, error.stack);
+				}
 			}
 		}
 	}

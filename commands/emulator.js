@@ -6,5 +6,5 @@ module.exports = {
 	alias: ['bluestacks', 'memu'],
 	category: 'PC Creator',
 	description: 'Info about how to play PC Creator on PC',
-	autores: ['OPT-how', 'play', 'on pc', 'pc creator', 'OPT-version']
+	autores: ['play', 'pc creator', 'on pc']
 };
