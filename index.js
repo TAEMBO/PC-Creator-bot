@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: true});
 const fs = require('fs');
-client.config = require("./config.json");
+client.config = require("./config-test.json");
 client.prefix = ',';
 client.on("ready", async () => {
 	await client.user.setActivity(",help", {
@@ -101,23 +101,23 @@ client.on("message", async (message) => {
 		}
 	} else {
 		if (client.config.enableAutoResponse) {
-			const msgContentLowercase = message.content.toLowerCase();
+			let msg = message.content.toLowerCase();
 			const questionWords = ['how', 'what', 'where', 'when', 'help', 'why', 'is'];
 			let trigger;
 			if (!questionWords.some(x => {
-				if ((' ' + msgContentLowercase + ' ').includes(' ' + x + ' ')) {
+				if ((' ' + msg + ' ').includes(' ' + x + ' ') || (' ' + msg + ' ').includes(' ' + x + 's')) {
 					trigger = x;
 					return true;
 				} else return false;
 			}) || message.author.bot) return;
-			const msg = msgContentLowercase.slice(msgContentLowercase.indexOf(trigger));
 			let match;
+			if (msg.length > 96) msg = msg.slice(msg.indexOf(trigger))
 			client.commands.forEach(command => {
 				if (!command.autores) return;
 				if (command.autores.every(keyword => {
 					if (keyword.includes('/')) {
 						const keywordsSplit = keyword.split('/');
-						if (keywordsSplit.some(x => msg.includes(x))) return true;
+						if (keywordsSplit.some(x => msg.includes(' ' + x))) return true;
 						else return false;
 					} else {
 						return msg.includes(keyword)
