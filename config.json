@@ -7,5 +7,7 @@
 	"evalWhitelist": [
 		"615761944154210305"
 	],
-	"enableAutoResponse": true
+	"enableAutoResponse": true,
+	"dmForwardChannel": "778848112588095559",
+	"pcCreatorServer": "571031703661969430"
 }
