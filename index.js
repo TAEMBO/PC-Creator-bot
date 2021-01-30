@@ -132,7 +132,7 @@ client.on("message", async (message) => {
 				if (command.autores.every(keyword => {
 					if (keyword.includes('/')) {
 						const keywordsSplit = keyword.split('/');
-						if (keywordsSplit.some(x => msg.includes(' ' + x))) return true;
+						if (keywordsSplit.some(x => msg.includes(x))) return true;
 						else return false;
 					} else {
 						return msg.includes(keyword)
