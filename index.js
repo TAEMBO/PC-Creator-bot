@@ -90,7 +90,7 @@ client.on("message", async (message) => {
 	if (message.channel.type === 'dm') {
 		const channel = client.channels.cache.get(client.config.dmForwardChannel);
 		const pcCreatorServer = client.guilds.cache.get(client.config.pcCreatorServer);
-		if (!channel || pcCreatorServer) console.log(`could not find channel ${client.config.dmForwardChannel} or guild ${client.config.pcCreatorServer}`);
+		if (!channel || !pcCreatorServer) console.log(`could not find channel ${client.config.dmForwardChannel} or guild ${client.config.pcCreatorServer}`);
 		const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
 		const memberOfPccs = !!guildMemberObject;
 		const embed = new client.embed()
@@ -116,7 +116,7 @@ client.on("message", async (message) => {
 		}
 	} else {
 		if (client.config.enableAutoResponse) {
-			let msg = message.content.toLowerCase();
+			let msg = message.content.toLowerCase().replace(/'/g, '').replace(/´/g, '');
 			const questionWords = ['how', 'what', 'where', 'when', 'help', 'why', 'is'];
 			let trigger;
 			if (!questionWords.some(x => {
