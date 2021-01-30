@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: true});
 const fs = require('fs');
-client.config = require("./config-test.json");
+client.config = require("./config.json");
 client.prefix = ',';
 client.on("ready", async () => {
 	await client.user.setActivity(",help", {
@@ -89,8 +89,8 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 client.on("message", async (message) => {
 	if (message.channel.type === 'dm') {
 		const channel = client.channels.cache.get(client.config.dmForwardChannel);
-		if (!channel) return;
 		const pcCreatorServer = client.guilds.cache.get(client.config.pcCreatorServer);
+		if (!channel || pcCreatorServer) console.log(`could not find channel ${client.config.dmForwardChannel} or guild ${client.config.pcCreatorServer}`);
 		const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
 		const memberOfPccs = !!guildMemberObject;
 		const embed = new client.embed()
