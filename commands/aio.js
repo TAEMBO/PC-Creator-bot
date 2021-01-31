@@ -4,5 +4,6 @@ module.exports = {
 	},
 	name: 'aio',
 	description: 'Provides a picture of what a watercooler looks like',
-	category: 'PC Creator'
+	category: 'PC Creator',
+	autores: ['what/how', 'water/cool/aio']
 };
