@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: true});
 const fs = require('fs');
 client.config = require("./config.json");
+if (!client.config.token) client.config = require("./config-test.json");
 client.prefix = ',';
 client.on("ready", async () => {
 	await client.user.setActivity(",help", {
