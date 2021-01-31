@@ -2323,21 +2323,277 @@ module.exports = {
                 }
 			})
 		} else if (args[1].toUpperCase() === '10980XE') {
-			message.channel.send({
-				embed: {
-					"title": "Intel Core i9-10980XE",
-					"description": "**Cores**: 18\n**Threads**: 36\n**Base clock**: 3.0GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $950 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
-					"color": 2793983
-				}
-			})
-	    } else if (args[1].toUpperCase() === '7980XE') {
-			message.channel.send({
-				embed: {
-					"title": "Intel Core i9-7980XE",
-					"description": "**Cores**: 18\n**Threads**: 36\n**Base clock**: 2.6GHz\n**Boost clock**: 4.2GHz\n**MSRP**: $1999 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
-					"color": 2793983
-				}
-			})
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-10980XE",
+                    "description": "**Cores**: 18\n**Threads**: 36\n**Base clock**: 3.0GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $950 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '10940X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-10940X",
+                    "description": "**Cores**: 14\n**Threads**: 28\n**Base clock**: 3.3GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $784 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '10920X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-10920X",
+                    "description": "**Cores**: 12\n**Threads**: 24\n**Base clock**: 3.5GHz\n**Boost clock**: 4.6GHz\n**MSRP**: $689 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '10900X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-10900X",
+                    "description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.7GHz\n**Boost clock**: 4.5GHz\n**MSRP**: $590 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '9980XE') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-9980XE",
+                    "description": "**Cores**: 18\n**Threads**: 36\n**Base clock**: 3.0GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $1979 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '9960X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-9960X",
+                    "description": "**Cores**: 16\n**Threads**: 32\n**Base clock**: 3.1GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $1684 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '9940X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-9940X",
+                    "description": "**Cores**: 14\n**Threads**: 36\n**Base clock**: 3.3GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $1387 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '9920X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-9920X",
+                    "description": "**Cores**: 12\n**Threads**: 24\n**Base clock**: 3.5GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $1189 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '9900X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-9900X",
+                    "description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.5GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $989 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '9820X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-9820X",
+                    "description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.3GHz\n**Boost clock**: 4.1GHz\n**MSRP**: $889 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '9800X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-9800X",
+                    "description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.8GHz\n**Boost clock**: 4.4GHz\n**MSRP**: $589 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '7980XE') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-7980XE",
+                    "description": "**Cores**: 18\n**Threads**: 36\n**Base clock**: 2.6GHz\n**Boost clock**: 4.2GHz\n**MSRP**: $1979 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '7960X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-7960X",
+                    "description": "**Cores**: 16\n**Threads**: 32\n**Base clock**: 2.8GHz\n**Boost clock**: 4.2GHz\n**MSRP**: $1684 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '7940X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-7940X",
+                    "description": "**Cores**: 14\n**Threads**: 28\n**Base clock**: 3.1GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $1387 USD\n**Socket**: LGA 2066\n**TDP**: 165w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '7920X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-7920X",
+                    "description": "**Cores**: 12\n**Threads**: 24\n**Base clock**: 2.9GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $1189 USD\n**Socket**: LGA 2066\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '7900X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i9-7900X",
+                    "description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.3GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $989 USD\n**Socket**: LGA 2066\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '7820X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-7820X",
+                    "description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.6GHz\n**Boost clock**: 4.3GHz\n**MSRP**: $589 USD\n**Socket**: LGA 2066\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '7800X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-7800X",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.5GHz\n**Boost clock**: 4.0GHz\n**MSRP**: $389 USD\n**Socket**: LGA 2066\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '7740X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-7740X",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 4.3GHz\n**Boost clock**: 4.5GHz\n**MSRP**: $339 USD\n**Socket**: LGA 2066\n**TDP**: 112w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '7640X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i5-7640X",
+                    "description": "**Cores**: 4\n**Threads**: 4\n**Base clock**: 4.0GHz\n**Boost clock**: 4.2GHz\n**MSRP**: $242 USD\n**Socket**: LGA 2066\n**TDP**: 112w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '6950X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-6950X",
+                    "description": "**Cores**: 10\n**Threads**: 20\n**Base clock**: 3.0GHz\n**Boost clock**: 3.5GHz\n**MSRP**: $1723 USD\n**Socket**: LGA 2011-3\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '6900K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-6900K",
+                    "description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.2GHz\n**Boost clock**: 3.7GHz\n**MSRP**: $1089 USD\n**Socket**: LGA 2011-3\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+        } else if (args[1].toUpperCase() === '6850K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-6850K",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.6GHz\n**Boost clock**: 3.8GHz\n**MSRP**: $617 USD\n**Socket**: LGA 2011-3\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '6800K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-6800K",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.4GHz\n**Boost clock**: 3.6GHz\n**MSRP**: $434 USD\n**Socket**: LGA 2011-3\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '5960X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-5960X",
+                    "description": "**Cores**: 8\n**Threads**: 16\n**Base clock**: 3.0GHz\n**Boost clock**: 3.5GHz\n**MSRP**: $999 USD\n**Socket**: LGA 2011-3\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '5930K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-5930K",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.5GHz\n**Boost clock**: 3.7GHz\n**MSRP**: $583 USD\n**Socket**: LGA 2011-3\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '5820K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-5820K",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.3GHz\n**Boost clock**: 3.6GHz\n**MSRP**: $389 USD\n**Socket**: LGA 2011-3\n**TDP**: 140w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '4960X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4960X",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.6GHz\n**Boost clock**: 4.0GHz\n**MSRP**: $1059 USD\n**Socket**: LGA 2011\n**TDP**: 130w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '4930K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4930K",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.4GHz\n**Boost clock**: 3.9GHz\n**MSRP**: $594 USD\n**Socket**: LGA 2011\n**TDP**: 130w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '4820K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-4820K",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.7GHz\n**Boost clock**: 3.9GHz\n**MSRP**: $332 USD\n**Socket**: LGA 2011\n**TDP**: 130w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '3970X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-3970X",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.5GHz\n**Boost clock**: 4.0GHz\n**MSRP**: $1059 USD\n**Socket**: LGA 2011\n**TDP**: 150w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '3960X') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-3960X",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.3GHz\n**Boost clock**: 3.9GHz\n**MSRP**: $1059 USD\n**Socket**: LGA 2011\n**TDP**: 130w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '3930K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-3930K",
+                    "description": "**Cores**: 6\n**Threads**: 12\n**Base clock**: 3.2GHz\n**Boost clock**: 3.8GHz\n**MSRP**: $594 USD\n**Socket**: LGA 2011\n**TDP**: 130w",
+                    "color": 2793983
+                }
+            })
+		} else if (args[1].toUpperCase() === '3820K') {
+            message.channel.send({
+                embed: {
+                    "title": "Intel Core i7-3820K",
+                    "description": "**Cores**: 4\n**Threads**: 8\n**Base clock**: 3.6GHz\n**Boost clock**: 3.8GHz\n**MSRP**: $305 USD\n**Socket**: LGA 2011\n**TDP**: 130w",
+                    "color": 2793983
+                }
+            })
 		} 
 	},
 	name: 'cpuintel',
