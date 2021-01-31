@@ -27,5 +27,5 @@ module.exports = {
 	alias: ['benchmarks', 'benchmark', 'score'],
 	description: 'Provides overclocking spreadsheets of in-game items',
 	category: 'PC Creator',
-	autores: ['benchmark', 'video/card/cpu/processor']
+	autores: ['benchmark/score/need', 'video/card/gpu/cpu/processor']
 };
