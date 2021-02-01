@@ -134,7 +134,7 @@ client.on("message", async (message) => {
 			.setAuthor(message.author.tag + ` (${message.author.id})`, message.author.avatarURL({ format: 'png', dynamic: true, size: 256}))
 			.setColor(3971825)
 			.addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content)
-			.addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the PC Creator Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
+			.addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the PC Creator Discord server${memberOfPccs ? ' as ' + guildMemberObject.toString() : ''}${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.size > 0 ? guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ') : 'None'}` : ''}`)
 			.setTimestamp(Date.now());
 		channel.send(embed);
 	}
