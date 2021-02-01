@@ -152,11 +152,18 @@ client.on("message", async (message) => {
 		}
 	} else {
 		if (client.config.enableAutoResponse) {
-			let msg = message.content.toLowerCase().replace(/'/g, '').replace(/´/g, '');
+			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
 			const questionWords = ['how', 'what', 'where', 'when', 'help', 'why', 'is'];
 			let trigger;
 			if (!questionWords.some(x => {
-				if ((' ' + msg + ' ').includes(' ' + x + ' ') || (' ' + msg + ' ').includes(' ' + x + 's')) {
+				if (
+					(
+						(' ' + msg + ' ').includes(' ' + x + ' ')
+						&&
+						!(' ' + msg + ' ').includes(' ' + x + ' if ')
+					)
+					|| (' ' + msg + ' ').includes(' ' + x + 's ')
+				) {
 					trigger = x;
 					return true;
 				} else return false;

@@ -6,5 +6,5 @@ module.exports = {
 	alias: ['drives'],
 	description: 'Provides a picture of each type of storage drive',
 	category: 'PC Creator',
-	autores: ['what/how', 'is/does/present', 'ssd']
+	autores: ['what/how', 'is/does/present/look', 'ssd']
 };
