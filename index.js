@@ -153,21 +153,21 @@ client.on("message", async (message) => {
 	} else {
 		if (client.config.enableAutoResponse) {
 			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
-			const questionWords = ['how', 'what', 'where', 'when', 'help', 'why', 'is'];
+			const questionWords = ['how', 'what', 'where', 'when', 'help', 'why'];
 			let trigger;
 			if (!questionWords.some(x => {
 				if (
 					(
-						(' ' + msg + ' ').includes(' ' + x + ' ')
-						&&
-						!(' ' + msg + ' ').includes(' ' + x + ' if ')
+						(' ' + msg + ' ').includes(' ' + x + ' ') // question word has to be the full word, eliminates "whatever"
+						&& !(' ' + msg + ' ').includes(' ' + x + ' if ') // question word cant be used a suggestion, eliminates "what if ..."
+						&& !(' ' + msg + ' ').includes('s ' + x + ' ') // question word cant be used as a relative pronoun, eliminates "that's what ..."
 					)
-					|| (' ' + msg + ' ').includes(' ' + x + 's ')
+					|| (' ' + msg + ' ').includes(' ' + x + 's ') // question word can also be "question word + is", eg "what's"
 				) {
 					trigger = x;
 					return true;
 				} else return false;
-			}) || message.author.bot) return;
+			}) || message.author.bot || !msg.startsWith('is')) return;
 			let match;
 			if (msg.length > 96) msg = msg.slice(msg.indexOf(trigger))
 			client.commands.forEach(command => {
