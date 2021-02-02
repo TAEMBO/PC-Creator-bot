@@ -123,20 +123,22 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 });
 
 client.on("message", async (message) => {
-	if (message.channel.type === 'dm') {
-		const channel = client.channels.cache.get(client.config.dmForwardChannel);
-		const pcCreatorServer = client.guilds.cache.get(client.config.pcCreatorServer);
-		if (!channel || !pcCreatorServer) console.log(`could not find channel ${client.config.dmForwardChannel} or guild ${client.config.pcCreatorServer}`);
-		const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
-		const memberOfPccs = !!guildMemberObject;
-		const embed = new client.embed()
-			.setTitle('Forwarded DM Message')
-			.setAuthor(message.author.tag + ` (${message.author.id})`, message.author.avatarURL({ format: 'png', dynamic: true, size: 256}))
-			.setColor(3971825)
-			.addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content)
-			.addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the PC Creator Discord server${memberOfPccs ? ' as ' + guildMemberObject.toString() : ''}${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.size > 0 ? guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ') : 'None'}` : ''}`)
-			.setTimestamp(Date.now());
-		channel.send(embed);
+    if (message.channel.type === 'dm') {
+        const channel = client.channels.cache.get(client.config.dmForwardChannel);
+        const pcCreatorServer = client.guilds.cache.get(client.config.pcCreatorServer);
+        if (!channel || !pcCreatorServer) console.log(`could not find channel ${client.config.dmForwardChannel} or guild ${client.config.pcCreatorServer}`);
+        const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
+        const memberOfPccs = !!guildMemberObject;
+        const embed = new client.embed()
+            .setTitle('Forwarded DM Message')
+            .setAuthor(message.author.tag + ` (${message.author.id})`, message.author.avatarURL({ format: 'png', dynamic: true, size: 256}))
+            .setColor(3971825)
+            .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content)
+            .addField('User', `<@${message.author.id}>`)
+            .addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the PC Creator Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
+            .setTimestamp(Date.now());
+        channel.send(embed)
+        channel.send('<@615761944154210305>');
 	}
 	if (!message.guild) return;
 	if (message.content.startsWith(client.prefix)) {
