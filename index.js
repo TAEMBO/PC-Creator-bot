@@ -157,7 +157,7 @@ client.on("message", async (message) => {
 			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
 			const questionWords = ['how', 'what', 'where', 'when', 'help', 'why'];
 			let trigger;
-			if (!questionWords.some(x => {
+			if (!((questionWords.some(x => {
 				if (
 					(
 						(' ' + msg + ' ').includes(' ' + x + ' ') // question word has to be the full word, eliminates "whatever"
@@ -169,7 +169,7 @@ client.on("message", async (message) => {
 					trigger = x;
 					return true;
 				} else return false;
-			}) || message.author.bot || !msg.startsWith('is')) return;
+			}) && !message.author.bot) || msg.startsWith('is'))) return;
 			let match;
 			if (msg.length > 96) msg = msg.slice(msg.indexOf(trigger))
 			client.commands.forEach(command => {
