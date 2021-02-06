@@ -1754,6 +1754,14 @@ module.exports = {
 					"color": 2793983
 				}
 			})
+		} else if (args[1].toUpperCase() === '650') {
+			message.channel.send({
+				embed: {
+					"title": "Intel Core i5-650",
+					"description": "**Cores**: 2\n**Threads**: 4\n**Base clock**: 3.2GHz\n**Boost clock**: 3.54GHz\n**MSRP**: $177 USD\n**Socket**: LGA 1156\n**TDP**: 73w",
+					"color": 2793983
+				}
+			})
 		} else if (args[1].toUpperCase() === '750S') {
 			message.channel.send({
 				embed: {
