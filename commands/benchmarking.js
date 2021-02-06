@@ -6,5 +6,6 @@ module.exports = {
 	alias: ['benchmark', 'bm'],
 	description: 'Info about benchmarking',
 	category: 'PC Creator',
-	autores: ['what/how', 'benchmark']
+	autores: ['what/how', 'benchmark'],
+	cooldown: 5000
 };

@@ -15,6 +15,7 @@ client.on("ready", async () => {
 Object.assign(client, {
 	embed: Discord.MessageEmbed,
 	messageCollector: Discord.MessageCollector,
+	cooldowns: new Discord.Collection(),
 	memberCount_LastGuildFetchTimestamp: 0,
 });
 
@@ -53,6 +54,10 @@ client.commandInfo = (command, options = { insertEmpty: false, parts: []}) => {
 	}
 	if (options.parts.includes('alias') && command.alias) {
 		text += 'Aliases: ' + command.alias.map(x => '`' + x + '`').join(', ');
+		e();
+	}
+	if (options.parts.includes('cooldown') && command.cooldown) {
+		text += 'Cooldown: ' + command.cooldown / 1000 + ' seconds';
 		e();
 	}
 	if (options.parts.includes('category') && command.category) {
@@ -137,7 +142,7 @@ client.on("message", async (message) => {
             .addField('User', `<@${message.author.id}>`)
             .addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the PC Creator Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
             .setTimestamp(Date.now());
-        channel.send(embed)
+        await channel.send(embed)
         channel.send('<@615761944154210305>');
 	}
 	if (!message.guild) return;
@@ -146,6 +151,15 @@ client.on("message", async (message) => {
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
 			try {
+				if (commandFile.cooldown) {
+					now = Date.now();
+					if (!client.cooldowns.has(message.author.id)) client.cooldowns.set(message.author.id, new Discord.Collection())
+					if (client.cooldowns.get(message.author.id).has(commandFile.name) && client.cooldowns.get(message.author.id).get(commandFile.name) > now) {
+						return message.channel.send(`You need to wait ${Math.ceil((client.cooldowns.get(message.author.id).get(commandFile.name) - now) / 1000)} seconds until you can use this command again.`);
+					} else {
+						client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + commandFile.cooldown);
+					}
+				}
 				return commandFile.run(client, message, args);
 			} catch (error) {
 				console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);

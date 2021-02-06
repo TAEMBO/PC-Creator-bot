@@ -55,7 +55,7 @@ module.exports = {
 		if (command) {
 			const embed = new client.embed()
 				.setTitle(`__Commands: ${command.name}__`)
-				.setDescription(client.commandInfo(command, { insertEmpty: true, parts: ['name', 'usage', 'description', 'alias', 'category', 'autores'] }))
+				.setDescription(client.commandInfo(command, { insertEmpty: true, parts: ['name', 'usage', 'description', 'alias', 'cooldown', 'category', 'autores'] }))
 				.setColor(3971825)
 			return message.channel.send(embed);
 		} 
