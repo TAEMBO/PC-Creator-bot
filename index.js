@@ -13,8 +13,10 @@ client.on("ready", async () => {
 
 // global properties
 Object.assign(client, {
+	cpulist_INTEL: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-INTEL.json')),
 	embed: Discord.MessageEmbed,
 	messageCollector: Discord.MessageCollector,
+	collection: Discord.Collection,
 	memberCount_LastGuildFetchTimestamp: 0,
 });
 
@@ -146,7 +148,9 @@ client.on("message", async (message) => {
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
 			try {
-				return commandFile.run(client, message, args);
+				commandFile.run(client, message, args);
+				commandFile.uses ? commandFile.uses++ : commandFile.uses = 1;
+				return 
 			} catch (error) {
 				console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
 				return message.channel.send('An error occured while executing that command.');
@@ -158,25 +162,23 @@ client.on("message", async (message) => {
 			const questionWords = ['how', 'what', 'where', 'when', 'why'];
 			let trigger;
 			if (
-				!(
-					(
-						questionWords.some(x => {
-							if (
-								(
-									(msg).startsWith(x + ' ') // question word has to be the full word, eliminates "whatever"
-									|| (msg).startsWith(x + 's ') // question word can also be "question word + is", eg "what's"
-								)
-								&& !(msg).startsWith(x + ' if ') // question word cant be used a suggestion, eliminates "what if ..."
-							) {
-								trigger = x;
-								return true;
-							} else return false;
-						})
-						|| msg.startsWith('is')
-						|| msg.includes('help')
-					)
-					&& !message.author.bot
+				!((
+					questionWords.some(x => {
+						if (
+							(
+								(msg).startsWith(x + ' ') // question word has to be the full word, eliminates "whatever"
+								|| (msg).startsWith(x + 's ') // question word can also be "question word + is", eg "what's"
+							)
+							&& !(msg).startsWith(x + ' if ') // question word cant be used a suggestion, eliminates "what if ..."
+						) {
+							trigger = x;
+							return true;
+						} else return false;
+					})
+					|| msg.startsWith('is')
+					|| msg.includes('help')
 				)
+				&& !message.author.bot)
 			) return;
 			let match;
 			if (msg.length > 96) msg = msg.slice(msg.indexOf(trigger))
