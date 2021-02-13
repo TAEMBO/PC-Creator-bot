@@ -59,6 +59,21 @@ module.exports = {
 			}
 		});
 		console.log(matches.filter(x => x), oneResult);
+
+		if (oneResult) {
+			const cpu = client.cpulist_INTEL[matches.filter(x => x).sort((a, b) => b - a).firstKey()];
+			const embed = new client.embed()
+				.setTitle(client.cpulist_INTEL.manufacturer.charAt(0).toUpperCase() + client.cpulist_INTEL.manufacturer.slice(1) + ' ' + cpu.name)
+				.addField('Cores', cpu.cores, true)
+				.addField('Base Clock Speed', cpu.baseClock + ' GHz', true)
+				.addField('Threads', cpu.threads)
+				.addField('Boost Clock Speed', cpu.boostClock + ' GHz', true)
+				.addField('MSRP', '$' + cpu.price)
+				.addField('Socket', cpu.socket, true)
+				.addField('TDP', cpu.tdp + 'W', true)
+				.setColor(2793983)
+			message.channel.send(embed);
+		}
 	},
 	name: 'cpuintelnew',
 	description: 'Experimental ,cpuintel'
