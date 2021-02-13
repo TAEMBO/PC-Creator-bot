@@ -1,6 +1,6 @@
 module.exports = {
 	run: (client, message, args) => {
-		message.channel.send({ files: ["https://cdn.discordapp.com/attachments/696448442989543445/778741485968687194/IMG_0717_2020_11_08_17_40_41_UTC.JPG"] });
+		message.channel.send({ files: ["https://cdn.discordapp.com/attachments/571031705109135361/700576752140943482/Capture_2020-04-12_15.16.03.jpg"] });
 	},
 	name: 'gaming',
 	description: 'Provides a picture of how to make a PC\'s purpose for gaming',
