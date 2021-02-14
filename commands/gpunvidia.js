@@ -35,7 +35,7 @@ module.exports = {
 		} else if (args[1].toUpperCase() === '3060') {
 			message.channel.send({
 				embed: {
-					"title": "NVIDIA GeForce RTX 3060 FE",
+					"title": "NVIDIA GeForce RTX 3060",
 					"description": "**Boost core frequency**: 1.7GHz\n**Memory size**:  12GB\n**Memory type**: GDDR6\n**Power connectors**: N/A\n**TDP**: 170w\n**MSRP**: $329 USD",
 					"color": 7780608
 				}
