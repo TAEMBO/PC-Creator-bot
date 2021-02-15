@@ -159,7 +159,7 @@ client.on("message", async (message) => {
 	} else {
 		if (client.config.enableAutoResponse) {
 			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
-			const questionWords = ['how', 'what', 'where', 'when', 'why'];
+			const questionWords = ['how', 'what', 'where', 'why'];
 			let trigger;
 			if (
 				!((

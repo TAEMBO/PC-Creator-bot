@@ -1,5 +1,6 @@
 module.exports = {
 	run: async (client, message, args) => {
+		if (!args[1]) return message.channel.send('You failed to mention a user.');
 		const member = message.mentions.members?.first() || (await message.guild.members.fetch(args[1]).catch(() => undefined));
 		if (!member) return message.channel.send('You failed to mention a user from this server.');
 		const embed = new client.embed()
@@ -14,5 +15,5 @@ module.exports = {
 	name: 'userinfo',
 	usage: ['Mention / User ID'],
 	alias: ['memberinfo', 'user', 'whois'],
-	description: 'Info about a Discord member',
+	description: 'Info about a Discord member'
 };
