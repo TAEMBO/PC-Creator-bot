@@ -7,7 +7,7 @@ function cpuEmbed(cpu, client) {
 		.addField('Threads', cpu.threads, true)
 		.addField('Boost Clock Speed', cpu.boost.toFixed(2) + ' GHz', true)
 		.addField('Socket', cpu.socket, true)
-		.addField('MSRP', '$' + cpu.price.toFixed(2))
+		.addField('MSRP', cpu.price ? '$' + cpu.price.toFixed(2) : 'N/A')
 		.setColor(2793983)
 	return embed;
 }
@@ -24,25 +24,33 @@ module.exports = {
 			oneResult = false;
 			search[search.length - 1] = search[search.length - 1].slice(0, -2).trim();
 		}
+		let prematureError = false;
 		search.forEach((statement, index) => {
 			statement = statement.trim();
 			if (index === 0 && !['<', '>', '=', '~'].some(x => statement.includes(x))) {
-				nameSearch = search[0];
+				nameSearch = search[0].replace(/ /g, '-');
 			} else {
 				const operatorStartIndex = Math.max(statement.indexOf('<'), 0) || Math.max(statement.indexOf('>'), 0) || Math.max(statement.indexOf('='), 0) || Math.max(statement.indexOf('~'), 0);
 				let operator = statement.slice(operatorStartIndex, operatorStartIndex + 1);
 				if (operator === '=') operator = '===';
 				let property = statement.slice(0, operatorStartIndex).trim();
-				const value = statement.slice(operatorStartIndex + 1).trim();
-				if (operator === '~') filters.push('Math.round(cpu[1].' + property + '/10)=' + Math.round(value/10));
+				let value = statement.slice(operatorStartIndex + 1).trim();
+				if (property === 'socket') {
+					if (['<', '>'].includes(operator)) {
+						prematureError = true;
+						return message.channel.send(`Invalid operator in \`${statement}\``);
+					}
+					if (operator === '~') return filters.push(`cpu[1].socket.toLowerCase().startsWith('${value.toLowerCase().slice(0, value.indexOf(/[0-9]/) ? value.indexOf(/[0-9]/) : value.indexOf(' ') ? value.indexOf(' ') : value.length)}')`);
+					if (operator === '===') return filters.push(`cpu[1].socket.toLowerCase()==='${value.toLowerCase()}'`);
+				}
+				if (operator === '~') filters.push('cpu[1].' + property + '>=' + (value * 0.8) + '&&cpu[1].' + property + '<=' + (value * 1.2));
 				else filters.push('cpu[1].' + property + operator + value);
 			}
 		});
-		let prematureError = false;
 		Object.entries(client.cpulist_INTEL).forEach(cpu => {
 			if (!cpu[1].name) return;
 			if (nameSearch) {
-				if (cpu[1].name.toLowerCase().includes(nameSearch)) {
+				if (cpu[1].name.toLowerCase().replace(/ /g, '-').includes(nameSearch)) {
 					matches.set(cpu[0], nameSearch.length / cpu[1].name.length);
 				} else {
 					matches.set(cpu[0], false);
@@ -65,9 +73,12 @@ module.exports = {
 				matches.set(cpu[0], false);
 			}
 		});
+		if (matches.filter(x => x).size === 0 && !prematureError) {
+			console.log(matches);
+			return message.channel.send('That query returned `0` results!');
+		}
 		if (oneResult) {
 			const cpu = client.cpulist_INTEL[matches.filter(x => x).sort((a, b) => b - a).firstKey()];
-			if (!cpu && !prematureError) return message.channel.send('That query returned `0` results!');
 			message.channel.send(cpuEmbed(cpu, client));
 		} else {
 			const limit = 200;
