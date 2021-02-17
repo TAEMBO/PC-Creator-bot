@@ -8,7 +8,7 @@ module.exports = {
 			.addField(':small_blue_diamond: Account Creation Date', `${member.user.createdAt.getUTCFullYear()}-${('0' + (member.user.createdAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.user.createdAt.getUTCDate()).slice(-2)} (YYYY-MM-DD)`)
 			.addField(':small_blue_diamond: Join Date', `${member.joinedAt.getUTCFullYear()}-${('0' + (member.joinedAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.joinedAt.getUTCDate()).slice(-2)} (YYYY-MM-DD)`)
 			.addField(':small_blue_diamond: ID, Nickname, and Mention', `ID: ${member.user.id}\nNickname: ${member.nickname ? member.nickname : 'None'}\nMention: ${member.toString()}`)
-			.setColor(member.displayColor)
+			.setColor(member.displayColor || '#bbbbbb')
 			.setThumbnail(member.user.avatarURL({ format: 'png', dynamic: true, size: 2048}))
 		message.channel.send(embed);
 	},
