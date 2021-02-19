@@ -62,18 +62,21 @@ module.exports = {
 				try {
 					return eval(x);
 				} catch (error) {
-					prematureError = true;
-					let errorSearchFilter;
-					if (nameSearch) errorSearchFilter = search[i + 1];
-					else errorSearchFilter = search[i];
-					message.channel.send(`Invalid property, operator or value in \`${errorSearchFilter.trim()}\``);
+					if (!prematureError) {
+						prematureError = true;
+						let errorSearchFilter;
+						if (nameSearch) errorSearchFilter = search[i + 1];
+						else errorSearchFilter = search[i];
+						message.channel.send(`Invalid property, operator or value in \`${errorSearchFilter.trim()}\``);
+					}
 					return false;
 				}
 			})) {
 				matches.set(cpu[0], false);
 			}
 		});
-		if (matches.filter(x => x).size === 0 && !prematureError) {
+		if (prematureError) return;
+		if (matches.filter(x => x).size === 0) {
 			console.log(matches);
 			return message.channel.send('That query returned `0` results!');
 		}
