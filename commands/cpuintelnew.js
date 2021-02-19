@@ -4,11 +4,16 @@ function cpuEmbed(cpu, client) {
 		.addField('Cores', cpu.cores, true)
 		.addField('Base Clock Speed', cpu.base.toFixed(2) + ' GHz', true)
 		.addField('TDP', cpu.tdp + 'W', true)
-		.addField('Threads', cpu.threads, true)
-		.addField('Boost Clock Speed', cpu.boost.toFixed(2) + ' GHz', true)
+		.addField('Threads', cpu.threads, true);
+	if (cpu.boost) {
+		embed.addField('Boost Clock Speed', cpu.boost.toFixed(2) + ' GHz', true);
+	} else {
+		embed.addField('Boost Clock Speed', 'N/A', true);
+	}
+	embed
 		.addField('Socket', cpu.socket, true)
 		.addField('MSRP', cpu.price ? '$' + cpu.price.toFixed(2) : 'N/A')
-		.setColor(2793983)
+		.setColor(2793983);
 	return embed;
 }
 
@@ -76,10 +81,7 @@ module.exports = {
 			}
 		});
 		if (prematureError) return;
-		if (matches.filter(x => x).size === 0) {
-			console.log(matches);
-			return message.channel.send('That query returned `0` results!');
-		}
+		if (matches.filter(x => x).size === 0) return message.channel.send('That query returned `0` results!');
 		if (oneResult) {
 			const cpu = client.cpulist_INTEL[matches.filter(x => x).sort((a, b) => b - a).firstKey()];
 			message.channel.send(cpuEmbed(cpu, client));
