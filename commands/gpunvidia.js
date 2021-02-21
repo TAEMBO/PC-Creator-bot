@@ -200,6 +200,14 @@ module.exports = {
 					"color": 7780608
 				}
 			})
+		} else if (args[1].toUpperCase() === '210') {
+            message.channel.send({
+                embed: {
+                    "title": "NVIDIA GeForce GT 210",
+                    "description": "**Boost core frequency**: 0.589GHz\n**Memory size**:  1GB\n**Memory type**: DDR3\n**Power connectors**: N/A\n**TDP**: 18w\n**MSRP**: $45 USD",
+                    "color": 7780608
+                }
+            })
 		} else if (args[1].toUpperCase() === 'TITANRTX') {
             message.channel.send({
                 embed: {
