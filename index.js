@@ -210,7 +210,8 @@ client.on("message", async (message) => {
 			if (match) {
 				await message.channel.send(`AutoResponse™ was summoned. Running command \`${client.prefix}${match.name}\`...`);
 				try {
-					return match.run(client, Object.assign(message, { content: `${client.prefix}${match.name}` }), [match.name]);
+					match.run(client, Object.assign(message, { content: `${client.prefix}${match.name}` }), [match.name]);
+					match.uses ? match.uses++ : match.uses = 1;
 				} catch (error) {
 					return console.log(`An error occured while running command "${match.name}"`, error, error.stack);
 				}
