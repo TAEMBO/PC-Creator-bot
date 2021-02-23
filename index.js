@@ -14,14 +14,6 @@ client.on("ready", async () => {
 // global properties
 Object.assign(client, {
 	cpulist_INTEL: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-INTEL.json')),
-	embed: Discord.MessageEmbed,
-	messageCollector: Discord.MessageCollector,
-	collection: Discord.Collection,
-	memberCount_LastGuildFetchTimestamp: 0,
-});
-
-// global properties
-Object.assign(client, {
 	cpulist_AMD: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-AMD.json')),
 	embed: Discord.MessageEmbed,
 	messageCollector: Discord.MessageCollector,
@@ -164,9 +156,6 @@ client.on("message", async (message) => {
         channel.send(embed)
         channel.send('<@615761944154210305>');
 	}
-	if (message.content.includes("userbenchmark.com")) {
-		message.reply(":b:ingus y u use userbenchmark")
-	  }
 	if (!message.guild) return;
 	if (message.content.startsWith(client.prefix)) {
 		const args = message.content.slice(client.prefix.length).split(' ');
@@ -182,6 +171,9 @@ client.on("message", async (message) => {
 			}
 		}
 	} else {
+		if (message.content.includes("userbenchmark.com")) {
+			message.reply(":b:ingus y u use userbenchmark")
+		}
 		if (client.config.enableAutoResponse) {
 			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
 			const questionWords = ['how', 'what', 'where', 'why'];
