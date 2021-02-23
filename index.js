@@ -20,6 +20,15 @@ Object.assign(client, {
 	memberCount_LastGuildFetchTimestamp: 0,
 });
 
+// global properties
+Object.assign(client, {
+	cpulist_AMD: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-AMD.json')),
+	embed: Discord.MessageEmbed,
+	messageCollector: Discord.MessageCollector,
+	collection: Discord.Collection,
+	memberCount_LastGuildFetchTimestamp: 0,
+});
+
 // command handler
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -155,6 +164,9 @@ client.on("message", async (message) => {
         channel.send(embed)
         channel.send('<@615761944154210305>');
 	}
+	if (message.content.includes("userbenchmark.com")) {
+		message.reply(":b:ingus y u use userbenchmark")
+	  }
 	if (!message.guild) return;
 	if (message.content.startsWith(client.prefix)) {
 		const args = message.content.slice(client.prefix.length).split(' ');
