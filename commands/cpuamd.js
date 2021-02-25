@@ -16,7 +16,7 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (!args[1]) return message.channel.send('You need to search for a CPU');
 		if (args[1].toLowerCase() === 'help' && args.length === 2) {
-			const embed = client.cpuCommandHelpEmbed(client.prefix + args[0].toLowerCase(), 2793983);
+			const embed = client.cpuCommandHelpEmbed(client.prefix + args[0].toLowerCase(), 13582629);
 			return message.channel.send(embed);
 		}
 		const search = args.slice(1).join(' ').toLowerCase().split(',');
@@ -32,7 +32,7 @@ module.exports = {
 		search.forEach((statement, index) => {
 			statement = statement.trim();
 			if (index === 0 && !['<', '>', '=', '~'].some(x => statement.includes(x))) {
-				nameSearch = search[0];
+				nameSearch = search[0].replace(/ /g, '-');
 			} else {
 				const operatorStartIndex = Math.max(statement.indexOf('<'), 0) || Math.max(statement.indexOf('>'), 0) || Math.max(statement.indexOf('='), 0) || Math.max(statement.indexOf('~'), 0);
 				let operator = statement.slice(operatorStartIndex, operatorStartIndex + 1);
@@ -54,7 +54,7 @@ module.exports = {
 		Object.entries(client.cpulist_AMD).forEach(cpu => {
 			if (!cpu[1].name) return;
 			if (nameSearch) {
-				if (cpu[1].name.toLowerCase().includes(nameSearch)) {
+				if (cpu[1].name.toLowerCase().replace(/ /g, '-').includes(nameSearch)) {
 					matches.set(cpu[0], nameSearch.length / cpu[1].name.length);
 				} else {
 					matches.set(cpu[0], false);

@@ -32,7 +32,7 @@ module.exports = {
 		search.forEach((statement, index) => {
 			statement = statement.trim();
 			if (index === 0 && !['<', '>', '=', '~'].some(x => statement.includes(x))) {
-				nameSearch = search[0];
+				nameSearch = search[0].replace(/ /g, '-');
 			} else {
 				const operatorStartIndex = Math.max(statement.indexOf('<'), 0) || Math.max(statement.indexOf('>'), 0) || Math.max(statement.indexOf('='), 0) || Math.max(statement.indexOf('~'), 0);
 				let operator = statement.slice(operatorStartIndex, operatorStartIndex + 1);
@@ -54,7 +54,7 @@ module.exports = {
 		Object.entries(client.cpulist_INTEL).forEach(cpu => {
 			if (!cpu[1].name) return;
 			if (nameSearch) {
-				if (cpu[1].name.toLowerCase().includes(nameSearch)) {
+				if (cpu[1].name.toLowerCase().replace(/ /g, '-').includes(nameSearch)) {
 					matches.set(cpu[0], nameSearch.length / cpu[1].name.length);
 				} else {
 					matches.set(cpu[0], false);
