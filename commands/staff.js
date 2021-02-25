@@ -1,3 +1,7 @@
+const BLACKLIST = [
+	'321615117550616588', /* boss */
+	'403465361271291907', /* sad */
+];
 module.exports = {
     run: (client, message, args) => {
 		const staff = new Map(Object.entries({
