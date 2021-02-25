@@ -2,12 +2,16 @@ const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: true});
 const fs = require('fs');
 client.config = require("./config.json");
-if (!client.config.token) client.config = require("./config-test.json");
+if (!client.config.token) {
+	client.config = require("./config-test.json");
+	console.log('Using ./config-test.json');
+}
 client.prefix = ',';
 client.on("ready", async () => {
 	await client.user.setActivity(",help", {
 		type: "LISTENING", 
 	});
+	await client.guilds.cache.get(client.config.mainServer.id).members.fetch();
 	console.log(`Bot active as ${client.user.tag}`);
 });
 
@@ -141,7 +145,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 client.on("message", async (message) => {
     if (message.channel.type === 'dm') {
         const channel = client.channels.cache.get(client.config.dmForwardChannel);
-        const pcCreatorServer = client.guilds.cache.get(client.config.pcCreatorServer);
+        const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
         if (!channel || !pcCreatorServer) console.log(`could not find channel ${client.config.dmForwardChannel} or guild ${client.config.pcCreatorServer}`);
         const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
         const memberOfPccs = !!guildMemberObject;
@@ -158,7 +162,7 @@ client.on("message", async (message) => {
 	}
 	if (!message.guild) return;
 	if (message.content.startsWith(client.prefix)) {
-		const args = message.content.slice(client.prefix.length).split(' ');
+		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
 			try {

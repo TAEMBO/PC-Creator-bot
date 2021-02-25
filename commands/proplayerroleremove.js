@@ -1,6 +1,6 @@
 module.exports = {
 	run: async (client, message, args) => {
-		if (!message.member.roles.cache.has(client.config.moderatorRole)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.moderatorRole).name}** role to use this command`);
+		if (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
 		let member;
 		let timedOut = false;
 		if (args[1]) member = message.mentions.members?.first() || (await message.guild.members.fetch(args[1]).catch(() => undefined));
@@ -17,7 +17,7 @@ module.exports = {
 		if (!member && !timedOut) {
 			return message.channel.send('You failed to mention a member.');
 		} else if (!member && timedOut) return;
-		const role = message.guild.roles.cache.find(role => role.id === client.config.proplayerRole);
+		const role = message.guild.roles.cache.find(role => role.id === client.config.mainServer.roles.proplayer);
 		if (!role) message.channel.send('Indicated role does not exist');
 		if (!member.roles.cache.has(role.id)) return message.channel.send(`Cannot remove role **${role.name}** from **${member.user.tag}** because they do not have it.`);
 		member.roles.remove(role, `Command done by @${message.author.tag} (${message.author.id})`).then(() => {
