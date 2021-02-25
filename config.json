@@ -1,13 +1,22 @@
 {
 	"token": "",
-	"moderatorRole": "589435378147262464",
-	"proplayerRole": "775736993018806322",
-	"mutedRole": "634438185363046440",
-	"evalAllowed": false,
-	"evalWhitelist": [
-		"615761944154210305"
-	],
+	"eval": {
+		"allowed": false,
+		"whitelist": [
+			"615761944154210305"
+		]
+	},
 	"enableAutoResponse": true,
 	"dmForwardChannel": "572673322891083776",
-	"pcCreatorServer": "571031703661969430"
+	"mainServer": {
+		"id":"571031703661969430",
+		"roles": {
+			"administrator": "632674518317531137",
+			"moderator": "589435378147262464",
+			"trialmoderator": "697002610892341298",
+			"helper": "697728131003580537",
+			"proplayer": "775736993018806322",
+			"muted": "634438185363046440"
+		}
+	}
 }
