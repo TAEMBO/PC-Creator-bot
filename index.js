@@ -33,6 +33,34 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
+// ping spam
+const ping = 'ping';
+client.commands.get(ping).spammers = new client.collection();
+const checkPingSpam = (commandName, member) => {
+	if (commandName !== ping) return { code: false };
+	const spammers = client.commands.get(ping).spammers;
+	const userID = member.user.id;
+	if (spammers.has(userID)) {
+		const spammer = spammers.get(userID);
+		if (spammer.ignoreTime < Date.now()) {
+			spammers.delete(userID);
+			return { code: false };
+		} else {
+			spammer.uses++;
+			if (spammer.uses === 6 && spammer.bTime >= Date.now()) {
+				return { code: true, msg: ':b: Stop spamming me!'};
+			} else if (spammer.uses < 6) {
+				return { code: false };
+			} else {
+				return { code: true, msg: false };
+			}
+		}
+	} else {
+		spammers.set(userID, { ignoreTime: Date.now() + 30000, bTime: Date.now() + 10000, uses: 1});
+		return false;
+	}
+};
+
 // commandinfo function
 client.commandInfo = (command, options = { insertEmpty: false, parts: []}) => {
 	let text = ':small_blue_diamond: ';
@@ -163,6 +191,11 @@ client.on("message", async (message) => {
 	if (!message.guild) return;
 	if (message.content.startsWith(client.prefix)) {
 		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');
+		const pingSpam = checkPingSpam(args[0], message.member);
+		if (pingSpam.code) {
+			if (pingSpam.msg) return message.channel.send(pingSpam.msg);
+			else return;
+		}
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
 			try {
