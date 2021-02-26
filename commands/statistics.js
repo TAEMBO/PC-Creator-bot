@@ -3,7 +3,7 @@ module.exports = {
 		const colunms = ['Command Name', 'Count'];
 		const includedCommands = client.commands.filter(x => x.uses).sort((a, b) => b.uses - a.uses);
 		if (includedCommands.size === 0) return message.channel.send('No commands have been used yet.'); 
-		const nameLength = Math.max(...includedCommands.map(x => x.name.length), colunms[0].length) + 1;
+		const nameLength = Math.max(...includedCommands.map(x => x.name.length), colunms[0].length) + 2;
 		const amountLength = Math.max(...includedCommands.map(x => x.uses.toString().length), colunms[1].length) + 1;
 		const rows = [`${colunms[0] + ' '.repeat(nameLength - colunms[0].length)}|${' '.repeat(amountLength - colunms[1].length) + colunms[1]}\n`, '-'.repeat(nameLength) + '-'.repeat(amountLength) + '\n'];
 		includedCommands.forEach(command => {

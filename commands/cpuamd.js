@@ -14,7 +14,7 @@ function cpuEmbed(cpu, client) {
 
 module.exports = {
 	run: async (client, message, args) => {
-		if (!args[1]) return message.channel.send('You need to search for a CPU');
+		if (!args[1]) return message.channel.send('You need to search for a CPU. For help, do `' + client.prefix + args[0] + ' help`');
 		if (args[1].toLowerCase() === 'help' && args.length === 2) {
 			const embed = client.cpuCommandHelpEmbed(client.prefix + args[0].toLowerCase(), 13582629);
 			return message.channel.send(embed);
