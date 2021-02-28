@@ -96,9 +96,10 @@ module.exports = (client, message, args) => {
 		message.channel.send(embed).then(embedMessage => {
 			if (!multipleResponseAsk) return;
 			message.channel.awaitMessages(numberMessage => numberMessage.author.id === message.author.id, { max: 1, time: 40000, errors: ['time'] }).then(collected => {
+				console.log(collected.first()?.content);
 				const index = parseInt(collected.first().content) - 1;
 				if (!index) return message.channel.send('Invalid number.');
-				const cpu = client.cpulist_AMD[bestMatches[index]];
+				const cpu = client.cpulist[manufacturer][bestMatches[index]];
 				message.channel.send(client.cpuEmbed(client, {cpu, manufacturer, color}));
 			}).catch(err => message.channel.send('You failed to respond with a number.'));
 		});
