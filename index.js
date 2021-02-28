@@ -17,12 +17,18 @@ client.on("ready", async () => {
 
 // global properties
 Object.assign(client, {
-	cpulist_INTEL: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-INTEL.json')),
-	cpulist_AMD: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-AMD.json')),
 	embed: Discord.MessageEmbed,
 	messageCollector: Discord.MessageCollector,
 	collection: Discord.Collection,
+	cpulist: {
+		INTEL: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-INTEL.json')),
+		AMD: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-AMD.json')),
+	},
 	memberCount_LastGuildFetchTimestamp: 0,
+	helpDefaultOptions: {
+		insertEmpty: false,
+		parts: ['name', 'usage', 'description', 'alias']
+	}
 });
 
 // command handler
@@ -32,88 +38,14 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
+client.commands.get('ping').spammers = new client.collection();
 
-// ping spam
-const ping = 'ping';
-client.commands.get(ping).spammers = new client.collection();
-const checkPingSpam = (commandName, member) => {
-	if (commandName !== ping) return { code: false };
-	const spammers = client.commands.get(ping).spammers;
-	const userID = member.user.id;
-	if (spammers.has(userID)) {
-		const spammer = spammers.get(userID);
-		if (spammer.ignoreTime < Date.now()) {
-			spammers.delete(userID);
-			return { code: false };
-		} else {
-			spammer.uses++;
-			if (spammer.uses === 6 && spammer.bTime >= Date.now()) {
-				return { code: true, msg: ':b: Stop spamming me!'};
-			} else if (spammer.uses < 6) {
-				return { code: false };
-			} else {
-				return { code: true, msg: false };
-			}
-		}
-	} else {
-		spammers.set(userID, { ignoreTime: Date.now() + 30000, bTime: Date.now() + 10000, uses: 1});
-		return false;
-	}
-};
-
-// commandinfo function
-client.commandInfo = (command, options = { insertEmpty: false, parts: []}) => {
-	let text = ':small_blue_diamond: ';
-	function e() {
-		text += '\n';
-		if (options.insertEmpty) {
-			text += '\n';
-		}
-		return;
-	}
-	if (options.parts.includes('name') && command.name) {
-		text += '`' + client.prefix + command.name;
-		if (options.parts.includes('usage') && command.usage) {
-			text += ' [' + command.usage.join('] [') + ']';
-		}
-		text += '`';
-		e();
-	} else if (options.parts.includes('usage') && command.usage) {
-		text += 'Usage: `[' + command.usage.join('] [') + ']`';
-		e();
-	}
-	if (options.parts.includes('description') && command.description) {
-		text += command.description;
-		e();
-	}
-	if (options.parts.includes('alias') && command.alias) {
-		text += 'Aliases: ' + command.alias.map(x => '`' + x + '`').join(', ');
-		e();
-	}
-	if (options.parts.includes('category') && command.category) {
-		text += 'Category: ' + command.category;
-		e();
-	}
-	if (options.parts.includes('autores') && command.autores) {
-		text += 'AutoResponse:tm: Requirements: `[' + command.autores.join('] [') + ']`';
-		e();
-	}
-	e();
-	return text;
-};
-
-// cpu command help
-client.cpuCommandHelpEmbed = (commandName, color) => {
-	const embed = new client.embed()
-		.setTitle('CPU Command Help')
-		.setDescription('This command searches a list of real life CPUs and supplies you with technical information about them. This guide explains how to use this command properly.')
-		.addField('Name Search', `Name Search is the easiest method to find a specific CPU. The syntax of name search is \`${commandName} [CPU name]\`. CPU name is text that can include spaces but not commas. This text is transformed into all lowercase letters and matched with lowercase CPU names. Matches are assigned a value based on how well they match the search, if at all. This formula is \`Search length / CPU name length\`. Name search is optional when at least 1 filter is present.`)
-		.addField('Filters', `Filters are a method to narrow down a big list of CPUs. The syntax of filters is \`[Property] [Operator] [Value]\` where Property is one of "cores", "threads", "base", "boost", "price", "socket" or "tdp". Operator is one of <, >, =, ~. Value is an integer, decimal number or text (can contain numbers, e.g. LGA 1200). Filters must be separated with a comma \`,\` A comma must also be added after Name Search, between Name Search and the first Filter.`)
-		.addField('Filters - Part 2', `If the Property is "socket", < and > are not allowed and ~ matches CPUs with sockets that start with the text part of Value (Substring of Value, starting at the first character and ending at the first number, or ending of string, whichever comes first) If the Operator is ~, matches' Property must be ±20% of Value. Price is always measured in USD. Boost and base clocks are always measured in GHz. If you want to filter by price or clock speed, enter only an integer or decimal number without any GHz or Dollar signs. For decimal numbers, use \`.\`, e.g. \`price = 249.99\` matches CPUS which's price is equal to 249.99 USD ($).`)
-		.addField('Multiple Search', `Multiple Search is a way to receive a list of CPU names and choose the one you want to learn more about. Multiple Search is activated when you add \`-s\` to the end of the command. Multiple Search orders all matches by best matches first and responds with all or 200 best matches and attaches a number to each one. If Name Search is active, matches are ordered by the assigned value of how well they match the CPU's name. If Name Search is not active, matches are ordered alphabetically. You can choose your preferred CPU by sending a message with a valid number. A valid number is an integer within the constraints given by the bot.`)
-		.setColor(color)
-	return embed;
-};
+// load functions
+const functionFiles = fs.readdirSync('./functions').filter(file => file.endsWith('.js'));
+for (const file of functionFiles) {
+	const func = require(`./functions/${file}`);
+	client[file.slice(0, -3)] = func;
+}
 
 // assign page number to commands
 const categories = {};
@@ -121,7 +53,7 @@ while (client.commands.some(command => !command.hidden && !command.page)) {
 	const command = client.commands.find(command => !command.hidden && !command.page);
 	if (!command.category) command.category = 'Misc';
 	if (!categories[command.category]) categories[command.category] = { text: '', currentPage: 1}
-	const commandInfo = client.commandInfo(command);
+	const commandInfo = client.commandInfo(command, client.helpDefaultOptions);
 	if (categories[command.category].text.length + commandInfo.length > 1024) {
 		categories[command.category].text = commandInfo;
 		categories[command.category].currentPage++;
@@ -191,7 +123,8 @@ client.on("message", async (message) => {
 	if (!message.guild) return;
 	if (message.content.startsWith(client.prefix)) {
 		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');
-		const pingSpam = checkPingSpam(args[0], message.member);
+		const pingSpam = client.checkPingSpam(client, args[0], message.member);
+		console.log(pingSpam);
 		if (pingSpam.code) {
 			if (pingSpam.msg) return message.channel.send(pingSpam.msg);
 			else return;

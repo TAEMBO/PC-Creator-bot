@@ -3,7 +3,7 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 	const pageInfo = client.commands.pages[pageIndex];
 	let text = '';
 	client.commands.filter(command => !command.hidden && command.category === pageInfo.category && command.page === pageInfo.page).forEach(command => {
-		text += client.commandInfo(command, { parts: ['name', 'usage', 'description', 'alias'] });
+		text += client.commandInfo(client, command, client.helpDefaultOptions);
 	});
 	const embed = new client.embed()
 		.setTitle(`__Commands: ${pageInfo.name}__`)
@@ -55,7 +55,7 @@ module.exports = {
 		if (command) {
 			const embed = new client.embed()
 				.setTitle(`__Commands: ${command.name}__`)
-				.setDescription(client.commandInfo(command, { insertEmpty: true, parts: ['name', 'usage', 'description', 'alias', 'category', 'autores'] }))
+				.setDescription(client.commandInfo(client, command, { insertEmpty: true, parts: ['name', 'usage', 'description', 'alias', 'category', 'autores'] }))
 				.setColor(3971825)
 			return message.channel.send(embed);
 		} 
