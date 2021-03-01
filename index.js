@@ -124,7 +124,6 @@ client.on("message", async (message) => {
 	if (message.content.startsWith(client.prefix)) {
 		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');
 		const pingSpam = client.checkPingSpam(client, args[0], message.member);
-		console.log(pingSpam);
 		if (pingSpam.code) {
 			if (pingSpam.msg) return message.channel.send(pingSpam.msg);
 			else return;
