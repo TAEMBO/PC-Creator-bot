@@ -5,5 +5,5 @@ module.exports = {
 	name: 'games',
 	description: 'Provides help with game installation',
 	category: 'PC Creator',
-	autores: ['install/buy/get', 'game/fortnite/minecraft/witcher']
+	autores: ['what/how/where', 'install/buy/get', 'game/fortnite/minecraft/witcher']
 };

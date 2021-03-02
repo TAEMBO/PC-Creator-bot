@@ -19,7 +19,7 @@ module.exports = (client, message, args) => {
 	} else if (search[search.length - 1].endsWith('-sl')) {
 		oneResult = false;
 		multipleResponseAsk = false;
-		search[search.length - 1] = search[search.length - 1].slice(0, -2).trim();
+		search[search.length - 1] = search[search.length - 1].slice(0, -3).trim();
 	}
 	let prematureError = false;
 	search.forEach((statement, index) => {
