@@ -28,8 +28,11 @@ Object.assign(client, {
 	helpDefaultOptions: {
 		insertEmpty: false,
 		parts: ['name', 'usage', 'description', 'alias']
-	}
+	},
 });
+
+// meme approval queue
+client.memeQueue = new client.collection();
 
 // command handler
 client.commands = new Discord.Collection();
