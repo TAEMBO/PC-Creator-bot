@@ -6,4 +6,5 @@ module.exports = {
 	name: 'sus',
 	description: 'GuildMember deserialization with binary tree inversion',
 	category: 'Moderation',
+	usage: ['go', 'fuck', 'yourself', 'chikkenn']
 };

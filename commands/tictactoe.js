@@ -1,5 +1,9 @@
 module.exports = {
 	run: (client, message, args) => {
+		// leaderboards
+		if (args[1] === 'leaderboard') {
+			
+		}
 		// request opponent
 		let request = `Who wants to play Tic Tac Toe with ${message.member.toString()}? First person to respond with "me" will be elected Opponent. (60s)`;
 		let answer = 'me';
@@ -19,6 +23,7 @@ module.exports = {
 				if (!opponent) return message.channel.send('Something went wrong! You have no opponent.');
 				// game object contains all data about the game
 				const game = {
+					id: Math.round(Math.random() * 100000).toString(16),
 					board: [ /* X */
 						[null, null, null], /* Y */
 						[null, null, null],
@@ -57,6 +62,9 @@ module.exports = {
 					victoryAction: () => {
 						game.ended = true;
 						message.channel.send(`${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!`);
+						const dbEntry = client.tictactoeDb.get(game.id);
+						dbEntry.endTime = Date.now();
+						dbEntry.winner = game.participants[game.turn].user.tag;
 						return;
 					},
 					boardState: () => {
@@ -73,9 +81,14 @@ module.exports = {
 							'━━━╋━━━╋━━━',
 							` ${markers[0]} ┃ ${markers[3]} ┃ ${markers[6]}`
 						];
-						return '``\n' + boardText.join('\n') + '\n```';
+						return '```\n' + boardText.join('\n') + '\n```';
 					}
 				};
+				// init in db
+				client.tictactoeDb.set(game.id, {
+					players: game.participants.map(x => x.user.tag),
+					startTime: Date.now()
+				})
 				// send info about how to play the game
 				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out.\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
 				// cycle function is executed on every turn
@@ -137,6 +150,9 @@ module.exports = {
 						if (!game.board.some(x => x.includes(null))) {
 							game.ended = true;
 							await message.channel.send('It\'s a draw! Neither player won the game.');
+							const dbEntry = client.tictactoeDb.get(game.id);
+							dbEntry.endTime = Date.now();
+							dbEntry.winner = null;
 							return res();
 						}
 					} else return res(game.userError(3));

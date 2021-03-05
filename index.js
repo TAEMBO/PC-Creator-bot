@@ -1,12 +1,13 @@
 const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: true});
 const fs = require('fs');
+const path = require('path');
 client.config = require("./config.json");
 if (!client.config.token) {
 	client.config = require("./config-test.json");
 	console.log('Using ./config-test.json');
 }
-client.prefix = ',';
+client.prefix = ',,';
 client.on("ready", async () => {
 	await client.user.setActivity(",help", {
 		type: "LISTENING", 
@@ -36,6 +37,48 @@ client.memeQueue = new client.collection();
 
 // cooldowns
 client.cooldowns = new client.collection();
+
+// database
+class Database extends Discord.Collection {
+	constructor(dir, writeInterval) {
+		super()
+		this.lastWrite = 0;
+		this.dir = path.resolve(dir);
+		console.log(this.dir);
+		this.writeInterval = writeInterval || 60000;
+	}
+	intervalSave() {
+		this.setInterval = setInterval(() => {
+			let oldJson;
+			try {
+				oldJson = fs.readFileSync(this.dir);
+			} catch (error) {
+				oldJson = '';
+			}
+			// save
+			const toObject = (map = new Map) => Object.fromEntries(Array.from(map.entries(), ([k, v]) => v instanceof Map ? [k, toObject(v)] : [k, v]))
+			const object = toObject(this);
+			const json = JSON.stringify(object);
+			if (oldJson !== json) {
+				fs.writeFileSync(this.dir, json);
+				this.lastWrite = Date.now();
+				console.log('saved');
+			}
+		}, this.writeInterval);
+		return;
+	}
+	stop() {
+		clearInterval(this.setInterval);
+		return;
+	}
+	init() {
+		const data = Object.entries(JSON.parse(fs.readFileSync(this.dir)));
+	}
+}
+
+// ttt database
+client.tictactoeDb = new Database('./ttt.json');
+// client.tictactoeDb.intervalSave();
 
 // command handler
 client.commands = new Discord.Collection();
