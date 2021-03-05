@@ -59,13 +59,29 @@ module.exports = {
 						message.channel.send(`${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!`);
 						return;
 					},
+					boardState: () => {
+						const markers = [];
+						game.board.forEach((column, x) => {
+							game.board[x].forEach((marker, y) => {
+								markers.push(marker ? marker : ' ');
+							});
+						});
+						let boardText = [
+							` ${markers[2]} ┃ ${markers[5]} ┃ ${markers[8]}`,
+							'━━━╋━━━╋━━━',
+							` ${markers[1]} ┃ ${markers[4]} ┃ ${markers[7]}`,
+							'━━━╋━━━╋━━━',
+							` ${markers[0]} ┃ ${markers[3]} ┃ ${markers[6]}`
+						];
+						return '``\n' + boardText.join('\n') + '\n```';
+					}
 				};
 				// send info about how to play the game
 				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out.\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
 				// cycle function is executed on every turn
 				const cycle = () => { return new Promise(async (res, rej) => {
 					// result is what .then() returns. ask the player where they want to place their marker
-					const result = await message.channel.send(`${game.participants[game.turn].toString()}, Where do you want to place your \`${game.markers[game.turn]}\`? (60s)`).then(async c => {
+					const result = await message.channel.send('Current board state:\n' + game.boardState() + `\n${game.participants[game.turn].toString()}, Where do you want to place your \`${game.markers[game.turn]}\`? (60s)`).then(async c => {
 						// returns what .then() returns. waits for the player to send coordinates. message must contain comma
 						return await message.channel.awaitMessages(d => d.author.id === game.participants[game.turn].user.id && d.content.includes(','), { max: 1, time: 60000, errors: ['time'] }).then(e => {
 							// coords is the first message of the collection, split into 2 at the comma and mapped into integers
@@ -87,20 +103,6 @@ module.exports = {
 					if (!MarkerAtCoords) {
 						const playerMarker = game.markers[game.turn];
 						game.board[result[0]][result[1]] = playerMarker;
-						const markers = [];
-						game.board.forEach((column, x) => {
-							game.board[x].forEach((marker, y) => {
-								markers.push(marker ? marker : ' ');
-							});
-						});
-						let boardText = [
-							` ${markers[2]} ┃ ${markers[5]} ┃ ${markers[8]}`,
-							'━━━╋━━━╋━━━',
-							` ${markers[1]} ┃ ${markers[4]} ┃ ${markers[7]}`,
-							'━━━╋━━━╋━━━',
-							` ${markers[0]} ┃ ${markers[3]} ┃ ${markers[6]}`
-						];
-						message.channel.send('Current board state:\n```\n' + boardText.join('\n') + '\n```');							
 						// if move won, victory to current turn
 						// rows
 						for (let i = 0; i < 3; i++) {
