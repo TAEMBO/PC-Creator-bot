@@ -15,6 +15,7 @@ module.exports = {
 			.setTitle('Statistics: Command Usage')
 			.setDescription('List of commands that have been used in this session, ordered by amount of uses. Table contains command name and amount of uses.')
 			.setColor(3971825)
+			.setFooter(`Bot has been online for ${(client.uptime / 1000 / 60 / 60).toFixed(1)} hours.`)
 		if (rows.join('').length > 2048) {
 			let fieldValue = '';
 			rows.forEach(row => {

@@ -1,9 +1,18 @@
 module.exports = {
 	run: (client, message, args) => {
 		// request opponent
-		message.channel.send(`Who wants to play Tic Tac Toe with ${message.member.toString()}? First person to respond with "me" will be elected Opponent. (60s)`).then(a => {
+		let request = `Who wants to play Tic Tac Toe with ${message.member.toString()}? First person to respond with "me" will be elected Opponent. (60s)`;
+		let answer = 'me';
+		let challenge = false;
+		// if they challenged someone
+		if (message.mentions.members.first()) {
+			request = `Does ${message.mentions.members.first().toString()} want to play Tic Tac Toe with ${message.member.toString()}? Respond with "y" to be elected Opponent. (60s)`;
+			answer = 'y';
+			challenge = true;
+		}
+		message.channel.send(request).then(a => {
 			// wait until someone wants to be the opponent
-			message.channel.awaitMessages(x => x.content.toLowerCase() === 'me', { max: 1, time: 60000, errors: ['time']}).then(async b => {
+			message.channel.awaitMessages(x => x.content.toLowerCase().startsWith(answer) && (challenge ? x.author.id === message.mentions.members.first().user.id : true), { max: 1, time: 60000, errors: ['time']}).then(async b => {
 				// opponent is the first value of the collection returned by the collector (guildMember)
 				const opponent = b.first()?.member;
 				// if for some reason there is no opponent, end the game
@@ -22,7 +31,6 @@ module.exports = {
 					errors: [0, 0],
 					markers: ['X', 'O'],
 					userError: (index) => {
-						console.log('usererror');
 						game.errors[game.turn]++;
 						const fouls = [
 							'You failed to respond with coordinates.',
@@ -30,17 +38,20 @@ module.exports = {
 							'Illegal move. Outside board bounds.',
 							'Illegal move. Position taken.'
 						];
-						const consequence = game.errors[game.turn] === 3 ? 'You lose...' : 'Opponent\'s turn...';
+						const fatal = game.errors[game.turn] >= 3;
+						const consequence = fatal ? 'You lose...' : 'Opponent\'s turn...';
 						message.channel.send(`${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) ${fouls[index]} ${consequence}`);
-						const returnText = game.errors[game.turn] === 3 ? 'surrender' : 'illegal';
+						const returnText = fatal ? 'surrender' : 'illegal';
 						game.changeTurn();
+						if (fatal) {
+							game.victoryAction();
+						}
 						return returnText;
 					},
 					changeTurn: () => {
 						const temp = game.nextTurn;
 						game.nextTurn = game.turn;
 						game.turn = temp;
-						console.log('turn changed');
 						return;
 					},
 					victoryAction: () => {
@@ -141,5 +152,6 @@ module.exports = {
 	},
 	name: 'tictactoe',
 	description: 'Play the famous tic tac toe or noughts and crosses or Xs and Os game with a partner',
-	alias: ['ttt', 'noughtsandcrosses', 'n&c']
+	alias: ['ttt', 'noughtsandcrosses', 'n&c'],
+	cooldown: 60
 };

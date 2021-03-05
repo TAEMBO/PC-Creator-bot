@@ -6,7 +6,7 @@ if (!client.config.token) {
 	client.config = require("./config-test.json");
 	console.log('Using ./config-test.json');
 }
-client.prefix = ',,';
+client.prefix = ',';
 client.on("ready", async () => {
 	await client.user.setActivity(",help", {
 		type: "LISTENING", 
@@ -33,6 +33,9 @@ Object.assign(client, {
 
 // meme approval queue
 client.memeQueue = new client.collection();
+
+// cooldowns
+client.cooldowns = new client.collection();
 
 // command handler
 client.commands = new Discord.Collection();
@@ -126,13 +129,29 @@ client.on("message", async (message) => {
 	if (!message.guild) return;
 	if (message.content.startsWith(client.prefix)) {
 		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');
-		const pingSpam = client.checkPingSpam(client, args[0], message.member);
-		if (pingSpam.code) {
-			if (pingSpam.msg) return message.channel.send(pingSpam.msg);
-			else return;
-		}
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
+
+			// cooldown
+			if (commandFile.cooldown) {
+				const member = client.cooldowns.get(message.author.id);
+				if (member) {
+					const commandCooldownForUser = client.cooldowns.get(message.author.id).get(commandFile.name);
+					if (commandCooldownForUser) {
+						if (commandCooldownForUser > Date.now()) {
+							return message.channel.send(`You need to wait ${Math.ceil((commandCooldownForUser - Date.now()) / 1000)} seconds until you can use this command again.`);
+						} else {
+							client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
+						}
+					} else {
+						client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
+					}
+				} else {
+					client.cooldowns.set(message.author.id, new client.collection())
+					client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
+				}
+			}
+
 			try {
 				commandFile.run(client, message, args);
 				commandFile.uses ? commandFile.uses++ : commandFile.uses = 1;

@@ -3,5 +3,6 @@ module.exports = {
 		client.cpuCommand(client, message, args);
 	},
 	name: 'cpuamd',
-	description: 'Info about AMD CPUs'
+	description: 'Info about AMD CPUs',
+	cooldown: 10
 };
