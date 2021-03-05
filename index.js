@@ -6,7 +6,7 @@ if (!client.config.token) {
 	client.config = require("./config-test.json");
 	console.log('Using ./config-test.json');
 }
-client.prefix = ',';
+client.prefix = ',,';
 client.on("ready", async () => {
 	await client.user.setActivity(",help", {
 		type: "LISTENING", 

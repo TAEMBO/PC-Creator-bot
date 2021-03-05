@@ -2,7 +2,7 @@
 	"1": {
 		"name": "Game state",
 		"description": "The current development state of all PC Creator games.\ndevs: Game developer, like BOSS and Andrew\npcc 2: PC Creator 2\npcc: PC Creator\npccp: PC Creator Pro",
-		"author":  {
+		"author": {
 			"name": "384002606621655040",
 			"onDiscord": true
 		},

@@ -6,5 +6,6 @@ module.exports = {
 		}
 		message.channel.send(`**${message.guild.name}** has **${message.guild.approximateMemberCount.toLocaleString()}** members.`);
 	},
-	name: 'membercount'
+	name: 'membercount',
+	description: 'Displays the amount of members on this server'
 };

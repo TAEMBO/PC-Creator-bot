@@ -28,8 +28,10 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 					await botMessage.react('◀️');
 					await botMessage.react('▶️');
 				});
-				collector.on('end', () => {
-					botMessage.reactions.removeAll();
+				collector.on('end', async () => {
+					await botMessage.reactions.removeAll();
+					await botMessage.suppressEmbeds();
+					botMessage.edit('_Removed to save space._');
 				});
 				await botMessage.react('◀️');
 				await botMessage.react('▶️');
