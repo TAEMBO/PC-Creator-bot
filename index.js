@@ -7,13 +7,13 @@ if (!client.config.token) {
 	client.config = require("./config-test.json");
 	console.log('Using ./config-test.json');
 }
-client.prefix = ',,';
+client.prefix = client.config.prefix;
 client.on("ready", async () => {
 	await client.user.setActivity(",help", {
 		type: "LISTENING", 
 	});
 	await client.guilds.cache.get(client.config.mainServer.id).members.fetch();
-	console.log(`Bot active as ${client.user.tag}`);
+	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
 });
 
 // global properties
@@ -30,6 +30,7 @@ Object.assign(client, {
 		insertEmpty: false,
 		parts: ['name', 'usage', 'description', 'alias']
 	},
+	embedColor: 3971825,
 });
 
 // meme approval queue
@@ -38,47 +39,86 @@ client.memeQueue = new client.collection();
 // cooldowns
 client.cooldowns = new client.collection();
 
-// database
-class Database extends Discord.Collection {
-	constructor(dir, writeInterval) {
-		super()
-		this.lastWrite = 0;
-		this.dir = path.resolve(dir);
-		console.log(this.dir);
-		this.writeInterval = writeInterval || 60000;
-	}
-	intervalSave() {
-		this.setInterval = setInterval(() => {
-			let oldJson;
-			try {
-				oldJson = fs.readFileSync(this.dir);
-			} catch (error) {
-				oldJson = '';
-			}
-			// save
-			const toObject = (map = new Map) => Object.fromEntries(Array.from(map.entries(), ([k, v]) => v instanceof Map ? [k, toObject(v)] : [k, v]))
-			const object = toObject(this);
-			const json = JSON.stringify(object);
-			if (oldJson !== json) {
-				fs.writeFileSync(this.dir, json);
-				this.lastWrite = Date.now();
-				console.log('saved');
-			}
-		}, this.writeInterval);
-		return;
-	}
-	stop() {
-		clearInterval(this.setInterval);
-		return;
-	}
-	init() {
-		const data = Object.entries(JSON.parse(fs.readFileSync(this.dir)));
-	}
-}
+// tic tac toe statistics database
+client.tictactoeDb = {
+	_content: [],
+	_path: path.resolve('./ttt.json'),
+	_interval: undefined,
+	addGame: (data = { players: ['', ''], winner: '', draw: false, startTime: 0, endTime: 0 }) => {
+		this._content.push(data);
+		return this;
+	},
+	initLoad: () => {
+		const json = fs.readFileSync(this._path);
+		const array = JSON.parse(json);
+		this._content = array;
+		return this;
+	},
+	forceSave: () => {
+		fs.writeFileSync(this._path, JSON.stringify(this._content));
+		return this;
+	},
+	intervalSave: (milliseconds) => {
+		this._interval = setInterval(this.forceSave, milliseconds || 60000);
+		return this;
+	},
+	stopInterval: () => {
+		if (this._interval) clearInterval(this._interval);
+		return this;
+	},
 
-// ttt database
-client.tictactoeDb = new Database('./ttt.json');
-// client.tictactoeDb.intervalSave();
+	// global stats
+	getTotalGames: () => {
+		const amount = this._content.length;
+		return amount;
+	},
+	getRecentGames: (amount) => {
+		const games = this._content.sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
+		return games;
+	},
+	getPlayersGames: () => {
+		const players = {};
+		this._content.forEach(game => {
+			game.players.forEach(player => {
+				if (!players[player]) players[player] = { wins: 0, losses: 0, draws: 0, total: 0 };
+				players[player].total++;
+				if (game.draw) return players[player].draws++;
+				if (player === game.winner) {
+					return players[player].wins++;
+				} else {
+					return players[player].losses++;
+				}
+			});
+		});
+		return players;
+	},
+	getBestPlayers: (amount) => {
+		const players = Object.entries(this.getPlayersGames()).sort((a, b) => b[1].wins - a[1].wins).slice(0, amount - 1)
+		return players;
+	},
+	getMostActivePlayers: (amount) => {
+		const players = Object.entries(this.getPlayersGames()).sort((a, b) => b[1].total - a[1].total).slice(0, amount - 1)
+		return players;
+	},
+
+
+	// player stats
+	getPlayer: (player) => {
+		const games = this._content.filter(x => x.players.includes(player));
+		return games;
+	},
+	getPlayerRecentGames: (player, amount) => {
+		const games = this._content.filter(x => x.players.includes(player)).sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
+		return games;
+	},
+	getPlayerWonGames: (player, amount) => {
+		const games = this._content.filter(x => x.winner === player).sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
+		return games;
+	},
+
+
+};
+client.tictactoeDb.initLoad().intervalSave();
 
 // command handler
 client.commands = new Discord.Collection();

@@ -13,7 +13,7 @@ module.exports = {
 		});
 		const embed = new client.embed()
 			.setTitle('Statistics: Command Usage')
-			.setDescription('List of commands that have been used in this session, ordered by amount of uses. Table contains command name and amount of uses.')
+			.setDescription('List of commands that have been used in this session, ordered by amount of uses. Table contains command name and amount of uses.\nTotal amount of commands used in this session: ' + client.commands.filter(x => x.uses).map(x => x.uses).reduce((a, b) => a + b, 0))
 			.setColor(3971825)
 			.setFooter(`Bot has been online for ${(client.uptime / 1000 / 60 / 60).toFixed(1)} hours.`)
 		if (rows.join('').length > 1024) {
