@@ -78,7 +78,8 @@ module.exports = {
 					},
 					draw: () => {
 						game.ended = true;
-						message.channel.send(game.boardState() + '\nIt\'s a draw! Neither player won the game. Draws are not counted in Tic Tac Toe Statistics');
+						message.channel.send(game.boardState() + '\nIt\'s a draw! Neither player won the game.');
+						db.addGame({ players: game.participants.map(x => x.user.tag), draw: true, startTime: game.startTime, endTime: Date.now() });
 						return;
 					},
 					boardState: () => {

@@ -40,11 +40,11 @@ client.memeQueue = new client.collection();
 client.cooldowns = new client.collection();
 
 // tic tac toe statistics database
-/* client.tictactoeDb = {
+client.tictactoeDb = {
 	_content: [],
 	_path: path.resolve('./ttt.json'),
 	_interval: undefined,
-	addGame(data = { players: ['', ''], winner: '', draw: false, startTime: 0, endTime: 0 }) {
+	addGame(data = { players, winner, draw, startTime, endTime }) {
 		this._content.push(data);
 		return this;
 	},
@@ -109,22 +109,20 @@ client.cooldowns = new client.collection();
 
 
 	// player stats
-	getPlayer: (player) => {
+	getPlayer(player) {
 		const games = this._content.filter(x => x.players.includes(player));
 		return games;
 	},
-	getPlayerRecentGames: (player, amount) => {
+	getPlayerRecentGames(player, amount) {
 		const games = this._content.filter(x => x.players.includes(player)).sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
 		return games;
 	},
-	getPlayerWonGames: (player, amount) => {
+	getPlayerWonGames(player, amount) {
 		const games = this._content.filter(x => x.winner === player).sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
 		return games;
 	},
-
-
 };
-client.tictactoeDb.initLoad().intervalSave(); */
+client.tictactoeDb.initLoad().intervalSave();
 
 // command handler
 client.commands = new Discord.Collection();
