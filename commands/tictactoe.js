@@ -184,7 +184,7 @@ module.exports = {
 		});
 	},
 	name: 'tictactoe',
-	description: 'Play the famous tic tac toe or noughts and crosses or Xs and Os game with a partner',
+	description: 'Play the famous tic tac toe or noughts and crosses or Xs and Os game with a partner. Add leaderboard to the end to see statistics.',
 	alias: ['ttt', 'noughtsandcrosses', 'n&c'],
 	cooldown: 60
 };
