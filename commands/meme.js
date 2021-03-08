@@ -33,6 +33,7 @@ module.exports = {
 					meme.author.onDiscord = true;
 					await message.channel.send('What is the user ID of the creator of this meme? (60s)');
 					meme.author.name = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+					if (meme.author.name.startsWith('<')) return failed();
 				} else if (onDiscord.toLowerCase() === 'n') {
 					meme.author.onDiscord = false;
 					await message.channel.send('Supply a name for the creator of this meme, e.g. their username on the platform that you found this meme on. (90s)');
