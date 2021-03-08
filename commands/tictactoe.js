@@ -1,16 +1,15 @@
 module.exports = {
-	run: (client, message, args) => {
+	run: async (client, message, args) => {
 		const db = client.tictactoeDb;
 		// leaderboards
 		if (args[1] === 'leaderboard' || args[1] === 'lb') {
 			const embed = new client.embed()
 				.setTitle('__Tic Tac Toe Statistics__')
 				.setDescription(`A total of ${db.getTotalGames()} games have been played.`)
-				.addField('Recent Games', `\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\``)
-				.addField('Best Players (>10 games played)', `\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], ((x[1].wins / x[1].total) * 100).toFixed(2) + '%']), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``)
-				.addField('Most Active Players', `\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``)
 				.setColor(client.embedColor)
-			return message.channel.send(embed);
+			await message.channel.send(embed);
+			await message.channel.send(`Recent Games\n\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\`\nBest Players (>10 games played)\n\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], ((x[1].wins / x[1].total) * 100).toFixed(2) + '%']), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\`\nMost Active Players\n\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``);
+			return;
 		}
 		// request opponent
 		let request = `Who wants to play Tic Tac Toe with ${message.member.toString()}? First person to respond with "me" will be elected Opponent. (60s)`;
@@ -44,6 +43,9 @@ module.exports = {
 					errors: [0, 0],
 					markers: ['X', 'O'],
 					startTime: Date.now(),
+					get singleplayer() {
+						return this.participants[0].user.id === this.participants[1].user.id;
+					},
 					userError: (index) => {
 						game.errors[game.turn]++;
 						const fouls = [
@@ -70,9 +72,8 @@ module.exports = {
 					},
 					victoryAction: () => {
 						game.ended = true;
-						const singleplayer = game.participants[0].user.id === game.participants[1].user.id;
-						message.channel.send(`${game.boardState()}\n${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!${singleplayer ? ' Singleplayer games are not counted in Tic Tac Toe Statistics.' : ''}`);
-						if (singleplayer) return;
+						message.channel.send(`${game.boardState()}\n${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!${game.singleplayer ? ' Singleplayer games are not counted in Tic Tac Toe Statistics.' : ''}`);
+						if (game.singleplayer) return;
 						db.addGame({ players: game.participants.map(x => x.user.tag), winner: game.participants[game.turn].user.tag, startTime: game.startTime, endTime: Date.now() });
 						return;
 					},
@@ -100,7 +101,7 @@ module.exports = {
 					}
 				};
 				// send info about how to play the game
-				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out. You can type \`${client.prefix}end\` to surrender at any point.\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
+				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out. You can type \`${client.prefix}end\` to surrender on your own turn.\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
 				// cycle function is executed on every turn
 				const cycle = () => { return new Promise(async (res, rej) => {
 					// result is what .then() returns. ask the player where they want to place their marker
@@ -109,8 +110,9 @@ module.exports = {
 						return await message.channel.awaitMessages(d => d.author.id === game.participants[game.turn].user.id && d.content.includes(','), { max: 1, time: 60000, errors: ['time'] }).then(async e => {
 							// ,,end
 							if (e.first()?.content === client.prefix + 'end') {
-								await message.channel.send('A player wants to end the game!');
-								game.draw();
+								await message.channel.send(`${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) wants to surrender!`);
+								game.changeTurn();
+								game.victoryAction();
 								return res();
 							}
 							// coords is the first message of the collection, split into 2 at the comma and mapped into integers
