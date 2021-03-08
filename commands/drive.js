@@ -1,6 +1,6 @@
 module.exports = {
 	run: (client, message, args) => {
-		message.channel.send({ files: ["https://media.discordapp.net/attachments/571031705109135361/698154858158489704/image0-4.jpg?width=1104&height=669"] });
+		message.channel.send('https://media.discordapp.net/attachments/571031705109135361/698154858158489704/image0-4.jpg');
 	},
 	name: 'drive',
 	alias: ['drives'],

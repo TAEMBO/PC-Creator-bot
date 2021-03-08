@@ -40,7 +40,7 @@ client.memeQueue = new client.collection();
 client.cooldowns = new client.collection();
 
 // tic tac toe statistics database
-client.tictactoeDb = {
+/* client.tictactoeDb = {
 	_content: [],
 	_path: path.resolve('./ttt.json'),
 	_interval: undefined,
@@ -124,7 +124,7 @@ client.tictactoeDb = {
 
 
 };
-client.tictactoeDb.initLoad().intervalSave();
+client.tictactoeDb.initLoad().intervalSave(); */
 
 // command handler
 client.commands = new Discord.Collection();

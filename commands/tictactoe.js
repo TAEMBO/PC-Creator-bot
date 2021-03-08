@@ -177,7 +177,8 @@ module.exports = {
 				}, 1000);
 			}).catch(err => {
 				// no one responded "me"
-				message.channel.send('Haha no one wants to play with you, lonely goblin.')
+				message.channel.send('Haha no one wants to play with you, lonely goblin.'),
+				console.log(err);
 			});
 		});
 	},
