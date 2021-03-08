@@ -44,39 +44,45 @@ client.tictactoeDb = {
 	_content: [],
 	_path: path.resolve('./ttt.json'),
 	_interval: undefined,
-	addGame: (data = { players: ['', ''], winner: '', draw: false, startTime: 0, endTime: 0 }) => {
+	addGame(data = { players: ['', ''], winner: '', draw: false, startTime: 0, endTime: 0 }) {
 		this._content.push(data);
 		return this;
 	},
-	initLoad: () => {
+	initLoad() {
 		const json = fs.readFileSync(this._path);
 		const array = JSON.parse(json);
 		this._content = array;
+		console.log('Tic Tac Toe Statistics Database Loaded');
 		return this;
 	},
-	forceSave: () => {
-		fs.writeFileSync(this._path, JSON.stringify(this._content));
+	forceSave(db, force = false) {
+		const oldJson = fs.readFileSync(db._path, { encoding: 'utf8' });
+		const newJson = JSON.stringify(db._content);
+		if (oldJson !== newJson || force) {
+			fs.writeFileSync(db._path, newJson || '[]');
+			console.log('Tic Tac Toe Statistics Database Saved');
+		}
+		return db;
+	},
+	intervalSave(milliseconds) {
+		this._interval = setInterval(() => this.forceSave(this), milliseconds || 60000);
 		return this;
 	},
-	intervalSave: (milliseconds) => {
-		this._interval = setInterval(this.forceSave, milliseconds || 60000);
-		return this;
-	},
-	stopInterval: () => {
+	stopInterval() {
 		if (this._interval) clearInterval(this._interval);
 		return this;
 	},
 
 	// global stats
-	getTotalGames: () => {
+	getTotalGames() {
 		const amount = this._content.length;
 		return amount;
 	},
-	getRecentGames: (amount) => {
+	getRecentGames(amount) {
 		const games = this._content.sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
 		return games;
 	},
-	getPlayersGames: () => {
+	getAllPlayersGames() {
 		const players = {};
 		this._content.forEach(game => {
 			game.players.forEach(player => {
@@ -92,12 +98,12 @@ client.tictactoeDb = {
 		});
 		return players;
 	},
-	getBestPlayers: (amount) => {
-		const players = Object.entries(this.getPlayersGames()).sort((a, b) => b[1].wins - a[1].wins).slice(0, amount - 1)
+	getBestPlayers(amount) {
+		const players = Object.entries(this.getAllPlayersGames()).filter(x => x[1].total >= 10).sort((a, b) => b[1].wins/b[1].total - a[1].wins/a[1].total).slice(0, amount - 1)
 		return players;
 	},
-	getMostActivePlayers: (amount) => {
-		const players = Object.entries(this.getPlayersGames()).sort((a, b) => b[1].total - a[1].total).slice(0, amount - 1)
+	getMostActivePlayers(amount) {
+		const players = Object.entries(this.getAllPlayersGames()).sort((a, b) => b[1].total - a[1].total).slice(0, amount - 1)
 		return players;
 	},
 

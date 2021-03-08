@@ -1,8 +1,16 @@
 module.exports = {
 	run: (client, message, args) => {
+		const db = client.tictactoeDb;
 		// leaderboards
-		if (args[1] === 'leaderboard') {
-			
+		if (args[1] === 'leaderboard' || args[1] === 'lb') {
+			const embed = new client.embed()
+				.setTitle('__Tic Tac Toe Statistics__')
+				.setDescription(`A total of ${db.getTotalGames()} games have been played.`)
+				.addField('Recent Games', `\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\``)
+				.addField('Best Players (>10 games played)', `\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], ((x[1].wins / x[1].total) * 100).toFixed(2) + '%']), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``)
+				.addField('Most Active Players', `\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``)
+				.setColor(client.embedColor)
+			return message.channel.send(embed);
 		}
 		// request opponent
 		let request = `Who wants to play Tic Tac Toe with ${message.member.toString()}? First person to respond with "me" will be elected Opponent. (60s)`;
@@ -35,6 +43,7 @@ module.exports = {
 					participants: [message.member, opponent],
 					errors: [0, 0],
 					markers: ['X', 'O'],
+					startTime: Date.now(),
 					userError: (index) => {
 						game.errors[game.turn]++;
 						const fouls = [
@@ -61,10 +70,15 @@ module.exports = {
 					},
 					victoryAction: () => {
 						game.ended = true;
-						message.channel.send(`${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!`);
-						const dbEntry = client.tictactoeDb.get(game.id);
-						dbEntry.endTime = Date.now();
-						dbEntry.winner = game.participants[game.turn].user.tag;
+						const singleplayer = game.participants[0].user.id === game.participants[1].user.id;
+						message.channel.send(`${game.boardState()}\n${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!${singleplayer ? ' Singleplayer games are not counted in Tic Tac Toe Statistics.' : ''}`);
+						if (singleplayer) return;
+						db.addGame({ players: game.participants.map(x => x.user.tag), winner: game.participants[game.turn].user.tag, startTime: game.startTime, endTime: Date.now() });
+						return;
+					},
+					draw: () => {
+						game.ended = true;
+						message.channel.send(game.boardState() + '\nIt\'s a draw! Neither player won the game. Draws are not counted in Tic Tac Toe Statistics');
 						return;
 					},
 					boardState: () => {
@@ -81,22 +95,23 @@ module.exports = {
 							'━━━╋━━━╋━━━',
 							` ${markers[0]} ┃ ${markers[3]} ┃ ${markers[6]}`
 						];
-						return '```\n' + boardText.join('\n') + '\n```';
+						return 'Current board state:\n```\n' + boardText.join('\n') + '\n```';
 					}
 				};
-				// init in db
-				client.tictactoeDb.set(game.id, {
-					players: game.participants.map(x => x.user.tag),
-					startTime: Date.now()
-				})
 				// send info about how to play the game
-				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out.\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
+				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out. You can type \`${client.prefix}end\` to surrender at any point.\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
 				// cycle function is executed on every turn
 				const cycle = () => { return new Promise(async (res, rej) => {
 					// result is what .then() returns. ask the player where they want to place their marker
-					const result = await message.channel.send('Current board state:\n' + game.boardState() + `\n${game.participants[game.turn].toString()}, Where do you want to place your \`${game.markers[game.turn]}\`? (60s)`).then(async c => {
+					const result = await message.channel.send(game.boardState() + `\n${game.participants[game.turn].toString()}, Where do you want to place your \`${game.markers[game.turn]}\`? (60s)`).then(async c => {
 						// returns what .then() returns. waits for the player to send coordinates. message must contain comma
-						return await message.channel.awaitMessages(d => d.author.id === game.participants[game.turn].user.id && d.content.includes(','), { max: 1, time: 60000, errors: ['time'] }).then(e => {
+						return await message.channel.awaitMessages(d => d.author.id === game.participants[game.turn].user.id && d.content.includes(','), { max: 1, time: 60000, errors: ['time'] }).then(async e => {
+							// ,,end
+							if (e.first()?.content === client.prefix + 'end') {
+								await message.channel.send('A player wants to end the game!');
+								game.draw();
+								return res();
+							}
 							// coords is the first message of the collection, split into 2 at the comma and mapped into integers
 							const coordinates = e.first()?.content.split(',').map(f => parseInt(f));
 							// if for some reason the message wasnt coordinates, foul
@@ -148,11 +163,7 @@ module.exports = {
 						) return res(game.victoryAction());
 						// draw, if none of the spots are null, aka there is a marker in every spot
 						if (!game.board.some(x => x.includes(null))) {
-							game.ended = true;
-							await message.channel.send('It\'s a draw! Neither player won the game.');
-							const dbEntry = client.tictactoeDb.get(game.id);
-							dbEntry.endTime = Date.now();
-							dbEntry.winner = null;
+							game.draw();
 							return res();
 						}
 					} else return res(game.userError(3));
@@ -161,7 +172,9 @@ module.exports = {
 				while (!game.ended) {
 					await cycle();
 				}
-				setTimeout(() => message.channel.send('Game has ended.'), 1000);
+				setTimeout(() => {
+					message.channel.send('Game has ended.');
+				}, 1000);
 			}).catch(err => {
 				// no one responded "me"
 				message.channel.send('Haha no one wants to play with you, lonely goblin.')
