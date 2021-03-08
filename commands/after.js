@@ -3,5 +3,5 @@ module.exports = {
 		message.channel.send("https://www.youtube.com/watch?v=RYYoCXh2gtw");
 	},
 	name: 'after',
-	description: 'what to do after you build your PC'
+	description: 'what to do after you build your PC (NOT IN-GAME)'
 };

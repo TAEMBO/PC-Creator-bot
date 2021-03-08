@@ -62,9 +62,6 @@ module.exports = {
 					victoryAction: () => {
 						game.ended = true;
 						message.channel.send(`${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!`);
-						const dbEntry = client.tictactoeDb.get(game.id);
-						dbEntry.endTime = Date.now();
-						dbEntry.winner = game.participants[game.turn].user.tag;
 						return;
 					},
 					boardState: () => {
@@ -85,10 +82,6 @@ module.exports = {
 					}
 				};
 				// init in db
-				client.tictactoeDb.set(game.id, {
-					players: game.participants.map(x => x.user.tag),
-					startTime: Date.now()
-				})
 				// send info about how to play the game
 				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out.\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
 				// cycle function is executed on every turn
@@ -150,9 +143,6 @@ module.exports = {
 						if (!game.board.some(x => x.includes(null))) {
 							game.ended = true;
 							await message.channel.send('It\'s a draw! Neither player won the game.');
-							const dbEntry = client.tictactoeDb.get(game.id);
-							dbEntry.endTime = Date.now();
-							dbEntry.winner = null;
 							return res();
 						}
 					} else return res(game.userError(3));
@@ -164,7 +154,8 @@ module.exports = {
 				setTimeout(() => message.channel.send('Game has ended.'), 1000);
 			}).catch(err => {
 				// no one responded "me"
-				message.channel.send('Haha no one wants to play with you, lonely goblin.')
+				message.channel.send('Haha no one wants to play with you, lonely goblin.'),
+				console.log(err);
 			});
 		});
 	},
