@@ -1,4 +1,17 @@
 const util = require('util');
+const removeUsername = (text) => {
+	let matchesLeft = true;
+	const array = text.split('\\');
+	while (matchesLeft) {
+		const usernameIndex = array.indexOf('Users') + 1;
+		if (usernameIndex < 1) matchesLeft = false;
+		else {
+			array[usernameIndex] = '#'.repeat(array[usernameIndex].length);
+			array[usernameIndex - 1] = 'Us\u200bers';
+		}
+	} 
+	return array.join('\\');
+};
 module.exports = {
 	run: (client, message, args) => {
 		if (!client.config.eval.allowed) return message.channel.send('Eval is disabled.');
@@ -18,7 +31,7 @@ module.exports = {
 			message.channel.send(embed).then(errorEmbedMessage => {
 				const messagecollector = new client.messageCollector(message.channel, x => x.content === 'stack' && x.author.id === message.author.id, { max: 1, time: 30000 });
 				messagecollector.on('collect', collected => {
-					collected.channel.send(`\`\`\`\n${err.stack}\n\`\`\``);
+					collected.channel.send(`\`\`\`\n${removeUsername(err.stack)}\n\`\`\``);
 				});
 			});
 		}
@@ -33,7 +46,7 @@ module.exports = {
 		const embed = new client.embed()
 			.setTitle('__Eval__')
 			.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
-			.addField('Output', `\`\`\`${output.slice(0, 1016)}\n\`\`\``)
+			.addField('Output', `\`\`\`${removeUsername(output).slice(0, 1016)}\n\`\`\``)
 			.setColor(3971825);
 		message.channel.send(embed);
 	},
