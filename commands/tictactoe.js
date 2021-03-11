@@ -1,24 +1,51 @@
 module.exports = {
 	run: async (client, message, args) => {
 		const db = client.tictactoeDb;
+		// remove from cooldown
+		const emptyCooldown = () => {
+			client.cooldowns.get(message.author.id).set('tictactoe', Date.now() + 8000);
+		};
+
 		// leaderboards
 		if (args[1] === 'leaderboard' || args[1] === 'lb') {
+			emptyCooldown();
 			const embed = new client.embed()
 				.setTitle('__Tic Tac Toe Statistics__')
 				.setDescription(`A total of ${db.getTotalGames()} games have been played.`)
-				.setFooter(`Do \`${client.prefix}ttt stats [username]\` for player stats.`)
+				.setFooter(`Do "${client.prefix}ttt stats [username]" for player stats.`)
 				.setColor(client.embedColor)
 			await message.channel.send(embed);
-			await message.channel.send(`Recent Games\n\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\`\nBest Players (>10 games played)\n\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], ((x[1].wins / x[1].total) * 100).toFixed(2) + '%']), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\`\nMost Active Players\n\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``);
+			await message.channel.send(`Recent Games\n\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\`\nBest Players (>10 games played)\n\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], db.calcWinPercentage(x[1])]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\`\nMost Active Players\n\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``);
 			return;
 		} else if (args[1] === 'stats') {
-			const playerStats = db.getAllPlayersGames()[args[2] || message.author.tag];
+			emptyCooldown();
+			const allPlayers = db.getAllPlayers();
+			let playerStats;
+			let username;
+			if (message.mentions.members.first()) {
+				playerStats = allPlayers[message.mentions.members.first()?.user.tag];
+				username = message.mentions.members.first()?.user.tag
+			} else if (args[2]) {
+				playerStats = allPlayers[args[2]];
+				username = args[2];
+				if (!playerStats) {
+					const member = await message.guild.members.fetch(args[2]);
+					playerStats = allPlayers[member.user.tag];
+					username = member.user.tag;
+				}
+			} else {
+				playerStats = allPlayers[message.author.tag];
+				username = message.author.tag;
+			}
 			if (!playerStats) return message.channel.send('User not found.');
 			const embed = new client.embed()
-				.setTitle(`__Tic Tac Toe Statistics: ${args[2] || message.author.tag}__`)
-				.setDescription(`This user has played a total of ${playerStats.total} games.\n${playerStats.wins} of those were wins.\n${playerStats.losses} of those were losses.\n${playerStats.draws} of those were draws.`)
+				.setTitle(`__Tic Tac Toe Statistics: ${username}__`)
+				.setDescription(`This user has played a total of ${playerStats.total} games.\n${playerStats.wins} of those were wins.\n${playerStats.losses} of those were losses.\n${playerStats.draws} of those were draws.\nThis user has a win percentage of \`${db.calcWinPercentage(playerStats)}\``)
 				.setColor(client.embedColor)
 			return message.channel.send(embed);
+		}
+		if (client.tictactoeGames.has(message.channel.id)) {
+			return message.channel.send(`There is already an ongoing game in this channel created by ${client.tictactoeGames.get(message.channel.id).name}${client.tictactoeGames.get(message.channel.id).challenge ? ' and it is a challenge for ' + client.tictactoeGames.get(message.channel.id).opponent : '.' }`);
 		}
 		// request opponent
 		let request = `Who wants to play Tic Tac Toe with ${message.member.toString()}? First person to respond with "me" will be elected Opponent. (60s)`;
@@ -29,12 +56,13 @@ module.exports = {
 			challenge = true;
 		}
 		message.channel.send(request).then(a => {
+			client.tictactoeGames.set(message.channel.id, { name: message.author.tag, challenge, opponent: message.mentions.members.first()?.user.tag || undefined});
 			// wait until someone wants to be the opponent
 			message.channel.awaitMessages(x => {
 				if (challenge) {
 					return ['y', 'n'].some(y => x.content.toLowerCase().startsWith(y)) && x.author.id === message.mentions.members.first().user.id;
 				} else {
-					return x.content.startsWith('me');
+					return x.content.toLowerCase().startsWith('me');
 				}
 			}, { max: 1, time: 60000, errors: ['time']}).then(async b => {
 				if (challenge) {
@@ -117,31 +145,47 @@ module.exports = {
 					}
 				};
 				// send info about how to play the game
-				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out. You can type \`${client.prefix}end\` to surrender on your own turn.\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
+				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out. You can type \`${client.prefix}end\` to surrender on your own turn or \`${client.prefix}draw\` to suggest a draw to your opponent..\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
 				// cycle function is executed on every turn
 				const cycle = () => { return new Promise(async (res, rej) => {
 					// result is what .then() returns. ask the player where they want to place their marker
 					const result = await message.channel.send(game.boardState() + `\n${game.participants[game.turn].toString()}, Where do you want to place your \`${game.markers[game.turn]}\`? (60s)`).then(async c => {
 						// returns what .then() returns. waits for the player to send coordinates. message must contain comma
-						return await message.channel.awaitMessages(d => d.author.id === game.participants[game.turn].user.id && d.content.includes(','), { max: 1, time: 60000, errors: ['time'] }).then(async e => {
-							// ,,end
+						return await message.channel.awaitMessages(d => d.author.id === game.participants[game.turn].user.id && d.content.includes(',') && d.content.indexOf(',') <= 1, { max: 1, time: 60000, errors: ['time'] }).then(async e => {
+							// ,end
 							if (e.first()?.content.startsWith(client.prefix + 'end')) {
 								await message.channel.send(`${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) wants to surrender!`);
 								game.changeTurn();
 								game.victoryAction();
 								return res();
+							// ,draw
+							} else if (e.first()?.content.startsWith(client.prefix + 'draw')) {
+								await message.channel.send(`${game.participants[game.nextTurn].toString()} (\`${game.markers[game.nextTurn]}\`), do you want to end the game in a draw? Respond with y/n. (60s)`);
+								const opponentResponses = await message.channel.awaitMessages(x => x.author.id === game.participants[game.nextTurn].user.id && ['y', 'n'].some(y => x.content.toLowerCase().startsWith(y)), { max: 1, time: 60000, errors: ['time']}).catch(() => message.channel.send('Game does not end.'));
+								
+								if (opponentResponses.first()) {
+									if (opponentResponses.first().content.toLowerCase().startsWith('y'))
+									game.draw();
+									res();
+									return false;
+								} else {
+									res();
+									return false;
+								}
 							}
 							// coords is the first message of the collection, split into 2 at the comma and mapped into integers
 							const coordinates = e.first()?.content.split(',').map(f => parseInt(f));
 							// if for some reason the message wasnt coordinates, foul
 							if (coordinates.length !== 2 || coordinates.some(x => isNaN(x))) {
-								return res(game.userError(0));
+								res(game.userError(0));
+								return false;
 							}
 							// return coords
 							return coordinates;
 						}).catch(err => {
 							// player failed to send coordinates in time, foul
-							return res(game.userError(1));
+							res(game.userError(1));
+							return false;
 						});
 					});
 					if (!result) return;
@@ -193,10 +237,13 @@ module.exports = {
 				}
 				setTimeout(() => {
 					message.channel.send('Game has ended.');
+					client.tictactoeGames.delete(message.channel.id);
+
 				}, 1000);
 			}).catch(err => {
 				// no one responded "me"
 				message.channel.send('Haha no one wants to play with you, lonely goblin.'),
+				client.tictactoeGames.delete(message.channel.id);
 				console.log(err);
 			});
 		});
@@ -204,5 +251,5 @@ module.exports = {
 	name: 'tictactoe',
 	description: 'Play the famous tic tac toe or noughts and crosses or Xs and Os game with a partner. Add leaderboard to the end to see statistics.',
 	alias: ['ttt', 'noughtsandcrosses', 'n&c'],
-	cooldown: 40
+	cooldown: 35
 };
