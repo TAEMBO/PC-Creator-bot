@@ -124,6 +124,7 @@ module.exports = {
 					draw: () => {
 						game.ended = true;
 						message.channel.send(game.boardState() + '\nIt\'s a draw! Neither player won the game.');
+						if (game.singleplayer) return;
 						db.addGame({ players: game.participants.map(x => x.user.tag), draw: true, startTime: game.startTime, endTime: Date.now() });
 						return;
 					},
