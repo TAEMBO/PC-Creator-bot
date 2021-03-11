@@ -139,5 +139,6 @@ module.exports = {
 	},
 	name: 'meme',
 	description: 'Works like xkcd, images are given a number and you can view a specific image if you know the number. This command is for memes made by the PCC community',
-	usage: ['key/"add"/"review"']
+	usage: ['key/"add"/"review"'],
+	alias: ['memes']
 };
