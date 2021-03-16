@@ -40,7 +40,7 @@ module.exports = {
 		const homeEmojis = ['v', 'raised_hand', 'right_facing_fist'].map(x => ':' + x + ':');
 		const guestEmojis = ['v', 'raised_back_of_hand', 'left_facing_fist'].map(x => ':' + x + ':');
 		const arrows = ['arrow_right', 'arrow_left'].map(x => ':' + x + ':');
-		if (winnerIndex) {
+		if (winnerIndex !== undefined) {
 			message.channel.send(`${homeEmojis[homePlay]} ${arrows[winnerIndex]} ${guestEmojis[guestPlay]}\n${players[winnerIndex].toString()} wins!`);
 		} else {
 			message.channel.send(`${homeEmojis[homePlay]} :left_right_arrow: ${guestEmojis[guestPlay]}\nIts a draw!`);
