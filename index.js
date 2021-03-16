@@ -39,7 +39,8 @@ client.memeQueue = new client.collection();
 // cooldowns
 client.cooldowns = new client.collection();
 
-// tic tac toe statistics database
+// tic tac toe databases
+// statistics
 client.tictactoeDb = {
 	_content: [],
 	_path: path.resolve('./ttt.json'),
@@ -82,7 +83,7 @@ client.tictactoeDb = {
 		const games = this._content.sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
 		return games;
 	},
-	getAllPlayersGames() {
+	getAllPlayers() {
 		const players = {};
 		this._content.forEach(game => {
 			game.players.forEach(player => {
@@ -99,17 +100,17 @@ client.tictactoeDb = {
 		return players;
 	},
 	getBestPlayers(amount) {
-		const players = Object.entries(this.getAllPlayersGames()).filter(x => x[1].total >= 10).sort((a, b) => b[1].wins/b[1].total - a[1].wins/a[1].total).slice(0, amount - 1)
+		const players = Object.entries(this.getAllPlayers()).filter(x => x[1].total >= 10).sort((a, b) => b[1].wins/b[1].total - a[1].wins/a[1].total).slice(0, amount - 1)
 		return players;
 	},
 	getMostActivePlayers(amount) {
-		const players = Object.entries(this.getAllPlayersGames()).sort((a, b) => b[1].total - a[1].total).slice(0, amount - 1)
+		const players = Object.entries(this.getAllPlayers()).sort((a, b) => b[1].total - a[1].total).slice(0, amount - 1)
 		return players;
 	},
 
 
 	// player stats
-	getPlayer(player) {
+	getPlayerGames(player) {
 		const games = this._content.filter(x => x.players.includes(player));
 		return games;
 	},
@@ -117,12 +118,14 @@ client.tictactoeDb = {
 		const games = this._content.filter(x => x.players.includes(player)).sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
 		return games;
 	},
-	getPlayerWonGames(player, amount) {
-		const games = this._content.filter(x => x.winner === player).sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
-		return games;
-	},
+
+	calcWinPercentage(player) {
+		return ((player.wins / player.total) * 100).toFixed(2) + '%';
+	}
 };
 client.tictactoeDb.initLoad().intervalSave();
+// 1 game per channel
+client.tictactoeGames = new Discord.Collection();
 
 // command handler
 client.commands = new Discord.Collection();

@@ -2,7 +2,7 @@
 	"token": "",
 	"prefix": ",",
 	"eval": {
-		"allowed": false,
+		"allowed": true,
 		"whitelist": [
 			"615761944154210305"
 		]
