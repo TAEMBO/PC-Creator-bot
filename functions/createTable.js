@@ -17,6 +17,14 @@ module.exports = (columnTitles = [], rowsData = [], options = {}, client) => {
 	// big line
 	rows.push('━'.repeat([...columnWidths, ...(columnSeparator.length > 0 ? columnSeparator.map(x => x.length) : [0])].reduce((a, b) => a + b, 0)));
 	// data
+	// remove unicode
+	rowsData.map(row => {
+		return row.map(element => {
+			return element.split('').map(char => {
+				if (char.charCodeAt(0) > 128) return '□';
+			}).join('');
+		});
+	});
 	rows.push(rowsData.map(row => row.map((element, i) => {
 			return client.alignText(element, columnWidths[i], columnAlign[i], columnEmptyChar[i]) + (i === columnTitles.length - 1 ? '' : columnSeparator[i]);
 		}).join('')
