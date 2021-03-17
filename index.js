@@ -149,7 +149,7 @@ while (client.commands.some(command => !command.hidden && !command.page)) {
 	const command = client.commands.find(command => !command.hidden && !command.page);
 	if (!command.category) command.category = 'Misc';
 	if (!categories[command.category]) categories[command.category] = { text: '', currentPage: 1}
-	const commandInfo = client.commandInfo(command, client.helpDefaultOptions);
+	const commandInfo = client.commandInfo(client, command, client.helpDefaultOptions);
 	if (categories[command.category].text.length + commandInfo.length > 1024) {
 		categories[command.category].text = commandInfo;
 		categories[command.category].currentPage++;

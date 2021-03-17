@@ -15,7 +15,7 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 		message.channel.send(embed)
 			// add reactions to go forward or backward pages
 			.then(async botMessage => {
-				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id, { time: 40000 });
+				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id, { time: 10000 });
 				collector.on('collect', async (reaction, user) => {
 					if (reaction.emoji.name === '◀️') {
 						if (pageIndex - 1 < 0) pageIndex = client.commands.pages.length;
@@ -29,9 +29,9 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 					await botMessage.react('▶️');
 				});
 				collector.on('end', async () => {
-					await botMessage.reactions.removeAll();
+					await botMessage.edit('_Removed to save space._');
 					await botMessage.suppressEmbeds();
-					botMessage.edit('_Removed to save space._');
+					await botMessage.reactions.removeAll();
 				});
 				await botMessage.react('◀️');
 				await botMessage.react('▶️');
