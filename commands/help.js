@@ -15,7 +15,7 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 		message.channel.send(embed)
 			// add reactions to go forward or backward pages
 			.then(async botMessage => {
-				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id, { time: 10000 });
+				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id, { time: 45000 });
 				collector.on('collect', async (reaction, user) => {
 					if (reaction.emoji.name === '◀️') {
 						if (pageIndex - 1 < 0) pageIndex = client.commands.pages.length;
