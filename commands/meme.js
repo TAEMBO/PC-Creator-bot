@@ -101,7 +101,7 @@ module.exports = {
 
 
 					if (!meme) return message.channel.send('That meme doesn\'t exist.');
-					if (args[3] && ['y', 'n'].includes(args[3]).toLowerCase()) {
+					if (args[3] && ['y', 'n'].includes(args[3].toLowerCase())) {
 						if (args[3].toLowerCase() === 'y') approve()
 						else decline();
 						return;
