@@ -9,7 +9,7 @@ module.exports = {
 			await message.member.roles.add(role.id);
 			message.channel.send(`You\'ve received the **${role.name}** role. You can now access <#${client.config.mainServer.channels.betterGeneral}>`);
 		} else {
-			message.channel.send(`You\'re not eligible for access to the **${role.name}** role. Progress:\n${messages ? ':white_check_mark:' : ':x:'} ${client.userLevels.getUser(message.author.id)}/${client.userLevels._requirements.messages} messages\n${age ? ':white_check_mark:' : ':x:'} ${Math.floor((Date.now() - message.member.joinedTimestamp) / 1000 / 60 / 60 / 24)}d/${Math.floor(client.userLevels._requirements.age / 1000 / 60 / 60 / 24)}d account age.`);
+			message.channel.send(`You\'re not eligible for access to the **${role.name}** role. Progress:\n${messages ? ':white_check_mark:' : ':x:'} ${client.userLevels.getUser(message.author.id)}/${client.userLevels._requirements.messages} messages\n${age ? ':white_check_mark:' : ':x:'} ${Math.floor((Date.now() - message.member.joinedTimestamp) / 1000 / 60 / 60 / 24)}d/${Math.floor(client.userLevels._requirements.age / 1000 / 60 / 60 / 24)}d time on server.`);
 		}
 	},
 	name: 'applyforbetterchat',

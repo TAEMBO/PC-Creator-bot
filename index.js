@@ -135,7 +135,7 @@ client.userLevels = {
 	_interval: undefined,
 	_requirements: {
 		age: 1000 * 60 * 60 * 24 * 30 * 3,
-		messages: 4
+		messages: 1200
 	},
 	incrementUser(userid) {
 		const amount = this._content[userid];
@@ -305,7 +305,11 @@ client.on("message", async (message) => {
 			}
 		}
 	} else {
-		client.userLevels.incrementUser(message.author.id);
+		const BLACKLISTED_CHANNELS = [
+			'748122380383027210', /* bot-commands */
+		];
+		// if message was not sent in a blacklisted channel, count towards user level
+		if (!BLACKLISTED_CHANNELS.includes(message.channel.id)) client.userLevels.incrementUser(message.author.id);
 		if (message.content.includes("userbenchmark.com")) {
 			message.reply(":b:ingus y u use userbenchmark")
 		}
