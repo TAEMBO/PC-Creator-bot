@@ -3,13 +3,15 @@ const removeUsername = (text) => {
 	let matchesLeft = true;
 	const array = text.split('\\');
 	while (matchesLeft) {
-		const usernameIndex = array.indexOf('Users') + 1;
-		if (usernameIndex < 1) matchesLeft = false;
+		let usersIndex = array.indexOf('Users');
+		if (usersIndex < 1) matchesLeft = false;
 		else {
+			let usernameIndex = usersIndex + 1;
+			if (array[usernameIndex].length === 0) usernameIndex += 1;
 			array[usernameIndex] = '#'.repeat(array[usernameIndex].length);
-			array[usernameIndex - 1] = 'Us\u200bers';
+			array[usersIndex] = 'Us\u200bers';
 		}
-	} 
+	}
 	return array.join('\\');
 };
 module.exports = {
