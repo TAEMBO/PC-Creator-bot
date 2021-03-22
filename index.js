@@ -127,6 +127,59 @@ client.tictactoeDb.initLoad().intervalSave();
 // 1 game per channel
 client.tictactoeGames = new Discord.Collection();
 
+// userLevels
+// sqrt(messages/100)
+client.userLevels = {
+	_content: {},
+	_path: path.resolve('./userLevels.json'),
+	_interval: undefined,
+	_requirements: {
+		age: 1000 * 60 * 60 * 24 * 30 * 3,
+		messages: 4
+	},
+	incrementUser(userid) {
+		const amount = this._content[userid];
+		if (amount) this._content[userid]++;
+		else this._content[userid] = 1;
+		return this;
+	},
+	initLoad() {
+		const json = fs.readFileSync(this._path);
+		const content = JSON.parse(json);
+		this._content = content;
+		console.log('User Levels Database Loaded');
+		return this;
+	},
+	forceSave(db = this, force = false) {
+		const oldJson = fs.readFileSync(db._path, { encoding: 'utf8' });
+		const newJson = JSON.stringify(db._content);
+		if (oldJson !== newJson || force) {
+			fs.writeFileSync(db._path, newJson || '[]');
+			console.log('User Levels Database Saved');
+		}
+		return db;
+	},
+	intervalSave(milliseconds) {
+		this._interval = setInterval(() => this.forceSave(this), milliseconds || 300000);
+		return this;
+	},
+	stopInterval() {
+		if (this._interval) clearInterval(this._interval);
+		return this;
+	},
+	getUser(userid) {
+		return this._content[userid] || 0;
+	},
+	hasUser(userid) {
+		return !!this._content[userid];
+	},
+	getEligible(userid) {
+		const amount = this.getUser(userid) || 0;
+		return amount >= this._requirements.messages;
+	},
+}
+client.userLevels.initLoad().intervalSave();
+
 // command handler
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -200,9 +253,9 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 client.on("message", async (message) => {
     if (message.channel.type === 'dm') {
-        const channel = client.channels.cache.get(client.config.dmForwardChannel);
+        const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
         const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
-        if (!channel || !pcCreatorServer) console.log(`could not find channel ${client.config.dmForwardChannel} or guild ${client.config.pcCreatorServer}`);
+		if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);
         const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
         const memberOfPccs = !!guildMemberObject;
         const embed = new client.embed()
@@ -252,12 +305,13 @@ client.on("message", async (message) => {
 			}
 		}
 	} else {
+		client.userLevels.incrementUser(message.author.id);
 		if (message.content.includes("userbenchmark.com")) {
 			message.reply(":b:ingus y u use userbenchmark")
 		}
 		if (client.config.enableAutoResponse) {
 			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
-			const questionWords = ['how', 'what', 'where', 'why'];
+			const questionWords = ['how', 'what', 'where', 'why', 'can'];
 			let trigger;
 			if (
 				!((

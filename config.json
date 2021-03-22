@@ -8,7 +8,6 @@
 		]
 	},
 	"enableAutoResponse": true,
-	"dmForwardChannel": "572673322891083776",
 	"mainServer": {
 		"id":"571031703661969430",
 		"roles": {
@@ -17,7 +16,12 @@
 			"trialmoderator": "697002610892341298",
 			"helper": "697728131003580537",
 			"proplayer": "775736993018806322",
-			"muted": "634438185363046440"
+			"muted": "634438185363046440",
+			"levelOne": "823249966045855844"
+		},
+		"channels": {
+			"dmForwardChannel": "572673322891083776",
+			"betterGeneral": "755920483698081793"
 		}
 	}
 }
