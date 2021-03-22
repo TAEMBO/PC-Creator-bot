@@ -3,7 +3,7 @@ module.exports = (client, options) => {
 	const embed = new client.embed()
 		.setTitle(manufacturer.charAt(0).toUpperCase() + manufacturer.slice(1).toLowerCase() + ' ' + cpu.name)
 		.addField('Cores', cpu.cores, true)
-		.addField('Base Clock Speed', cpu.base.toFixed(2) + ' GHz', true)
+		.addField('Base Clock Speed', cpu.base ? cpu.base.toFixed(2) + ' GHz' : 'N/A', true)
 		.addField('TDP', cpu.tdp + 'W', true)
 		.addField('Threads', cpu.threads, true)
 		.addField('Boost Clock Speed', cpu.boost ? cpu.boost.toFixed(2) + ' GHz' : 'N/A', true)
