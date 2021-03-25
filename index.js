@@ -39,41 +39,12 @@ client.memeQueue = new client.collection();
 // cooldowns
 client.cooldowns = new client.collection();
 
-// tic tac toe databases
-// statistics
-client.tictactoeDb = {
-	_content: [],
-	_path: path.resolve('./ttt.json'),
-	_interval: undefined,
-	addGame(data = { players, winner, draw, startTime, endTime }) {
-		this._content.push(data);
-		return this;
-	},
-	initLoad() {
-		const json = fs.readFileSync(this._path);
-		const array = JSON.parse(json);
-		this._content = array;
-		console.log('Tic Tac Toe Statistics Database Loaded');
-		return this;
-	},
-	forceSave(db, force = false) {
-		const oldJson = fs.readFileSync(db._path, { encoding: 'utf8' });
-		const newJson = JSON.stringify(db._content);
-		if (oldJson !== newJson || force) {
-			fs.writeFileSync(db._path, newJson || '[]');
-			console.log('Tic Tac Toe Statistics Database Saved');
-		}
-		return db;
-	},
-	intervalSave(milliseconds) {
-		this._interval = setInterval(() => this.forceSave(this), milliseconds || 60000);
-		return this;
-	},
-	stopInterval() {
-		if (this._interval) clearInterval(this._interval);
-		return this;
-	},
+// database
+const database = require('./database.js');
 
+// tic tac toe statistics database
+client.tictactoeDb = new database('./ttt.json', 'array'); /* players, winner, draw, startTime, endTime */
+Object.assign(client.tictactoeDb, {
 	// global stats
 	getTotalGames() {
 		const amount = this._content.length;
@@ -100,15 +71,13 @@ client.tictactoeDb = {
 		return players;
 	},
 	getBestPlayers(amount) {
-		const players = Object.entries(this.getAllPlayers()).filter(x => x[1].total >= 10).sort((a, b) => b[1].wins/b[1].total - a[1].wins/a[1].total).slice(0, amount - 1)
+		const players = Object.entries(this.getAllPlayers()).filter(x => x[1].total >= 10).sort((a, b) => b[1].wins / b[1].total - a[1].wins / a[1].total).slice(0, amount - 1)
 		return players;
 	},
 	getMostActivePlayers(amount) {
 		const players = Object.entries(this.getAllPlayers()).sort((a, b) => b[1].total - a[1].total).slice(0, amount - 1)
 		return players;
 	},
-
-
 	// player stats
 	getPlayerGames(player) {
 		const games = this._content.filter(x => x.players.includes(player));
@@ -118,21 +87,17 @@ client.tictactoeDb = {
 		const games = this._content.filter(x => x.players.includes(player)).sort((a, b) => b.startTime - a.startTime).slice(0, amount - 1);
 		return games;
 	},
-
 	calcWinPercentage(player) {
 		return ((player.wins / player.total) * 100).toFixed(2) + '%';
 	}
-};
+});
 client.tictactoeDb.initLoad().intervalSave();
 // 1 game per channel
 client.tictactoeGames = new Discord.Collection();
 
 // userLevels
-// sqrt(messages/100)
-client.userLevels = {
-	_content: {},
-	_path: path.resolve('./userLevels.json'),
-	_interval: undefined,
+client.userLevels = new database('./userLevels.json', 'object');
+Object.assign(client.userLevels, {
 	_requirements: {
 		age: 1000 * 60 * 60 * 24 * 30 * 3,
 		messages: 1200
@@ -141,30 +106,6 @@ client.userLevels = {
 		const amount = this._content[userid];
 		if (amount) this._content[userid]++;
 		else this._content[userid] = 1;
-		return this;
-	},
-	initLoad() {
-		const json = fs.readFileSync(this._path);
-		const content = JSON.parse(json);
-		this._content = content;
-		console.log('User Levels Database Loaded');
-		return this;
-	},
-	forceSave(db = this, force = false) {
-		const oldJson = fs.readFileSync(db._path, { encoding: 'utf8' });
-		const newJson = JSON.stringify(db._content);
-		if (oldJson !== newJson || force) {
-			fs.writeFileSync(db._path, newJson || '[]');
-			console.log('User Levels Database Saved');
-		}
-		return db;
-	},
-	intervalSave(milliseconds) {
-		this._interval = setInterval(() => this.forceSave(this), milliseconds || 300000);
-		return this;
-	},
-	stopInterval() {
-		if (this._interval) clearInterval(this._interval);
 		return this;
 	},
 	getUser(userid) {
@@ -177,8 +118,48 @@ client.userLevels = {
 		const amount = this.getUser(userid) || 0;
 		return amount >= this._requirements.messages;
 	},
-}
-client.userLevels.initLoad().intervalSave();
+});
+client.userLevels.initLoad().intervalSave(300000);
+
+// specs
+client.specsDb = new database('./specs.json', 'object');
+Object.assign(client.specsDb, {
+	editSpecs(id, component, newValue) {
+		const allComponents = Object.keys(this._content[id]);
+		const index = allComponents.map(x => x.toLowerCase().replace(/ /g, '-')).indexOf(component.toLowerCase().replace(/ /g, '-'));
+		this._content[id][allComponents[index]] = newValue;
+		return this;
+	},
+	addSpec(id, component, value) {
+		this._content[id][component] = value;
+		return this;
+	},
+	deleteSpec(id, component) {
+		const allComponents = Object.keys(this._content[id]);
+		const index = allComponents.map(x => x.toLowerCase().replace(/ /g, '-')).indexOf(component.toLowerCase().replace(/ /g, '-'));
+		delete this._content[id][allComponents[index]];
+		return this;
+	},
+	deleteData(id) {
+		delete this._content[id];
+		return this;
+	},
+	getUser(id) {
+		const user = this._content[id];
+		return user;
+	},
+	hasUser(id) {
+		const user = this._content[id];
+		return !!user;
+	},
+	hasSpec(id, component) {
+		const allComponents = Object.keys(this._content[id]);
+		const index = allComponents.map(x => x.toLowerCase().replace(/ /g, '-')).indexOf(component.toLowerCase().replace(/ /g, '-'));
+		return index >= 0;
+	}
+
+});
+client.specsDb.initLoad().intervalSave(120000);
 
 // command handler
 client.commands = new Discord.Collection();

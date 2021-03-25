@@ -15,4 +15,5 @@ module.exports = {
 	name: 'applyforbetterchat',
 	description: 'Check your eligibility for access to the Level 1 role.',
 	alias: ['afbc'],
+	category: 'Moderation'
 };

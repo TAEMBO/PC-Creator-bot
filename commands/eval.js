@@ -15,14 +15,14 @@ const removeUsername = (text) => {
 	return array.join('\\');
 };
 module.exports = {
-	run: (client, message, args) => {
+	run: async (client, message, args) => {
 		if (!client.config.eval.allowed) return message.channel.send('Eval is disabled.');
 		if (!client.config.eval.whitelist.includes(message.author.id)) return message.channel.send('You\'re not allowed to use eval');
 		const code = message.content.slice(client.prefix.length + args[0].length + 1);
 		let output = 'error';
 		let error = false;
 		try {
-			output = eval(code);
+			output = await eval(code);
 		} catch (err) {
 			error = true;
 			const embed = new client.embed()
