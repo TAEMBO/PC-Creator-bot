@@ -40,9 +40,9 @@ module.exports = {
 				if (!client.specsDb.hasUser(message.author.id)) return message.channel.send('You haven\'t added any specs.');
 				if (args[2]) {
 					const component = args.slice(2).join(' ')
-					if (!client.specsDb.hasSpec(message.author.id, args[2])) return message.channel.send('You haven\'t added that spec.');
-					client.specsDb.deleteSpec(message.author.id, args[2]);
-					return message.channel.send(`Successfully deleted "${args[2]}" from your specs.`);
+					if (!client.specsDb.hasSpec(message.author.id, component)) return message.channel.send('You haven\'t added that spec.');
+					client.specsDb.deleteSpec(message.author.id, component);
+					return message.channel.send(`Successfully deleted "${component}" from your specs.`);
 				} else {
 					client.specsDb.deleteData(message.author.id);
 					return message.channel.send(`Successfully deleted all your specs.`);

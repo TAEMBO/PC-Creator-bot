@@ -138,6 +138,7 @@ Object.assign(client.specsDb, {
 		const allComponents = Object.keys(this._content[id]);
 		const index = allComponents.map(x => x.toLowerCase().replace(/ /g, '-')).indexOf(component.toLowerCase().replace(/ /g, '-'));
 		delete this._content[id][allComponents[index]];
+		if (Object.keys(this._content[id]).length === 0) this.deleteData(id);
 		return this;
 	},
 	deleteData(id) {
