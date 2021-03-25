@@ -118,14 +118,14 @@ module.exports = {
 						game.ended = true;
 						message.channel.send(`${game.boardState()}\n${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!${game.singleplayer ? ' Singleplayer games are not counted in Tic Tac Toe Statistics.' : ' TIP: You can view Tic Tac Toe statistics with "' + client.prefix + 'ttt leaderboard"'}`);
 						if (game.singleplayer) return;
-						db.addGame({ players: game.participants.map(x => x.user.tag), winner: game.participants[game.turn].user.tag, startTime: game.startTime, endTime: Date.now() });
+						db.addData({ players: game.participants.map(x => x.user.tag), winner: game.participants[game.turn].user.tag, startTime: game.startTime, endTime: Date.now() });
 						return;
 					},
 					draw: () => {
 						game.ended = true;
 						message.channel.send(game.boardState() + '\nIt\'s a draw! Neither player won the game. TIP: You can view Tic Tac Toe statistics with "' + client.prefix + 'ttt leaderboard"');
 						if (game.singleplayer) return;
-						db.addGame({ players: game.participants.map(x => x.user.tag), draw: true, startTime: game.startTime, endTime: Date.now() });
+						db.addData({ players: game.participants.map(x => x.user.tag), draw: true, startTime: game.startTime, endTime: Date.now() });
 						return;
 					},
 					boardState: () => {
