@@ -237,7 +237,7 @@ client.on("message", async (message) => {
     if (message.channel.type === 'dm') {
         const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
         const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
-		if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);
+	if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);
         const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
         const memberOfPccs = !!guildMemberObject;
         const embed = new client.embed()
@@ -246,7 +246,7 @@ client.on("message", async (message) => {
             .setColor(3971825)
             .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content)
             .addField('User', `<@${message.author.id}>`)
-            .addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the PC Creator Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
+            .addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the **${pcCreatorServer.name}** Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
             .setTimestamp(Date.now());
         channel.send(embed)
         channel.send('<@615761944154210305>');
