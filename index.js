@@ -296,7 +296,7 @@ client.on("message", async (message) => {
 			message.reply(":b:ingus y u use userbenchmark");
 		}
 		if (message.content.toLowerCase().includes("titanus")) {
-			message.channel.send("tit anus <:hahaha6:740166145167982623>");
+			message.channel.send("Ass-sus tit anus <:hahaha6:740166145167982623>");
 		}
 		if (client.config.enableAutoResponse) {
 			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
