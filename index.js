@@ -31,6 +31,7 @@ Object.assign(client, {
 		parts: ['name', 'usage', 'description', 'alias']
 	},
 	embedColor: 3971825,
+	//starLimit: 3
 });
 
 // meme approval queue
@@ -222,6 +223,95 @@ client.commands.pages.sort((a, b) => {
 	}
 });
 
+// starboard functionality
+/*
+client.starboard = new database('./starboard.json', 'object');
+Object.assign(client.starboard, {
+	async increment(reaction) {
+		console.log(reaction.message.id);
+		let dbEntry = this._content[reaction.message.id];
+		if (dbEntry) dbEntry.c++;
+		else {
+			this.addData(reaction.message.id, { c: 1, a: reaction.message.author.id });
+			dbEntry = this._content[reaction.message.id];
+		}
+		if (dbEntry?.c >= client.starLimit) {
+			console.log(`db entry ${reaction.message.id} has e ${dbEntry.e}`);
+			if (dbEntry.e) {
+				const embedMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e);
+				const embed = embedMessage.embeds[0];
+				embed.setTitle(dbEntry.c + ' :star:');
+				embedMessage.edit(embed);
+				return true;
+			} else {
+				const embed = await this.sendEmbed({ count: dbEntry.c, message: reaction.message});
+				console.log(embed.id);
+				this._content[reaction.message.id].e = embed.id;
+			}
+		}
+	},
+	sendEmbed(data) {
+		console.log('here4');
+		const embed = new client.embed()
+			.setTitle(`${data.count} :star: | <#${data.message.channel.id}>`)
+			.setDescription(data.message.content)
+			.setAuthor(`${data.message.member.displayName} (${data.message.author.id})`, data.message.author.avatarURL({ format: 'png', size: 128 }))
+			.setTimestamp(data.message.createdTimestamp)
+			.setFooter(data.message.id)
+			.setColor('#ffcc00');
+		if (data.message.attachments.first()?.width) embed.setImage(data.message.attachments.first().url);
+		return client.channels.resolve(client.config.mainServer.channels.starboard).send(embed).then(async x => {
+			x.react('⭐');
+			return x;
+		});
+	},
+	isOwner(messageId, userId) {
+		return this._content[messageId].a === userId;
+	}
+});
+client.on('messageReactionAdd', (reaction, user) => {
+	if (reaction.emoji.name !== '⭐' || user.bot) return;
+	//if (reaction.message.author.id === user.id) return reaction.message.channel.send('You can\'t star your own message.');
+	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
+		if (!reaction.message.embeds[0]) return;
+		client.starboard.increment({ message: { id: reaction.message.embeds[0].footer.text }});
+	} else {
+		client.starboard.increment(reaction);
+	}
+});*/
+
+// suggestions, starboard wrong emoji removal
+client.on('raw', async e => {
+	if (['MESSAGE_DELETE', 'TYPING_START', 'MESSAGE_CREATE', 'MESSAGE_UPDATE'].includes(e.t)) return;
+	console.log(e.t);
+	if (e.t === 'MESSAGE_REACTION_ADD') {
+		if (e.d.channel_id === client.config.mainServer.channels.suggestions) {
+			console.log('here1');
+			if (!['✅', '❌'].includes(e.d.emoji.name)) {
+				const channel = client.channels.resolve(e.d.channel_id);
+				const message = await channel.messages.fetch(e.d.message_id);
+				const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
+				reaction.remove();
+			}
+		}/* else if (e.d.channel_id === client.config.mainServer.channels.starboard) {
+			if (e.d.emoji.name !== '⭐') {
+				const channel = client.channels.resolve(e.d.channel_id);
+				const message = await channel.messages.fetch(e.d.message_id);
+				const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
+				reaction.remove();
+			}
+		}*/
+/*
+		if (e.d.emoji.name !== '⭐' || e.d.user.bot) return;
+		//if (reaction.message.author.id === user.id) return reaction.message.channel.send('You can\'t star your own message.');
+		if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
+			client.starboard.increment({ message: { id: reaction.message.embeds[0].footer.text } });
+		} else {
+			client.starboard.increment(reaction);
+		}*/
+	}
+});
+
 // give access to #voice-chat-text to members when they join vc
 client.on('voiceStateUpdate', (oldState, newState) => {
 	const memberRole = oldState.guild.roles.cache.get("747630391392731218");
@@ -237,7 +327,7 @@ client.on("message", async (message) => {
     if (message.channel.type === 'dm') {
         const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
         const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
-	if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);
+		if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);
         const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
         const memberOfPccs = !!guildMemberObject;
         const embed = new client.embed()
@@ -252,11 +342,14 @@ client.on("message", async (message) => {
         channel.send('<@615761944154210305>');
 	}
 	if (!message.guild) return;
+	if (client.config.mainServer.channels.suggestions === message.channel.id && !message.content.startsWith(client.prefix + 'suggest') && !message.author.bot) {
+		message.reply('You\'re only allowed to send suggestions in this channel.').then(x => setTimeout(() => x.delete(), 6000));
+		return message.delete();
+	}
 	if (message.content.startsWith(client.prefix)) {
 		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
-
 			// cooldown
 			if (commandFile.cooldown) {
 				const member = client.cooldowns.get(message.author.id);
