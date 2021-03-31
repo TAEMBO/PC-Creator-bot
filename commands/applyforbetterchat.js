@@ -1,6 +1,7 @@
 module.exports = {
 	run: async (client, message, args) => {
-		const member = message.mentions.members.first() || message.member;
+		const member = args[1] ? message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => { })) : message.member;
+		if (!member) return message.channel.send('You failed to mention a user from this server.');
 		const age = member.joinedTimestamp < Date.now() - client.userLevels._requirements.age;
 		const messages = client.userLevels.getEligible(member.user.id);
 		const role = message.guild.roles.cache.get(client.config.mainServer.roles.levelOne);
