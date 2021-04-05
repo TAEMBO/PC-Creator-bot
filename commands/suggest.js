@@ -3,6 +3,7 @@ module.exports = {
 		if (message.channel.id !== client.config.mainServer.channels.suggestions) return message.channel.send(`This command only works in <#${client.config.mainServer.channels.suggestions}>`);
 		await message.delete();
 		if (!args[1]) return message.reply('You need to suggest something.').then(x => setTimeout(() => x.delete(), 6000));
+		if (args[1].length > 2048) return message.reply('Your suggestion must be less than or equal to 2048 characters in length.').then(x => setTimeout(() => x.delete(), 6000));
 		const embed = new client.embed()
 			.setAuthor(`${message.member.displayName} (${message.author.id})`, message.author.avatarURL({ format: 'png', size: 128 }))
 			.setTitle(`Suggestion:`)
