@@ -277,6 +277,7 @@ Object.assign(client.starboard, {
 		});
 	},
 	isOwner(footer, userId) {
+		if (!footer) return false;
 		if (Object.entries(this._content).some(x => footer.includes(x[0]) && x[1].a === userId)) {
 			return true;
 		} else {
