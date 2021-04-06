@@ -227,7 +227,6 @@ client.commands.pages.sort((a, b) => {
 client.starboard = new database('./starboard.json', 'object');
 Object.assign(client.starboard, {
 	async increment(reaction) {
-		console.log(reaction.message.id);
 		let dbEntry = this._content[reaction.message.id];
 		if (dbEntry) dbEntry.c++;
 		else {
@@ -235,14 +234,11 @@ Object.assign(client.starboard, {
 			dbEntry = this._content[reaction.message.id];
 		}
 		if (dbEntry?.c >= client.starLimit) {
-			console.log(`db entry ${reaction.message.id} has e ${dbEntry.e}`);
 			if (dbEntry.e) {
 				const embedMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e);
-				console.log(embedMessage.content);
 				embedMessage.edit(`**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`);
 			} else {
 				const embed = await this.sendEmbed({ count: dbEntry.c, message: reaction.message});
-				console.log(embed.id);
 				this._content[reaction.message.id].e = embed.id;
 			}
 		}
@@ -264,14 +260,12 @@ Object.assign(client.starboard, {
 		}
 	},
 	sendEmbed(data) {
-		console.log('here4');
 		const embed = new client.embed()
 			.setDescription(data.message.content)
 			.setAuthor(`${data.message.member.displayName} [${data.message.author.tag}]`, data.message.author.avatarURL({ format: 'png', size: 128 }))
 			.setTimestamp(data.message.createdTimestamp)
 			.setFooter(`MSG:${data.message.id}, USER:${data.message.author.id}`)
 			.setColor('#ffcc00');
-		console.log(data.message.attachments.first()?.url);
 		if (['png', 'jpg', 'webp'].some(x => data.message.attachments.first()?.url?.endsWith(x))) {
 			embed.setImage(data.message.attachments.first().url);
 		} else if (data.message.attachments.first()?.url) {
@@ -303,7 +297,6 @@ client.on('messageReactionAdd', (reaction, user) => {
 	}
 });
 client.on('messageReactionRemove', (reaction, user) => {
-	console.log('got to here in msgrctremove');
 	if (reaction.emoji.name !== '⭐' || user.bot || reaction.message.author.id === user.id || client.starboard.isOwner(reaction.message.embeds[0]?.footer?.text, user.id)) return; // own message
 	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
 		if (!reaction.message.embeds[0]) return;
@@ -324,7 +317,6 @@ client.on('raw', async e => {
 	if (['MESSAGE_DELETE', 'TYPING_START', 'MESSAGE_CREATE', 'MESSAGE_UPDATE'].includes(e.t)) return;
 	if (e.t === 'MESSAGE_REACTION_ADD') {
 		if (e.d.channel_id === client.config.mainServer.channels.suggestions) {
-			console.log('here1');
 			if (!['✅', '❌'].includes(e.d.emoji.name)) {
 				const channel = client.channels.resolve(e.d.channel_id);
 				const message = await channel.messages.fetch(e.d.message_id);
