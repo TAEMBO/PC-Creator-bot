@@ -31,7 +31,7 @@ Object.assign(client, {
 		parts: ['name', 'usage', 'description', 'alias']
 	},
 	embedColor: 3971825,
-	//starLimit: 3
+	starLimit: 3
 });
 
 // meme approval queue
@@ -224,7 +224,6 @@ client.commands.pages.sort((a, b) => {
 });
 
 // starboard functionality
-/*
 client.starboard = new database('./starboard.json', 'object');
 Object.assign(client.starboard, {
 	async increment(reaction) {
@@ -239,10 +238,8 @@ Object.assign(client.starboard, {
 			console.log(`db entry ${reaction.message.id} has e ${dbEntry.e}`);
 			if (dbEntry.e) {
 				const embedMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e);
-				const embed = embedMessage.embeds[0];
-				embed.setTitle(dbEntry.c + ' :star:');
-				embedMessage.edit(embed);
-				return true;
+				console.log(embedMessage.content);
+				embedMessage.edit(`**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`);
 			} else {
 				const embed = await this.sendEmbed({ count: dbEntry.c, message: reaction.message});
 				console.log(embed.id);
@@ -250,40 +247,81 @@ Object.assign(client.starboard, {
 			}
 		}
 	},
+	async decrement(reaction) {
+		let dbEntry = this._content[reaction.message.id];
+		dbEntry.c--;
+		if (dbEntry.e) {
+			if (dbEntry.c < client.starLimit) {
+				(await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e)).delete();
+				dbEntry.e = undefined;
+				if (dbEntry.c === 0) {
+					delete this._content[reaction.message.id];
+				}
+			} else {
+				const embedMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e);
+				embedMessage.edit(`**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`);
+			}
+		}
+	},
 	sendEmbed(data) {
 		console.log('here4');
 		const embed = new client.embed()
-			.setTitle(`${data.count} :star: | <#${data.message.channel.id}>`)
 			.setDescription(data.message.content)
-			.setAuthor(`${data.message.member.displayName} (${data.message.author.id})`, data.message.author.avatarURL({ format: 'png', size: 128 }))
+			.setAuthor(`${data.message.member.displayName} [${data.message.author.tag}]`, data.message.author.avatarURL({ format: 'png', size: 128 }))
 			.setTimestamp(data.message.createdTimestamp)
-			.setFooter(data.message.id)
+			.setFooter(`MSG:${data.message.id}, USER:${data.message.author.id}`)
 			.setColor('#ffcc00');
-		if (data.message.attachments.first()?.width) embed.setImage(data.message.attachments.first().url);
-		return client.channels.resolve(client.config.mainServer.channels.starboard).send(embed).then(async x => {
+		console.log(data.message.attachments.first()?.url);
+		if (['png', 'jpg', 'webp'].some(x => data.message.attachments.first()?.url?.endsWith(x))) {
+			embed.setImage(data.message.attachments.first().url);
+		} else if (data.message.attachments.first()?.url) {
+			embed.setDescription((data.message.content + '\n\n' + data.message.attachments.first().url).trim())
+		}
+		return client.channels.resolve(client.config.mainServer.channels.starboard).send(`**${data.count}** :star: | ${data.message.channel.toString()}`, embed).then(async x => {
 			x.react('⭐');
 			return x;
 		});
 	},
-	isOwner(messageId, userId) {
-		return this._content[messageId].a === userId;
+	isOwner(footer, userId) {
+		if (Object.entries(this._content).some(x => footer.includes(x[0]) && x[1].a === userId)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 });
 client.on('messageReactionAdd', (reaction, user) => {
 	if (reaction.emoji.name !== '⭐' || user.bot) return;
-	//if (reaction.message.author.id === user.id) return reaction.message.channel.send('You can\'t star your own message.');
+	if (reaction.message.author.id === user.id || client.starboard.isOwner(reaction.message.embeds[0]?.footer?.text, user.id)) return reaction.message.channel.send('You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 6000));
+	if (reaction.message.guild.id !== client.config.mainServer.id) return;
 	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
 		if (!reaction.message.embeds[0]) return;
-		client.starboard.increment({ message: { id: reaction.message.embeds[0].footer.text }});
+		const footer = reaction.message.embeds[0].footer.text;
+		client.starboard.increment({ message: { id: footer.slice(4, footer.indexOf(',')) }});
 	} else {
 		client.starboard.increment(reaction);
 	}
-});*/
+});
+client.on('messageReactionRemove', (reaction, user) => {
+	console.log('got to here in msgrctremove');
+	if (reaction.emoji.name !== '⭐' || user.bot || reaction.message.author.id === user.id || client.starboard.isOwner(reaction.message.embeds[0]?.footer?.text, user.id)) return; // own message
+	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
+		if (!reaction.message.embeds[0]) return;
+		const footer = reaction.message.embeds[0].footer.text;
+		client.starboard.decrement({ message: { id: footer.slice(4, footer.indexOf(',')) } });
+	} else {
+		client.starboard.decrement(reaction);
+	}
+});
+client.on('messageDelete', async message => {
+	const dbEntry = client.starboard._content[message.id];
+	if (!dbEntry) return;
+	(await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e)).delete();
+});
 
 // suggestions, starboard wrong emoji removal
 client.on('raw', async e => {
 	if (['MESSAGE_DELETE', 'TYPING_START', 'MESSAGE_CREATE', 'MESSAGE_UPDATE'].includes(e.t)) return;
-	console.log(e.t);
 	if (e.t === 'MESSAGE_REACTION_ADD') {
 		if (e.d.channel_id === client.config.mainServer.channels.suggestions) {
 			console.log('here1');
@@ -293,22 +331,14 @@ client.on('raw', async e => {
 				const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
 				reaction.remove();
 			}
-		}/* else if (e.d.channel_id === client.config.mainServer.channels.starboard) {
+		} else if (e.d.channel_id === client.config.mainServer.channels.starboard) {
 			if (e.d.emoji.name !== '⭐') {
 				const channel = client.channels.resolve(e.d.channel_id);
 				const message = await channel.messages.fetch(e.d.message_id);
 				const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
 				reaction.remove();
 			}
-		}*/
-/*
-		if (e.d.emoji.name !== '⭐' || e.d.user.bot) return;
-		//if (reaction.message.author.id === user.id) return reaction.message.channel.send('You can\'t star your own message.');
-		if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
-			client.starboard.increment({ message: { id: reaction.message.embeds[0].footer.text } });
-		} else {
-			client.starboard.increment(reaction);
-		}*/
+		}
 	}
 });
 
