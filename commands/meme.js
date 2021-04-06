@@ -47,7 +47,12 @@ module.exports = {
 				meme.url = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!meme.url) return failed();
 
-				const key = Math.max(...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x))) + 1;
+				const highestKey = Math.max(...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x))) + 2;
+				const allNumbers = Array.from(Array(highestKey).keys()).slice(1);
+				[...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x))].forEach(usedKey => {
+					allNumbers.splice(allNumbers.indexOf(usedKey), 1);
+				});
+				const key = allNumbers[0];
 
 				client.memeQueue.set(key.toString(), meme);
 
@@ -106,8 +111,8 @@ module.exports = {
 						else decline();
 						return;
 					}
-					await message.channel.send(':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n||' + meme.url + '||');
-					const approval = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+					await message.channel.send(':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' + meme.url);
+					const approval = (await message.channel.awaitMessages(x => x.author.id === message.author.id && ['y', 'n'].some(y => x.content.toLowerCase().startsWith(y)), { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 					if (!approval) return failed();
 
 					if (approval.toLowerCase().startsWith('y'))
@@ -122,7 +127,7 @@ module.exports = {
 				}
 			}
 			const query = args.slice(1).join(' ').toLowerCase();
-			const meme = memes.get(args[1]) || memes.filter(x => x.name.toLowerCase().includes(query)).sort((a, b) => (b.name.length - query.length) - (a.name.length - query.length)).first();
+			const meme = memes.get(args[1]) || memes.filter(x => x.name.toLowerCase().includes(query) || x.description.toLowerCase().includes(query)).sort((a, b) => (b.name.length - query.length) - (a.name.length - query.length)).first();
 			if (!meme) return message.channel.send('That meme doesn\'t exist.');
 			const member = meme.author.onDiscord ? (await client.users.fetch(meme.author.name)) : undefined;
 			const embed = new client.embed()
