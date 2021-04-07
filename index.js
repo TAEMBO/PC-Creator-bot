@@ -287,7 +287,7 @@ Object.assign(client.starboard, {
 });
 client.on('messageReactionAdd', (reaction, user) => {
 	if (reaction.emoji.name !== '⭐' || user.bot) return;
-	if (reaction.message.author.id === user.id || client.starboard.isOwner(reaction.message.embeds[0]?.footer?.text, user.id)) return reaction.message.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 15000));
+	if (reaction.message.author.id === user.id || client.starboard.isOwner(reaction.message.embeds[0]?.footer?.text, user.id)) return reaction.message.reply('You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 5000));
 	if (reaction.message.guild.id !== client.config.mainServer.id) return;
 	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
 		if (!reaction.message.embeds[0]) return;
@@ -410,9 +410,6 @@ client.on("message", async (message) => {
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id)) client.userLevels.incrementUser(message.author.id);
 		if (message.content.includes("userbenchmark.com")) {
 			message.reply(":b:ingus y u use userbenchmark");
-		}
-		if (message.content.toLowerCase().includes("titanus")) {
-			message.channel.send("Ass-sus tit anus <:hahaha6:740166145167982623>");
 		}
 		if (client.config.enableAutoResponse) {
 			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
