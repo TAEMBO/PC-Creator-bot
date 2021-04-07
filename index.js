@@ -287,7 +287,7 @@ Object.assign(client.starboard, {
 });
 client.on('messageReactionAdd', (reaction, user) => {
 	if (reaction.emoji.name !== '⭐' || user.bot) return;
-	if (reaction.message.author.id === user.id || client.starboard.isOwner(reaction.message.embeds[0]?.footer?.text, user.id)) return reaction.message.channel.send('You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 6000));
+	if (reaction.message.author.id === user.id || client.starboard.isOwner(reaction.message.embeds[0]?.footer?.text, user.id)) return reaction.message.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 15000));
 	if (reaction.message.guild.id !== client.config.mainServer.id) return;
 	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
 		if (!reaction.message.embeds[0]) return;
