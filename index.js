@@ -271,7 +271,7 @@ Object.assign(client.starboard, {
 		data.message.embeds.forEach(x => {
 			description += `\n\n[Embed] ${x.provider ? x.provider.name + ': ' : ''}${x.title}`;
 		});
-		if (['png', 'jpg', 'webp'].some(x => data.message.attachments.first()?.url?.endsWith(x))) {
+		if (['png', 'jpg', 'webp', 'gif'].some(x => data.message.attachments.first()?.url?.endsWith(x))) {
 			embed.setImage(data.message.attachments.first().url);
 		} else if (data.message.attachments.first()?.url) {
 			description += '\n\n' + data.message.attachments.first().url;
