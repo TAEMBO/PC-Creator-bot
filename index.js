@@ -31,7 +31,8 @@ Object.assign(client, {
 		parts: ['name', 'usage', 'description', 'alias']
 	},
 	embedColor: 3971825,
-	starLimit: 3
+	starLimit: 3,
+	selfStarAllowed: false
 });
 
 // meme approval queue
@@ -260,34 +261,34 @@ Object.assign(client.starboard, {
 		}
 	},
 	sendEmbed(data) {
+		let description = data.message.content;
 		const embed = new client.embed()
-			.setDescription(data.message.content)
 			.setAuthor(`${data.message.member.displayName} [${data.message.author.tag}]`, data.message.author.avatarURL({ format: 'png', size: 128 }))
 			.setTimestamp(data.message.createdTimestamp)
 			.setFooter(`MSG:${data.message.id}, USER:${data.message.author.id}`)
 			.setColor('#ffcc00');
+		data.message.embeds.forEach(x => {
+			description += `\n\n[Embed] ${x.provider ? x.provider.name + ': ' : ''}${x.title}`;
+		});
 		if (['png', 'jpg', 'webp'].some(x => data.message.attachments.first()?.url?.endsWith(x))) {
 			embed.setImage(data.message.attachments.first().url);
 		} else if (data.message.attachments.first()?.url) {
-			embed.setDescription((data.message.content + '\n\n' + data.message.attachments.first().url).trim())
+			description += '\n\n' + data.message.attachments.first().url;
 		}
+		embed.setDescription(description.trim());
 		return client.channels.resolve(client.config.mainServer.channels.starboard).send(`**${data.count}** :star: | ${data.message.channel.toString()}`, embed).then(async x => {
 			x.react('⭐');
 			return x;
 		});
 	},
-	isOwner(footer, userId) {
-		if (!footer) return false;
-		if (Object.entries(this._content).some(x => footer.includes(x[0]) && x[1].a === userId)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 });
+client.starboard.initLoad().intervalSave(60000);
 client.on('messageReactionAdd', (reaction, user) => {
 	if (reaction.emoji.name !== '⭐' || user.bot) return;
-	if (reaction.message.author.id === user.id || client.starboard.isOwner(reaction.message.embeds[0]?.footer?.text, user.id)) return reaction.message.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 15000));
+	if ((reaction.message.author.id === user.id || reaction.message.embeds[0]?.footer?.text.includes(user.id)) && Math.random() < 7/7 && !client.selfStarAllowed) {
+		console.log(`User starred their own message. starrer: ${user.id}, message sender: ${reaction.message.author.id}, message footer: ${reaction.message.embeds[0]?.footer?.text}`);
+		return reaction.message.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 20000));
+	}
 	if (reaction.message.guild.id !== client.config.mainServer.id) return;
 	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
 		if (!reaction.message.embeds[0]) return;
@@ -298,7 +299,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 	}
 });
 client.on('messageReactionRemove', (reaction, user) => {
-	if (reaction.emoji.name !== '⭐' || user.bot || reaction.message.author.id === user.id || client.starboard.isOwner(reaction.message.embeds[0]?.footer?.text, user.id)) return; // own message
+	if (reaction.emoji.name !== '⭐' || user.bot || ((reaction.message.author.id === user.id || reaction.message.embeds[0]?.footer?.text.includes(user.id)) && !client.selfStarAllowed)) return; // own message or wrong
 	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
 		if (!reaction.message.embeds[0]) return;
 		const footer = reaction.message.embeds[0].footer.text;
@@ -332,6 +333,8 @@ client.on('raw', async e => {
 				reaction.remove();
 			}
 		}
+	} else if (e.t === 'MESSAGE_REACTION_REMOVE') {
+
 	}
 });
 
