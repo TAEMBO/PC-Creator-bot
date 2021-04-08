@@ -96,6 +96,7 @@ Object.assign(client.tictactoeDb, {
 client.tictactoeDb.initLoad().intervalSave();
 // 1 game per channel
 client.tictactoeGames = new Discord.Collection();
+client.rpsGames = new Discord.Collection();
 
 // userLevels
 client.userLevels = new database('./userLevels.json', 'object');
