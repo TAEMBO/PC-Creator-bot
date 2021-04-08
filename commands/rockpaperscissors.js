@@ -1,11 +1,15 @@
 module.exports = {
 	run: async (client, message, args) => {
+		if (client.rpsGames.has(message.channel.id)) {
+			return message.channel.send(`There is already an ongoing game in this channel created by ${client.rpsGames.get(message.channel.id)}`);
+		}
 		const players = [message.member];
 		await message.channel.send(`Who wants to play Rock Paper Scissors with ${message.member.toString()}? Respond with "me". (60s)`);
+		client.rpsGames.set(message.channel.id, message.author.tag);
 		const opponentMessages = await message.channel.awaitMessages(x => x.content.toLowerCase().startsWith('me'), { max: 1, time: 60000, errors: ['time'] }).catch(() => message.channel.send('Haha no one wants to play with you, lonely goblin.'));
 		players[1] = opponentMessages.first()?.member;
 		if (!players[1]) return message.channel.send('Something went wrong! You have no opponent.');
- 		await message.channel.send('You have 10 seconds to choose what you want to play. Respond with the full word, but do not send your message yet. The valid options are: Rock, Paper, and Scissors.');
+		await message.channel.send('You have 10 seconds to choose what you want to play. Respond with the full word, but do not send your message yet. The valid options are: Rock, Paper, and Scissors.');
 		await new Promise((res, rej) => {
 			setTimeout(() => {
 				res();
@@ -25,12 +29,18 @@ module.exports = {
 			return '';
 		});
 		const resolvedPlays = await Promise.all([homePlay, guestPlay]);
-		if (timeError) return;
+		if (timeError) {
+			client.rpsGames.delete(message.channel.id);
+			return;
+		}
 		homePlay = resolvedPlays[0];
 		guestPlay = resolvedPlays[1];
 		homePlay = plays.indexOf(homePlay.first()?.content.toLowerCase().split(' ')[0]);
 		guestPlay = plays.indexOf(guestPlay.first()?.content.toLowerCase().split(' ')[0]);
-		if (homePlay < 0 || guestPlay < 0) return message.channel.send('One player failed to play a valid option.');
+		if (homePlay < 0 || guestPlay < 0) {
+			client.rpsGames.delete(message.channel.id);
+			return message.channel.send('One player failed to play a valid option.');
+		}
 		let winnerIndex;
 		if (homePlay + 1 === guestPlay) winnerIndex = 0;
 		if (guestPlay + 1 === homePlay) winnerIndex = 1;
@@ -45,7 +55,7 @@ module.exports = {
 		} else {
 			message.channel.send(`${homeEmojis[homePlay]} :left_right_arrow: ${guestEmojis[guestPlay]}\nIts a draw!`);
 		}
-			
+		client.rpsGames.delete(message.channel.id);
 	},
 	name: 'rockpaperscissors',
 	description: 'Play rock paper scissors against another person',
