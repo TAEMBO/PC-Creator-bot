@@ -414,6 +414,11 @@ client.on("message", async (message) => {
 		if (message.content.includes("userbenchmark.com")) {
 			message.reply(":b:ingus y u use userbenchmark");
 		}
+		// wildlife reserve area
+		if (message.content.toLowerCase().includes("titanus") && Math.random() < 3/7) {
+			message.channel.send("Ass-sus tit anus <:hahaha6:740166145167982623>");
+		}
+		// do not remove titanus
 		if (client.config.enableAutoResponse) {
 			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
 			const questionWords = ['how', 'what', 'where', 'why', 'can'];
