@@ -44,7 +44,9 @@ module.exports = {
 				if (!meme.author.name) return failed();
 
 				await message.channel.send('Send a permanent URL to the meme image. (120s)');
-				meme.url = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+				const urlMessage = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+				if (urlMessage.content) meme.url = urlMessage.content;
+				else meme.url = urlMessage.attachments.first()?.url;
 				if (!meme.url) return failed();
 
 				const highestKey = Math.max(...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x))) + 2;
@@ -127,7 +129,7 @@ module.exports = {
 				}
 			}
 			const query = args.slice(1).join(' ').toLowerCase();
-			const meme = memes.get(args[1]) || memes.filter(x => x.name.toLowerCase().includes(query) || x.description.toLowerCase().includes(query)).sort((a, b) => (b.name.length - query.length) - (a.name.length - query.length)).first();
+			const meme = memes.get(args[1]) || memes.filter(x => x.name.toLowerCase().includes(query) || x.description.toLowerCase().includes(query)).sort((a, b) => (a.name.length - query.length) - (b.name.length - query.length)).first();
 			if (!meme) return message.channel.send('That meme doesn\'t exist.');
 			const member = meme.author.onDiscord ? (await client.users.fetch(meme.author.name)) : undefined;
 			const embed = new client.embed()
