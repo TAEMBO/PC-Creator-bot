@@ -352,6 +352,10 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 client.on("message", async (message) => {
     if (message.channel.type === 'dm') {
+		const BLACKLIST = [
+			'513118030151286794', /* chikkenn */
+		];
+		if (BLACKLIST.includes(message.author.id)) return;
         const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
         const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
 		if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);
@@ -366,7 +370,7 @@ client.on("message", async (message) => {
             .addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the **${pcCreatorServer.name}** Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
             .setTimestamp(Date.now());
         channel.send(embed)
-        channel.send('<@615761944154210305>');
+        channel.send(client.config.eval.whitelist.map(x => `<@${x}>`).join(', '));
 	}
 	if (!message.guild) return;
 	if (client.config.mainServer.channels.suggestions === message.channel.id && !message.content.startsWith(client.prefix + 'suggest') && !message.author.bot) {
