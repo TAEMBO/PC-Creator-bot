@@ -116,14 +116,14 @@ module.exports = {
 					},
 					victoryAction: () => {
 						game.ended = true;
-						message.channel.send(`${game.boardState()}\n${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!${game.singleplayer ? ' Singleplayer games are not counted in Tic Tac Toe Statistics.' : ' TIP: You can view Tic Tac Toe statistics with "' + client.prefix + 'ttt leaderboard"'}`);
+						message.channel.send(`${game.boardState()}\n${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) Won the game!${game.singleplayer ? ' Singleplayer games are not counted in Tic Tac Toe Statistics.' : ' TIP: You can view Tic Tac Toe statistics with `' + client.prefix + 'ttt leaderboard`'}`);
 						if (game.singleplayer) return;
 						db.addData({ players: game.participants.map(x => x.user.tag), winner: game.participants[game.turn].user.tag, startTime: game.startTime, endTime: Date.now() });
 						return;
 					},
 					draw: () => {
 						game.ended = true;
-						message.channel.send(game.boardState() + '\nIt\'s a draw! Neither player won the game. TIP: You can view Tic Tac Toe statistics with "' + client.prefix + 'ttt leaderboard"');
+						message.channel.send(game.boardState() + '\nIt\'s a draw! Neither player won the game. TIP: You can view Tic Tac Toe statistics with `' + client.prefix + 'ttt leaderboard`');
 						if (game.singleplayer) return;
 						db.addData({ players: game.participants.map(x => x.user.tag), draw: true, startTime: game.startTime, endTime: Date.now() });
 						return;
@@ -146,7 +146,7 @@ module.exports = {
 					}
 				};
 				// send info about how to play the game
-				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out. You can type \`${client.prefix}end\` to surrender on your own turn or \`${client.prefix}draw\` to suggest a draw to your opponent..\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
+				await message.channel.send(`The origin point of the board is in the bottom left (0,0). The top right is (2,2). Syntax for placing your marker is \`[X position],[Y position]\`. 3 fouls and you're out. You can type \`${client.prefix}end\` to surrender on your own turn or \`${client.prefix}draw\` to suggest a draw to your opponent.\n${game.participants[0].toString()} is \`${game.markers[0]}\`\n${game.participants[1].toString()} is \`${game.markers[1]}\`\n\`${game.markers[0]}\` starts!`);
 				// cycle function is executed on every turn
 				const cycle = () => { return new Promise(async (res, rej) => {
 					// result is what .then() returns. ask the player where they want to place their marker
