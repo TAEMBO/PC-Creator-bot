@@ -102,8 +102,8 @@ client.rpsGames = new Discord.Collection();
 client.userLevels = new database('./userLevels.json', 'object');
 Object.assign(client.userLevels, {
 	_requirements: {
-		age: 1000 * 60 * 60 * 24 * 30 * 3,
-		messages: 1200
+		age: 1000 * 60 * 60 * 24 * 30 * 2,
+		messages: 1000
 	},
 	incrementUser(userid) {
 		const amount = this._content[userid];
@@ -267,15 +267,42 @@ Object.assign(client.starboard, {
 			.setAuthor(`${data.message.member.displayName} [${data.message.author.tag}]`, data.message.author.avatarURL({ format: 'png', size: 128 }))
 			.setTimestamp(data.message.createdTimestamp)
 			.setFooter(`MSG:${data.message.id}, USER:${data.message.author.id}`)
+			.addField('\u200b', `[Jump to Message](${data.message.url})`)
 			.setColor('#ffcc00');
+		let imageSet = false;
 		data.message.embeds.forEach(x => {
-			description += `\n\n[Embed] ${x.provider ? x.provider.name + ': ' : ''}${x.title}`;
+			let text = `\n\\[[Embed](${x.url})] `;
+			if (x.provider || x.author) {
+				text += x.provider?.name || x.author.name;
+				if (x.title) {
+					text += `: ${x.title}`;
+				}
+			} else {
+				text += x.title;
+			}
+			if (x.image) {
+				if (imageSet) {
+					
+					text += `: [Image](${x.image.url})`;
+				} else {
+					text += ': Image';
+					embed.setImage(x.image.url);
+					imageSet = true;
+				}
+			}
+			description += text;
 		});
-		if (['png', 'jpg', 'webp', 'gif'].some(x => data.message.attachments.first()?.url?.endsWith(x))) {
-			embed.setImage(data.message.attachments.first().url);
-		} else if (data.message.attachments.first()?.url) {
-			description += '\n\n' + data.message.attachments.first().url;
-		}
+		data.message.attachments.forEach(attachment => {
+			if (['png', 'jpg', 'webp'].some(x => attachment.url?.endsWith(x)) && !imageSet) {
+				embed.setImage(data.message.attachments.first().url);
+				imageSet = true;
+			} else if (attachment.url) {
+				let type = 'File';
+				if (['png', 'jpg', 'webp'].some(x => attachment.url?.endsWith(x))) type = 'Image';
+				if (['mp4', 'mov', 'webm'].some(x => attachment.url?.endsWith(x))) type = 'Video';
+				description += `\n[Embed] ${type}: [${attachment.name}](${attachment.url})`;
+			}
+		});
 		embed.setDescription(description.trim());
 		return client.channels.resolve(client.config.mainServer.channels.starboard).send(`**${data.count}** :star: | ${data.message.channel.toString()}`, embed).then(async x => {
 			x.react('⭐');
@@ -284,31 +311,6 @@ Object.assign(client.starboard, {
 	},
 });
 client.starboard.initLoad().intervalSave(60000);
-client.on('messageReactionAdd', (reaction, user) => {
-	if (reaction.emoji.name !== '⭐' || user.bot) return;
-	if ((reaction.message.author.id === user.id || reaction.message.embeds[0]?.footer?.text.includes(user.id)) && Math.random() < 7/7 && !client.selfStarAllowed) {
-		console.log(`User starred their own message. starrer: ${user.id}, message sender: ${reaction.message.author.id}, message footer: ${reaction.message.embeds[0]?.footer?.text}`);
-		return reaction.message.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 20000));
-	}
-	if (reaction.message.guild.id !== client.config.mainServer.id) return;
-	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
-		if (!reaction.message.embeds[0]) return;
-		const footer = reaction.message.embeds[0].footer.text;
-		client.starboard.increment({ message: { id: footer.slice(4, footer.indexOf(',')) }});
-	} else {
-		client.starboard.increment(reaction);
-	}
-});
-client.on('messageReactionRemove', (reaction, user) => {
-	if (reaction.emoji.name !== '⭐' || user.bot || ((reaction.message.author.id === user.id || reaction.message.embeds[0]?.footer?.text.includes(user.id)) && !client.selfStarAllowed)) return; // own message or wrong
-	if (reaction.message.channel.id === client.config.mainServer.channels.starboard) {
-		if (!reaction.message.embeds[0]) return;
-		const footer = reaction.message.embeds[0].footer.text;
-		client.starboard.decrement({ message: { id: footer.slice(4, footer.indexOf(',')) } });
-	} else {
-		client.starboard.decrement(reaction);
-	}
-});
 client.on('messageDelete', async message => {
 	const dbEntry = client.starboard._content[message.id];
 	if (!dbEntry) return;
@@ -319,6 +321,7 @@ client.on('messageDelete', async message => {
 client.on('raw', async e => {
 	if (['MESSAGE_DELETE', 'TYPING_START', 'MESSAGE_CREATE', 'MESSAGE_UPDATE'].includes(e.t)) return;
 	if (e.t === 'MESSAGE_REACTION_ADD') {
+		if (e.d.guild_id !== client.config.mainServer.id) return;
 		if (e.d.channel_id === client.config.mainServer.channels.suggestions) {
 			if (!['✅', '❌'].includes(e.d.emoji.name)) {
 				const channel = client.channels.resolve(e.d.channel_id);
@@ -334,8 +337,34 @@ client.on('raw', async e => {
 				reaction.remove();
 			}
 		}
+		console.log(e.d);
+		const user = await client.users.fetch(e.d.user_id);
+		const reactionMessage = await client.channels.cache.get(e.d.channel_id).messages.fetch(e.d.message_id);
+		if (e.d.emoji.name !== '⭐' || user.bot) return;
+		if ((reactionMessage.author.id === user.id || reactionMessage.embeds[0]?.footer?.text.includes(user.id)) && Math.random() < 7 / 7 && !client.selfStarAllowed) {
+			console.log(`User starred their own message. starrer: ${user.id}, message sender: ${reactionMessage.author.id}, message footer: ${reactionMessage.embeds[0]?.footer?.text}`);
+			return reactionMessage.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 20000));
+		}
+		if (e.d.guild_id !== client.config.mainServer.id) return;
+		if (e.d.channel_id === client.config.mainServer.channels.starboard) {
+			if (!reactionMessage.embeds[0]) return;
+			const footer = reactionMessage.embeds[0].footer.text;
+			client.starboard.increment({ message: { id: footer.slice(4, footer.indexOf(',')) } });
+		} else {
+			client.starboard.increment({ message: reactionMessage });
+		}
 	} else if (e.t === 'MESSAGE_REACTION_REMOVE') {
-
+		if (e.d.guild_id !== client.config.mainServer.id) return;
+		const user = await client.users.fetch(e.d.user_id);
+		const reactionMessage = await client.channels.cache.get(e.d.channel_id).messages.fetch(e.d.message_id);
+		if (e.d.emoji.name !== '⭐' || user.bot || ((reactionMessage.author.id === user.id || reactionMessage.embeds[0]?.footer?.text.includes(user.id)) && !client.selfStarAllowed)) return; // own message or wrong
+		if (e.d.channel_id === client.config.mainServer.channels.starboard) {
+			if (!reactionMessage.embeds[0]) return;
+			const footer = reactionMessage.embeds[0].footer.text;
+			client.starboard.decrement({ message: { id: footer.slice(4, footer.indexOf(',')) } });
+		} else {
+			client.starboard.decrement({ message: reactionMessage});
+		}
 	}
 });
 
@@ -374,7 +403,7 @@ client.on("message", async (message) => {
 	}
 	if (!message.guild) return;
 	if (client.config.mainServer.channels.suggestions === message.channel.id && !message.content.startsWith(client.prefix + 'suggest') && !message.author.bot) {
-		message.reply('You\'re only allowed to send suggestions in this channel.').then(x => setTimeout(() => x.delete(), 6000));
+		message.reply(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 6000));
 		return message.delete();
 	}
 	if (message.content.startsWith(client.prefix)) {
