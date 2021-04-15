@@ -15,6 +15,7 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 		message.channel.send(embed)
 			// add reactions to go forward or backward pages
 			.then(async botMessage => {
+				let endTimestamp = Date.now() + 60000;
 				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id, { time: 60000 });
 				collector.on('collect', async (reaction, user) => {
 					if (reaction.emoji.name === '◀️') {
@@ -27,14 +28,26 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 					await Promise.all([botMessage.edit(helpPage(pageIndex, client, message, args, true)), botMessage.reactions.removeAll()]);
 					await botMessage.react('◀️');
 					await botMessage.react('▶️');
+					endTimestamp = Date.now() + 5000;
 				});
-				collector.on('end', async () => {
+				async function onEnd() {
 					await botMessage.edit('_Removed to save space._');
 					await botMessage.suppressEmbeds();
 					await botMessage.reactions.removeAll();
+				};
+				const interval = setInterval(() => {
+					if (Date.now() > endTimestamp) {
+						collector.stop();
+						onEnd();
+					}
+				}, 5000);
+				collector.on('end', async () => {
+					onEnd();
+					clearInterval(interval);
 				});
 				await botMessage.react('◀️');
 				await botMessage.react('▶️');
+				
 			});
 	}
 	

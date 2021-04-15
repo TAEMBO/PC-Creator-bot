@@ -9,7 +9,7 @@ module.exports = {
 			.addField(':small_blue_diamond: ID, Nickname, and Mention', `ID: ${member.user.id}\nNickname: ${member.nickname ? member.nickname : 'None'}\nMention: ${member.toString()}`)
 			.addField(':small_blue_diamond: Roles', member.roles.cache.size > 1 ? member.roles.cache.filter(x => x.id !== message.guild.roles.everyone.id).sort((a, b) => b.position - a.position).map(x => x.name).join('\n').slice(0, 1024) : 'None')
 			.setColor(member.displayColor || '#fefefe')
-			.setThumbnail(member.user.avatarURL({ format: 'png', dynamic: true, size: 2048}))
+			.setImage(member.user.avatarURL({ format: 'png', dynamic: true, size: 2048}))
 		message.channel.send(embed);
 	},
 	name: 'userinfo',

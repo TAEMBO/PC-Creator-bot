@@ -293,13 +293,14 @@ Object.assign(client.starboard, {
 			description += text;
 		});
 		data.message.attachments.forEach(attachment => {
-			if (['png', 'jpg', 'webp'].some(x => attachment.url?.endsWith(x)) && !imageSet) {
+			if (['png', 'jpg', 'webp', 'gif'].some(x => attachment.url?.endsWith(x)) && !imageSet) {
 				embed.setImage(data.message.attachments.first().url);
 				imageSet = true;
 			} else if (attachment.url) {
 				let type = 'File';
 				if (['png', 'jpg', 'webp'].some(x => attachment.url?.endsWith(x))) type = 'Image';
 				if (['mp4', 'mov', 'webm'].some(x => attachment.url?.endsWith(x))) type = 'Video';
+				if (attachment.url?.endsWith('gif')) type = 'Gif';
 				description += `\n[Embed] ${type}: [${attachment.name}](${attachment.url})`;
 			}
 		});
@@ -337,7 +338,6 @@ client.on('raw', async e => {
 				reaction.remove();
 			}
 		}
-		console.log(e.d);
 		const user = await client.users.fetch(e.d.user_id);
 		const reactionMessage = await client.channels.cache.get(e.d.channel_id).messages.fetch(e.d.message_id);
 		if (e.d.emoji.name !== '⭐' || user.bot) return;
