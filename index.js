@@ -262,7 +262,7 @@ Object.assign(client.starboard, {
 		}
 	},
 	sendEmbed(data) {
-		let description = data.message.content;
+		let description = data.message.content + '\n';
 		const embed = new client.embed()
 			.setAuthor(`${data.message.member.displayName} [${data.message.author.tag}]`, data.message.author.avatarURL({ format: 'png', size: 128 }))
 			.setTimestamp(data.message.createdTimestamp)
