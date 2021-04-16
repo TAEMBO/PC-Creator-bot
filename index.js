@@ -12,7 +12,6 @@ client.on("ready", async () => {
 	await client.user.setActivity(",help", {
 		type: "LISTENING", 
 	});
-	await client.guilds.cache.get(client.config.mainServer.id).members.fetch();
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
 });
 
