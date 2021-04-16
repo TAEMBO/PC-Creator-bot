@@ -16,7 +16,11 @@ module.exports = {
 		embed.setDescription(`Statistics from <#${client.config.mainServer.channels.starboard}>\nA total of **${starboardValues.reduce((a, b) => a.c + b.c, 0)}** :star: reactions have been added.`);
 		const allUsers = Array.from(new Set(starboardValues.map(x => x.a)));
 		console.log('allusers', allUsers);
-		const bestUsers = allUsers.map(x => [x, starboardValues.filter(y => y.a === x && y.c).reduce((a, b) => a.c + b.c, 0)]);
+		const bestUsers = allUsers.map(x => [x, (() => {
+			const filtered = starboardValues.filter(y => y.a === x && y.c).map(x => x.c);
+			console.log(`user ${x} has ${filtered.length} messages with star amounts ${filtered}`);
+			return filtered.reduce((a, b) => a + b, 0);
+		})]);
 		console.log(bestUsers);
 		const bestUsersText = bestUsers.filter(x => typeof x[1] === 'number' && !isNaN(x[1])).sort((a, b) => b[1] - a[1]).slice(0, 5).map(x => `<@${x[0]}> | **${x[1]}** :star:`);
 		embed.addField('Most Starred Users', bestUsersText.join('\n'));
