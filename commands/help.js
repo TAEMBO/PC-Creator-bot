@@ -28,7 +28,7 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 					await Promise.all([botMessage.edit(helpPage(pageIndex, client, message, args, true)), botMessage.reactions.removeAll()]);
 					await botMessage.react('◀️');
 					await botMessage.react('▶️');
-					endTimestamp = Date.now() + 5000;
+					endTimestamp = Date.now() + 60000;
 				});
 				async function onEnd() {
 					await botMessage.edit('_Removed to save space._');

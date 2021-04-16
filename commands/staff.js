@@ -1,5 +1,6 @@
 module.exports = {
     run: async (client, message, args) => {
+		if (message.guild.id !== client.config.mainServer.id) return message.channel.send(`\`${client.prefix}staff\` doesn't work in this server.`);
 		const staff = new Map(Object.entries({
 			administrator: message.guild.roles.cache.get(client.config.mainServer.roles.administrator),
 			moderator: message.guild.roles.cache.get(client.config.mainServer.roles.moderator),
