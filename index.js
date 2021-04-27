@@ -393,13 +393,17 @@ client.on("message", async (message) => {
             .setTitle('Forwarded DM Message')
             .setAuthor(message.author.tag + ` (${message.author.id})`, message.author.avatarURL({ format: 'png', dynamic: true, size: 256}))
             .setColor(3971825)
-            .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content)
-            .addField('User', `<@${message.author.id}>`)
-            .addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the **${pcCreatorServer.name}** Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
+            .addField('Message Content', message.content.length > 1024 ? message.content.slice(1021) + '...' : message.content + '\u200b')
             .setTimestamp(Date.now());
-		if (message.attachments.first()) {
-			embed.addField('Message Attachments', message.attachments.map(x => `[${x.name}](${x.url})`).join('\n'));
-		}
+		let messageAttachmentsText = '';
+		message.attachments.forEach(attachment => {
+			if (!embed.image && ['png', 'jpg', 'webp', 'gif'].some(x => attachment.name.endsWith(x))) embed.setImage(attachment.url);
+			else messageAttachmentsText += `[${attachment.name}](${attachment.url})\n`;
+		});
+		if (messageAttachmentsText.length > 0) embed.addField('Message Attachments', messageAttachmentsText.trim());
+		embed
+			.addField('User', `<@${message.author.id}>`)
+			.addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the **${pcCreatorServer.name}** Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
         channel.send(embed)
         channel.send(client.config.eval.whitelist.map(x => `<@${x}>`).join(', '));
 	}
