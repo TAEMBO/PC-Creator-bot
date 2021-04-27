@@ -27,7 +27,7 @@ module.exports = {
 		message.channel.send(embed);
 	},
 	name: 'starboardstats',
-	description: '[BETA] See statistics from starboard',
+	description: 'See statistics from starboard',
 	alias: ['sbs'],
 	cooldown: 30
 };

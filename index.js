@@ -164,6 +164,10 @@ Object.assign(client.specsDb, {
 });
 client.specsDb.initLoad().intervalSave(120000);
 
+// dm forward blacklist
+client.dmForwardBlacklist = new database('./dmforwardblacklist.json', 'array');
+client.dmForwardBlacklist.initLoad().intervalSave(180000);
+
 // command handler
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -380,10 +384,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 client.on("message", async (message) => {
     if (message.channel.type === 'dm') {
-		const BLACKLIST = [
-			'513118030151286794', /* chikkenn */
-		];
-		if (BLACKLIST.includes(message.author.id)) return;
+		if (client.dmForwardBlacklist.includes(message.author.id)) return;
         const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
         const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
 		if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);
