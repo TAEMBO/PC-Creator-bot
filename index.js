@@ -397,6 +397,9 @@ client.on("message", async (message) => {
             .addField('User', `<@${message.author.id}>`)
             .addField('Connections', `:small_blue_diamond: Message sender **${memberOfPccs ? 'is' : ' is not'}** on the **${pcCreatorServer.name}** Discord server${memberOfPccs ? `\n:small_blue_diamond: Roles on the PC Creator server: ${guildMemberObject.roles.cache.filter(x => x.id !== pcCreatorServer.roles.everyone.id).map(x => '**' + x.name + '**').join(', ')}` : ''}`)
             .setTimestamp(Date.now());
+		if (message.attachments.first()) {
+			embed.addField('Message Attachments', message.attachments.map(x => `[${x.name}](${x.url})`).join('\n'));
+		}
         channel.send(embed)
         channel.send(client.config.eval.whitelist.map(x => `<@${x}>`).join(', '));
 	}

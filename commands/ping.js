@@ -4,5 +4,4 @@ module.exports = {
 	},
 	name: 'ping',
 	description: 'Shows amount of time it takes for the bot to respond',
-	cooldown: 0
 };

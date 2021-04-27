@@ -6,5 +6,6 @@ module.exports = {
 	name: 'sus',
 	description: 'GuildMember deserialization with binary tree inversion',
 	category: 'Moderation',
+	alias: ['amogus'],
 	usage: ['go', 'fuck', 'yourself', 'chikkenn']
 };
