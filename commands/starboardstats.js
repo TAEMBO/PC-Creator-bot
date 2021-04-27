@@ -8,10 +8,7 @@ module.exports = {
 		const promises = containsEmbed.sort((a, b) => b[1].c - a[1].c).slice(0, 5).map(async x => {
 			console.log('most starred messages:', x[0]);
 			const starboardChannel = client.channels.resolve(client.config.mainServer.channels.starboard);
-			console.log('starboard channel has value', starboardChannel);
-			const resolvedStarboardMessage = starboardChannel.messages.resolve(x[1].e);
-			console.log('resolvedStarboardMessage has value', resolvedStarboardMessage);
-			const starboardMessage = await resolvedStarboardMessage?.fetch();
+			const starboardMessage = await starboardChannel.messages.fetch(x[1].e);
 			if (!starboardMessage) {
 				console.log(x, 'message in starboard is', starboardMessage);
 				return undefined;
