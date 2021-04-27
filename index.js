@@ -444,12 +444,18 @@ client.on("message", async (message) => {
 		];
 		// if message was not sent in a blacklisted channel, count towards user level
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id)) client.userLevels.incrementUser(message.author.id);
-		if (message.content.includes("userbenchmark.com")) {
-			message.reply(":b:ingus y u use userbenchmark");
-		}
 		// wildlife reserve area
 		if (message.content.toLowerCase().includes("titanus") && Math.random() < 3/7) {
 			message.channel.send("Ass-sus tit anus <:hahaha6:740166145167982623>");
+		}
+		if (message.content.includes("userbenchmark.com")) {
+			message.reply(":b:ingus y u use userbenchmark");
+		}
+		if (message.content.toLowerCase().includes("uwu")) {
+			message.reply("You received an honorary ban!");
+		}
+		if (message.content.toLowerCase().includes("lel")) {
+			message.delete();
 		}
 		// do not remove titanus
 		if (client.config.enableAutoResponse) {

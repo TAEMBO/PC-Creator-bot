@@ -6,7 +6,10 @@ module.exports = {
 		const players = [message.member];
 		await message.channel.send(`Who wants to play Rock Paper Scissors with ${message.member.toString()}? Respond with "me". (60s)`);
 		client.rpsGames.set(message.channel.id, message.author.tag);
-		const opponentMessages = await message.channel.awaitMessages(x => x.content.toLowerCase().startsWith('me'), { max: 1, time: 60000, errors: ['time'] }).catch(() => message.channel.send('Haha no one wants to play with you, lonely goblin.'));
+		const opponentMessages = await message.channel.awaitMessages(x => x.content.toLowerCase().startsWith('me'), { max: 1, time: 60000, errors: ['time'] }).catch(() => {
+			message.channel.send('Haha no one wants to play with you, lonely goblin.');
+			client.rpsGames.delete(message.channel.id);
+			});
 		players[1] = opponentMessages.first()?.member;
 		if (!players[1]) return message.channel.send('Something went wrong! You have no opponent.');
 		await message.channel.send('You have 10 seconds to choose what you want to play. Respond with the full word, but do not send your message yet. The valid options are: Rock, Paper, and Scissors.');

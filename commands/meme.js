@@ -44,7 +44,7 @@ module.exports = {
 				if (!meme.author.name) return failed();
 
 				await message.channel.send('Send a permanent URL to the meme image. (120s)');
-				const urlMessage = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+				const urlMessage = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first();
 				if (urlMessage.content) meme.url = urlMessage.content;
 				else meme.url = urlMessage.attachments.first()?.url;
 				if (!meme.url) return failed();
