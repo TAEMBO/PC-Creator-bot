@@ -8,7 +8,10 @@ module.exports = {
 		const promises = containsEmbed.sort((a, b) => b[1].c - a[1].c).slice(0, 5).map(async x => {
 			console.log(x);
 			const starboardMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.resolve(x[1].e)?.fetch();
-			if (!starboardMessage) return undefined;
+			if (!starboardMessage) {
+				console.log('starboardmessage', x[0], 'has value', starboardMessage);
+				return undefined;
+			}
 			console.log(`message ${x[0]} has ${x.c} stars and url ${starboardMessage.url}`);
 			return `**${x.c}** :star: By <@${starboardMessage.author.tag}>: [Jump to Starboard](${starboardMessage.url})`;
 		});
