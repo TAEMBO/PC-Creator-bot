@@ -6,10 +6,14 @@ module.exports = {
 		const containsEmbed = Object.entries(client.starboard._content).filter(x => x[1].e);
 		console.log('containsembed', containsEmbed);
 		const promises = containsEmbed.sort((a, b) => b[1].c - a[1].c).slice(0, 5).map(async x => {
-			console.log(x);
-			const starboardMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.resolve(x[1].e)?.fetch();
+			console.log('most starred messages:', x[0]);
+			const starboardChannel = client.channels.resolve(client.config.mainServer.channels.starboard);
+			console.log('starboard channel has value', starboardChannel);
+			const resolvedStarboardMessage = starboardChannel.messages.resolve(x[1].e);
+			console.log('resolvedStarboardMessage has value', resolvedStarboardMessage);
+			const starboardMessage = await resolvedStarboardMessage?.fetch();
 			if (!starboardMessage) {
-				console.log('starboardmessage', x[0], 'has value', starboardMessage);
+				console.log(x, 'message in starboard is', starboardMessage);
 				return undefined;
 			}
 			console.log(`message ${x[0]} has ${x.c} stars and url ${starboardMessage.url}`);
