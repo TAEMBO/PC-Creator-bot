@@ -5,24 +5,24 @@ module.exports = {
 			.setColor(client.embedColor)
 		const containsEmbed = Object.entries(client.starboard._content).filter(x => x[1].e);
 		console.log('containsembed', containsEmbed);
+		const starboardChannel = client.channels.resolve(client.config.mainServer.channels.starboard);
 		const promises = containsEmbed.sort((a, b) => b[1].c - a[1].c).slice(0, 5).map(async x => {
 			console.log('most starred messages:', x[0]);
-			const starboardChannel = client.channels.resolve(client.config.mainServer.channels.starboard);
 			const starboardMessage = await starboardChannel.messages.fetch(x[1].e);
 			if (!starboardMessage) {
 				console.log(x, 'message in starboard is', starboardMessage);
 				return undefined;
 			}
-			console.log(`message ${x[0]} has ${x.c} stars and url ${starboardMessage.url}`);
-			return `**${x.c}** :star: By <@${starboardMessage.author.tag}>: [Jump to Starboard](${starboardMessage.url})`;
+			console.log(`message ${x[0]} has ${x[1].c} stars and url ${starboardMessage.url}`);
+			return `**${x[1].c}** :star: By <@${x[1].a}>: [Jump to Starboard](${starboardMessage.url})`;
 		});
 		console.log(promises);
 		const bestMessages = await Promise.all(promises);
 		embed.addField('Most Starred Messages', bestMessages.join('\n') + '\n(prevent empty field value)');
 
-		const starboardValues = Object.values(client.starboard._content).filter(x => x.c >= client.starLimit);
-		console.log('starboardvalues lenght', starboardValues.length);
-		embed.setDescription(`Statistics from <#${client.config.mainServer.channels.starboard}>\nA total of **${starboardValues.reduce((a, b) => a.c + b.c, 0)}** :star: reactions have been added.`);
+		const starboardValues = Object.values(client.starboard._content).map(x => x.c).filter(x => x >= client.starLimit);
+		console.log('starboardvalues lenght', starboardValues.length, 'and the value', starboardValues);
+		embed.setDescription(`Statistics from <#${client.config.mainServer.channels.starboard}>\nA total of **${starboardValues.reduce((a, b) => a + b, 0)}** :star: reactions have been added.`);
 		const allUsers = Array.from(new Set(starboardValues.map(x => x.a)));
 		const bestUsers = allUsers.map(x => [x, (() => {
 			const filtered = starboardValues.filter(y => y.a === x && y.c).map(x => x.c);
