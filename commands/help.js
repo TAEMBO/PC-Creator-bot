@@ -15,10 +15,10 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 		message.channel.send(embed)
 			// add reactions to go forward or backward pages
 			.then(async botMessage => {
-				let endTimestamp = Date.now() + 30000;
-				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id, { time: 200000 });
+				let endTimestamp = Date.now() + 45000;
+				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id, { time: 240000 });
 				collector.on('collect', async (reaction, user) => {
-					endTimestamp = Date.now() + 30000;
+					endTimestamp = Date.now() + 45000;
 					if (reaction.emoji.name === '◀️') {
 						if (pageIndex - 1 < 0) pageIndex = client.commands.pages.length;
 						pageIndex--;
