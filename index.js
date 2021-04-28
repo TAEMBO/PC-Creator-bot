@@ -93,9 +93,9 @@ Object.assign(client.tictactoeDb, {
 	}
 });
 client.tictactoeDb.initLoad().intervalSave();
+
 // 1 game per channel
-client.tictactoeGames = new Discord.Collection();
-client.rpsGames = new Discord.Collection();
+client.games = new Discord.Collection();
 
 // userLevels
 client.userLevels = new database('./userLevels.json', 'object');
@@ -384,7 +384,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 client.on("message", async (message) => {
     if (message.channel.type === 'dm') {
-		if (client.dmForwardBlacklist.includes(message.author.id)) return;
+		if (client.dmForwardBlacklist._content.includes(message.author.id)) return;
         const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
         const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
 		if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);

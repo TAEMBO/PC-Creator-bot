@@ -44,8 +44,8 @@ module.exports = {
 				.setColor(client.embedColor)
 			return message.channel.send(embed);
 		}
-		if (client.tictactoeGames.has(message.channel.id)) {
-			return message.channel.send(`There is already an ongoing game in this channel created by ${client.tictactoeGames.get(message.channel.id).name}${client.tictactoeGames.get(message.channel.id).challenge ? ' and it is a challenge for ' + client.tictactoeGames.get(message.channel.id).opponent : '.' }`);
+		if (client.games.has(message.channel.id)) {
+			return message.channel.send(`There is already an ongoing game in this channel created by ${client.games.get(message.channel.id)}`);
 		}
 		// request opponent
 		let request = `Who wants to play Tic Tac Toe with ${message.member.toString()}? First person to respond with "me" will be elected Opponent. (60s)`;
@@ -56,7 +56,7 @@ module.exports = {
 			challenge = true;
 		}
 		message.channel.send(request).then(a => {
-			client.tictactoeGames.set(message.channel.id, { name: message.author.tag, challenge, opponent: message.mentions.members.first()?.user.tag || undefined});
+			client.games.set(message.channel.id, message.author.tag);
 			// wait until someone wants to be the opponent
 			message.channel.awaitMessages(x => {
 				if (challenge) {
@@ -238,13 +238,13 @@ module.exports = {
 				}
 				setTimeout(() => {
 					message.channel.send('Game has ended.');
-					client.tictactoeGames.delete(message.channel.id);
+					client.games.delete(message.channel.id);
 
 				}, 1000);
 			}).catch(err => {
 				// no one responded "me"
 				message.channel.send('Haha no one wants to play with you, lonely goblin.'),
-				client.tictactoeGames.delete(message.channel.id);
+				client.games.delete(message.channel.id);
 				console.log(err);
 			});
 		});

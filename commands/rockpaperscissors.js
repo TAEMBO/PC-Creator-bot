@@ -1,14 +1,14 @@
 module.exports = {
 	run: async (client, message, args) => {
-		if (client.rpsGames.has(message.channel.id)) {
-			return message.channel.send(`There is already an ongoing game in this channel created by ${client.rpsGames.get(message.channel.id)}`);
+		if (client.games.has(message.channel.id)) {
+			return message.channel.send(`There is already an ongoing game in this channel created by ${client.games.get(message.channel.id)}`);
 		}
 		const players = [message.member];
 		await message.channel.send(`Who wants to play Rock Paper Scissors with ${message.member.toString()}? Respond with "me". (60s)`);
-		client.rpsGames.set(message.channel.id, message.author.tag);
+		client.games.set(message.channel.id, message.author.tag);
 		const opponentMessages = await message.channel.awaitMessages(x => x.content.toLowerCase().startsWith('me'), { max: 1, time: 60000, errors: ['time'] }).catch(() => {
 			message.channel.send('Haha no one wants to play with you, lonely goblin.');
-			client.rpsGames.delete(message.channel.id);
+			client.games.delete(message.channel.id);
 			});
 		players[1] = opponentMessages.first()?.member;
 		if (!players[1]) return message.channel.send('Something went wrong! You have no opponent.');
@@ -33,7 +33,7 @@ module.exports = {
 		});
 		const resolvedPlays = await Promise.all([homePlay, guestPlay]);
 		if (timeError) {
-			client.rpsGames.delete(message.channel.id);
+			client.games.delete(message.channel.id);
 			return;
 		}
 		homePlay = resolvedPlays[0];
@@ -41,7 +41,7 @@ module.exports = {
 		homePlay = plays.indexOf(homePlay.first()?.content.toLowerCase().split(' ')[0]);
 		guestPlay = plays.indexOf(guestPlay.first()?.content.toLowerCase().split(' ')[0]);
 		if (homePlay < 0 || guestPlay < 0) {
-			client.rpsGames.delete(message.channel.id);
+			client.games.delete(message.channel.id);
 			return message.channel.send('One player failed to play a valid option.');
 		}
 		let winnerIndex;
@@ -58,7 +58,7 @@ module.exports = {
 		} else {
 			message.channel.send(`${homeEmojis[homePlay]} :left_right_arrow: ${guestEmojis[guestPlay]}\nIts a draw!`);
 		}
-		client.rpsGames.delete(message.channel.id);
+		client.games.delete(message.channel.id);
 	},
 	name: 'rockpaperscissors',
 	description: 'Play rock paper scissors against another person',
