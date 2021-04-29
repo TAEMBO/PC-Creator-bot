@@ -1,5 +1,10 @@
 {
 	"token": "",
+	"modmailBotToken": "",
+	"botSwitches": {
+		"pccb": true,
+		"modmail": true
+	},
 	"prefix": ",",
 	"eval": {
 		"allowed": true,
@@ -10,6 +15,10 @@
 	"enableAutoResponse": true,
 	"mainServer": {
 		"id":"571031703661969430",
+		"staffRoles": [
+			"administrator",
+			"moderator"
+		],
 		"roles": {
 			"administrator": "632674518317531137",
 			"moderator": "589435378147262464",

@@ -1,9 +1,10 @@
 const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: true});
+const modmailClient = new Discord.Client({ disableEveryone: true });
 const fs = require('fs');
 const path = require('path');
 client.config = require("./config.json");
-if (!client.config.token) {
+if (!client.config.token && !client.config.modmailBotToken) {
 	client.config = require("./config-test.json");
 	console.log('Using ./config-test.json');
 }
@@ -13,6 +14,12 @@ client.on("ready", async () => {
 		type: "LISTENING", 
 	});
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
+});
+modmailClient.on("ready", async () => {
+	await modmailClient.user.setActivity("To Direct Messages", {
+		type: "LISTENING",
+	});
+	console.log(`Modmail Bot active as ${modmailClient.user.tag}`);
 });
 
 // global properties
@@ -409,7 +416,8 @@ client.on("message", async (message) => {
         channel.send(client.config.eval.whitelist.map(x => `<@${x}>`).join(', '));
 	}
 	if (!message.guild) return;
-	if (client.config.mainServer.channels.suggestions === message.channel.id && !message.content.startsWith(client.prefix + 'suggest') && !message.author.bot) {
+	const suggestCommand = client.commands.get('suggest');
+	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(' ')[0] === client.prefix + x) && !message.author.bot) {
 		message.reply(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 6000));
 		return message.delete();
 	}
@@ -515,4 +523,81 @@ client.on("message", async (message) => {
 		}
 	}
 });
-client.login(client.config.token);
+modmailClient.threads = new client.collection();
+modmailClient.on('message', message => {
+	if (message.channel.type === 'dm') {
+		if (message.author.bot) return;
+		const modmailChannel = modmailClient.channels.cache.get(client.config.mainServer.channels.modmail);
+		if (modmailClient.threads.has(message.author.id)) {
+			modmailChannel.send(`\`Case ID: ${modmailClient.threads.get(message.author.id).caseId}\` Additional information from ${message.author.toString()}: ${message.content + '\n' + (message.attachments.first()?.url || '')}`);
+			modmailClient.threads.get(message.author.id).messages.push(`R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
+			return;
+		}
+		const caseId = (Date.now() + '').slice(0, -5);
+		message.channel.send(`Modmail received! :white_check_mark:\nWait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to a moderator.\n\`Case ID: ${caseId}\``);
+		modmailClient.threads.set(message.author.id, { messages: [], caseId });
+		modmailChannel.send(`${client.config.mainServer.staffRoles.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}\n\`Case ID: ${caseId}\` new modmail from ${message.author.toString()}. a communication portal has been opened for 10 minutes.\nrequest extra time with \`extratime ${caseId}\`\nreply with \`reply ${caseId} [message]\`\nend modmail with \`end ${caseId} [reason]\`\ncontent: ${message.content + '\n' + (message.attachments.first()?.url || '')}`);
+		modmailClient.threads.get(message.author.id).messages.push(`R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
+		let collectorEndTimestamp = Date.now() + 10*60*1000;
+		let timeWarning = false;
+		const modReplyCollector = modmailChannel.createMessageCollector(() => true);
+
+		modReplyCollector.on('collect', async modReply => {
+			if (modReply.content.startsWith('extratime')) {
+				const args = modReply.content.split(' ');
+				const replyCaseId = args[1];
+				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which modmail needs extra time');
+				if (!replyCaseId === caseId) return; // replied to different convo than this
+				collectorEndTimestamp = Date.now() + 10*60*1000;
+				modmailChannel.send('Extra time granted. The communication portal will close in 10 minutes.');
+				timeWarning = false;
+			} else if (modReply.content.startsWith('reply')) {
+				const args = modReply.content.split(' ');
+				const replyCaseId = args[1];
+				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which modmail you want to reply to');
+				if (!replyCaseId === caseId) return; // replied to different convo than this
+				const reply = args.slice(2).join(' ') + '\n' + (modReply.attachments.first()?.url || '');
+				message.channel.send(`:warning: Reply from ${modReply.member.roles.highest.name} ${modReply.author.tag}: ${reply}`);
+				modmailClient.threads.get(message.author.id).messages.push(`M (${modReply.author.username}): ${args.slice(2).join(' ') + (modReply.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
+				modmailChannel.send(`\`Case ID: ${caseId}\` Reply forwarded.`);
+			} else if (modReply.content.startsWith('end')) {
+				const args = modReply.content.split(' ');
+				const replyCaseId = args[1];
+				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which modmail you want to end');
+				if (!replyCaseId === caseId) return; // replied to different convo than this
+				const reason = args.slice(2).join(' ');
+				message.channel.send(`:x: ${modReply.member.roles.highest.name} ${modReply.author.tag} has ended this modmail session with reason: ${reason}`);
+				await modmailChannel.send(`\`Case ID: ${caseId}\` Modmail has closed.`);
+				modmailClient.threads.get(message.author.id).messages.push(`M (${modReply.author.username}) Ended modmail: ${reason}`); // R = recipient, M = moderator
+				modReplyCollector.stop();
+			}
+		});
+
+		const interval = setInterval(() => {
+			if (Date.now() > collectorEndTimestamp) {
+				modReplyCollector.stop();
+				modmailChannel.send(`\`Case ID: ${caseId}\` Modmail has closed.`);
+			} else if (Date.now() + 60*1000 > collectorEndTimestamp && !timeWarning) {
+				modmailChannel.send(`\`Case ID: ${caseId}\` Portal closing in 1 minute.`);
+				timeWarning = true;
+			}
+		}, 5000);
+
+		modReplyCollector.on('end', () => {
+			clearInterval(interval);
+			// send embed in modmail channel compiling everything together
+			modmailChannel.send(`Compilation from modmail \`${caseId}\`:\nR: Recipient, M: Moderator\n\`\`\`\n${modmailClient.threads.get(message.author.id).messages.join('\n')}\n\`\`\``);
+			// remove from threads collection
+		});
+
+	} else if (message.mentions.members.has(modmailClient.user.id)) {
+		message.reply('Send me a DM to contact moderators.');
+	}
+});
+
+if (client.config.botSwitches.pccb) {
+	client.login(client.config.token);
+}
+if (client.config.botSwitches.modmail) {
+	modmailClient.login(client.config.modmailBotToken);
+}
