@@ -142,7 +142,7 @@ module.exports = {
 		});
 
 		const interval = setInterval(() => {
-			if (Date.now() > latestActivity + 60000) {
+			if (Date.now() > latestActivity + 5*60*1000) {
 				guessCollector.stop();
 				client.games.delete(message.channel.id);
 				message.channel.send('The hangman game has ended due to inactivity.');
