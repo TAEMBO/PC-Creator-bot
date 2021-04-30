@@ -38,6 +38,51 @@ module.exports = {
 				}
 			}).join(' ');
 		}
+		function guessLetter(letter) {
+			latestActivity = Date.now();
+			if (guesses.includes(letter)) return message.channel.send('That letter has been guessed already.');
+			guesses.push(letter);
+			if (!word.includes(letter)) {
+				fouls++;
+				checkFouls();
+				return;
+			}
+			wordUpdate();
+		}
+		function guessWord(text) {
+			latestActivity = Date.now();
+			if (!word.includes(text)) {
+				fouls++;
+				checkFouls(true);
+				return;
+			}
+			const guessedTextStartIndex = word.indexOf(text);
+			const guessedTextCharIndices = Array.from(Array(text.length).keys());
+			guessedWordsIndices.push(...guessedTextCharIndices.map(x => x + guessedTextStartIndex));
+			wordUpdate();
+		}
+
+		const guessCollector = message.channel.createMessageCollector(x => x.content.startsWith('guess'));
+
+		guessCollector.on('collect', guessMessage => {
+			const guess = guessMessage.content.slice(6).toLowerCase();
+			if (!guess || guess.length === 0) return guessMessage.reply('You\'re using the \`guess\` command wrong. Get good.');
+			if (guess.length > 1) {
+				guessWord(guess);
+			} else {
+				guessLetter(guess);
+			}
+		});
+
+		const interval = setInterval(() => {
+			if (Date.now() > latestActivity + 5 * 60 * 1000) {
+				guessCollector.stop();
+				client.games.delete(message.channel.id);
+				message.channel.send('The hangman game has ended due to inactivity.');
+				clearInterval(interval);
+			}
+		}, 5000);
+
 		function checkFouls(textGuess) {
 			const stages = [
 				[
@@ -101,55 +146,14 @@ module.exports = {
 			if (fouls === 7) {
 				loseText = `\nThe poor fella got hung. You lost the game. The word was:\n\`\`\`\n${word}\n\`\`\``;
 				client.games.delete(message.channel.id);
-			}
-			message.channel.send(`The word doesn\`t include that ${textGuess ? 'letter' : 'piece of text'}.\nAn incorrect guess leads to the addition of things to the drawing. It now looks like this:\n\`\`\`\n${stages[fouls - 1].join('\n')}\n\`\`\`` + loseText);
-		}
-		function guessLetter(letter) {
-			latestActivity = Date.now();
-			if (guesses.includes(letter)) return message.channel.send('That letter has been guessed already.');
-			guesses.push(letter);
-			if (!word.includes(letter)) {
-				fouls++;
-				checkFouls();
-				return;
-			}
-			wordUpdate();
-		}
-		function guessWord(text) {
-			latestActivity = Date.now();
-			if (!word.includes(text)) {
-				fouls++;
-				checkFouls(true);
-				return;
-			}
-			const guessedTextStartIndex = word.indexOf(text);
-			const guessedTextCharIndices = Array.from(Array(text.length).keys());
-			guessedWordsIndices.push(...guessedTextCharIndices.map(x => x + guessedTextStartIndex));
-			wordUpdate();
-		}
-		message.channel.send(`I have received a word from ${message.member.toString()}. Anyone can guess letters or the full word by doing \`guess [letter or word]\`\nThe word is:\n\`\`\`\n${hideWord()}\n\`\`\``);
-
-		const guessCollector = message.channel.createMessageCollector(x => x.content.startsWith('guess'));
-
-		guessCollector.on('collect', guessMessage => {
-			const guess = guessMessage.content.slice(6).toLowerCase();
-			if (!guess || guess.length === 0) return guessMessage.reply('You\'re using the \`guess\` command wrong. Get good.');
-			if (guess.length > 1) {
-				guessWord(guess);
-			} else {
-				guessLetter(guess);
-			}
-		});
-
-		const interval = setInterval(() => {
-			if (Date.now() > latestActivity + 5*60*1000) {
 				guessCollector.stop();
-				client.games.delete(message.channel.id);
-				message.channel.send('The hangman game has ended due to inactivity.');
 				clearInterval(interval);
 			}
-		}, 5000);
+			message.channel.send(`The word doesn\`t include that ${!textGuess ? 'letter' : 'piece of text'}.\nAn incorrect guess leads to the addition of things to the drawing. It now looks like this:\n\`\`\`\n${stages[fouls - 1].join('\n')}\n\`\`\`` + loseText);
+		}
+		message.channel.send(`I have received a word from ${message.member.toString()}. Anyone can guess letters or the full word by doing \`guess [letter or word]\`\nThe word is:\n\`\`\`\n${hideWord()}\n\`\`\``);
 	},
 	name: 'hangman',
 	description: 'Play the hangman game with other Discord users',
+	cooldown: 60
 };
