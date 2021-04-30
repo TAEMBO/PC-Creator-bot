@@ -392,6 +392,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 client.on("message", async (message) => {
     if (message.channel.type === 'dm') {
 		if (client.dmForwardBlacklist._content.includes(message.author.id)) return;
+		if (client.games.some(x => x === message.author.tag)) return;
         const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
         const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
 		if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);
@@ -527,6 +528,7 @@ modmailClient.threads = new client.collection();
 modmailClient.on('message', message => {
 	if (message.channel.type === 'dm') {
 		if (message.author.bot) return;
+		if (client.dmForwardBlacklist._content.includes(message.author.id)) return;
 		const modmailChannel = modmailClient.channels.cache.get(client.config.mainServer.channels.modmail);
 		if (modmailClient.threads.has(message.author.id)) {
 			modmailChannel.send(`\`Case ID: ${modmailClient.threads.get(message.author.id).caseId}\` Additional information from ${message.author.toString()}: ${message.content + '\n' + (message.attachments.first()?.url || '')}`);
@@ -563,12 +565,12 @@ modmailClient.on('message', message => {
 			} else if (modReply.content.startsWith('end')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which modmail you want to end');
+				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which modmail session you want to end');
 				if (!replyCaseId === caseId) return; // replied to different convo than this
 				const reason = args.slice(2).join(' ');
 				message.channel.send(`:x: ${modReply.member.roles.highest.name} ${modReply.author.tag} has ended this modmail session with reason: ${reason}`);
-				await modmailChannel.send(`\`Case ID: ${caseId}\` Modmail has closed.`);
-				modmailClient.threads.get(message.author.id).messages.push(`M (${modReply.author.username}) Ended modmail: ${reason}`); // R = recipient, M = moderator
+				await modmailChannel.send(`\`Case ID: ${caseId}\` Modmail session has closed.`);
+				modmailClient.threads.get(message.author.id).messages.push(`M (${modReply.author.username}) Ended session: ${reason}`); // R = recipient, M = moderator
 				modReplyCollector.stop();
 			}
 		});
@@ -576,7 +578,7 @@ modmailClient.on('message', message => {
 		const interval = setInterval(() => {
 			if (Date.now() > collectorEndTimestamp) {
 				modReplyCollector.stop();
-				modmailChannel.send(`\`Case ID: ${caseId}\` Modmail has closed.`);
+				modmailChannel.send(`\`Case ID: ${caseId}\` Modmail session has closed.`);
 			} else if (Date.now() + 60*1000 > collectorEndTimestamp && !timeWarning) {
 				modmailChannel.send(`\`Case ID: ${caseId}\` Portal closing in 1 minute.`);
 				timeWarning = true;
@@ -586,8 +588,16 @@ modmailClient.on('message', message => {
 		modReplyCollector.on('end', () => {
 			clearInterval(interval);
 			// send embed in modmail channel compiling everything together
-			modmailChannel.send(`Compilation from modmail \`${caseId}\`:\nR: Recipient, M: Moderator\n\`\`\`\n${modmailClient.threads.get(message.author.id).messages.join('\n')}\n\`\`\``);
+			const embed = new client.embed()
+				.setTitle('Modmail Summary')
+				.setDescription(`\`Case ID: ${caseId}\`\nR: Recipient, M: Moderator\n\`\`\`\n${modmailClient.threads.get(message.author.id).messages.join('\n')}\n\`\`\``)
+				.setColor(client.embedColor)
+			modmailChannel.send(embed);
 			// remove from threads collection
+			if (!modmailClient.threads.get(message.author.id).messages.some(x => x.startsWith('M'))) {
+				message.channel.send(':x: The modmail session ended automatically with no response from a moderator. Usually this means that there are no moderators online. Please wait patiently. The moderators will contact you when they come online.');
+			}
+			modmailClient.threads.delete(message.author.id);
 		});
 
 	} else if (message.mentions.members.has(modmailClient.user.id)) {
