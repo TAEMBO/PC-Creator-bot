@@ -601,7 +601,14 @@ modmailClient.on('message', message => {
 		});
 
 	} else if (message.mentions.members.has(modmailClient.user.id)) {
-		message.reply('Send me a DM to contact moderators.');
+		const embed = new client.embed()
+			.setTitle('ModMail Instructions')
+			.addField(':small_blue_diamond: What?', 'ModMail is a bot that makes it easy to contact a server moderator.', true)
+			.addField(':small_blue_diamond: Why?', 'ModMail should be used when you want to report a rule breaker on this Discord server.', true)
+			.addField(':small_blue_diamond: How?', 'Send me a Direct Message on Discord. Moderators will then solve your problem.', true)
+			.addField(':small_blue_diamond: Don\'ts', 'Do not use ModMail for unimportant situations.\nDo not spam ModMail.\nDo not use ModMail unnecessarily.', true)
+			.setColor(client.embedColor)
+		message.channel.send(embed);
 	}
 });
 
