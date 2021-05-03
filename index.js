@@ -5,8 +5,8 @@ const fs = require('fs');
 const path = require('path');
 client.config = require("./config.json");
 if (!client.config.token && !client.config.modmailBotToken) {
-	client.config = require("./config-test.json");
-	console.log('Using ./config-test.json');
+	client.config = require("./config.json");
+	console.log('Using ./config.json');
 }
 client.prefix = client.config.prefix;
 client.on("ready", async () => {
@@ -470,9 +470,6 @@ client.on("message", async (message) => {
 		}
 		if (message.content.toLowerCase().includes("uwu")) {
 			message.reply("You received an honorary ban!");
-		}
-		if (message.content.toLowerCase().includes("lel")) {
-			message.delete();
 		}
 		// do not remove titanus
 		if (client.config.enableAutoResponse) {
