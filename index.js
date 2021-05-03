@@ -16,7 +16,7 @@ client.on("ready", async () => {
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
 });
 modmailClient.on("ready", async () => {
-	await modmailClient.user.setActivity("To Direct Messages", {
+	await modmailClient.user.setActivity("Direct Messages", {
 		type: "LISTENING",
 	});
 	console.log(`Modmail Bot active as ${modmailClient.user.tag}`);
