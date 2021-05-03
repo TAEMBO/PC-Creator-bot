@@ -5,8 +5,8 @@ const fs = require('fs');
 const path = require('path');
 client.config = require("./config.json");
 if (!client.config.token && !client.config.modmailBotToken) {
-	client.config = require("./config.json");
-	console.log('Using ./config.json');
+	client.config = require("./config-test.json");
+	console.log('Using ./config-test.json');
 }
 client.prefix = client.config.prefix;
 client.on("ready", async () => {
