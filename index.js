@@ -471,6 +471,9 @@ client.on("message", async (message) => {
 		if (message.content.toLowerCase().includes("uwu")) {
 			message.reply("You received an honorary ban!");
 		}
+		if (message.author.id === '155149108183695360' && ['was muted', 'was banned'].some(x => message.embeds[0]?.description?.includes(x))) {
+			message.channel.send(':partying_face: :tada:');
+		}
 		// do not remove titanus
 		if (client.config.enableAutoResponse) {
 			let msg = message.content.toLowerCase().replace(/'|´|"/g, '');
