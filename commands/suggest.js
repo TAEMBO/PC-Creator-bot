@@ -7,7 +7,7 @@ module.exports = {
 		const embed = new client.embed()
 			.setAuthor(`${message.member.displayName} (${message.author.id})`, message.author.avatarURL({ format: 'png', size: 128 }))
 			.setTitle(`Suggestion:`)
-			.setDescription(message.content.slice(message.content.indexOf(' ') + 1))
+			.setDescription(args.slice(1).join(' '))
 			.setTimestamp()
 			.setColor(client.embedColor)
 		const suggestion = await message.channel.send(embed);

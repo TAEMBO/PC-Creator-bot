@@ -10,7 +10,7 @@ module.exports = {
 			.addField(':small_blue_diamond: Achieved By', `<@${achiever.id}> ${achiever.tag} (${achiever.id})`)
 			.addField(':small_blue_diamond: Details', 'overclocks are needed to get the highest score.\n**CPU**: 150 Base 43 Boost\n**RAM**: 4160\n**GPU**: 4340 and 24700\n• ZALMVN ZMX55 Thermal Paste is required and needs to cover 100% of the CPU.\n• Max overclocking skill is required.\n• Max spec custom CPU is required.')
 			.addField(':small_blue_diamond: Score Achieved', '\`127,964\`')
-			.setImage('https://cdn.discordapp.com/attachments/696448442989543445/836309534913069126/Untitled-1.png')
+			.setImage('https://cdn.discordapp.com/attachments/696448442989543445/840000021676294194/Untitled-1.png')
 			.setColor(client.embedColor)
 		message.channel.send(embed);
     },
