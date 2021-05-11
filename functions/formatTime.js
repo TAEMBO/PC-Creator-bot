@@ -39,5 +39,5 @@ module.exports = (integer, accuracy = 1) => {
 		}
 	}
 	if (text.length === 0) text = '0s';
-	return text;
+	return text.trim();
 };
