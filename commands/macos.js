@@ -5,5 +5,5 @@ module.exports = {
 	name: 'macos',
 	description: 'Tells you what parts are needed to make a working PC with MacOS',
 	category: 'PC Creator',
-	autores: ['install/get/component', 'apple/mac/macos', 'macos/os/operating system']
+	autores: ['install/get/component', 'apple os/apple operating system/apple mac os/apple mac operating system/apple macos/macos/mac os']
 };
