@@ -530,47 +530,52 @@ modmailClient.on('message', message => {
 		if (message.author.bot) return;
 		if (client.dmForwardBlacklist._content.includes(message.author.id)) return;
 		const modmailChannel = modmailClient.channels.cache.get(client.config.mainServer.channels.modmail);
+		function summaryTimestamp() {
+			return `[${client.format24hClock(Date.now(), true)}]`;
+		}
 		if (modmailClient.threads.has(message.author.id)) {
-			modmailChannel.send(`\`Case ID: ${modmailClient.threads.get(message.author.id).caseId}\` Additional information from ${message.author.toString()}: ${message.content + '\n' + (message.attachments.first()?.url || '')}`);
-			modmailClient.threads.get(message.author.id).messages.push(`R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
+			modmailChannel.send(`\`Case ID: ${modmailClient.threads.get(message.author.id).caseId}\` Additional information from ${message.author.toString()} (${message.author.tag}): ${message.content + '\n' + (message.attachments.first()?.url || '')}`);
+			modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
 			return;
 		}
 		const caseId = (Date.now() + '').slice(0, -5);
-		message.channel.send(`Modmail received! :white_check_mark:\nWait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to a moderator.\n\`Case ID: ${caseId}\``);
-		modmailClient.threads.set(message.author.id, { messages: [], caseId });
-		modmailChannel.send(`${client.config.mainServer.staffRoles.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}\n\`Case ID: ${caseId}\` new modmail from ${message.author.toString()}. a communication portal has been opened for 10 minutes.\nrequest extra time with \`extratime ${caseId}\`\nreply with \`reply ${caseId} [message]\`\nend modmail with \`end ${caseId} [reason]\`\ncontent: ${message.content + '\n' + (message.attachments.first()?.url || '')}`);
-		modmailClient.threads.get(message.author.id).messages.push(`R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
+		const unimportant = message.content.toLowerCase().startsWith('[unimportant]');
+		message.channel.send(`ModMail received! :white_check_mark:\nWait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to a moderator.\n\`Case ID: ${caseId}\``);
+		modmailClient.threads.set(message.author.id, { messages: [], caseId, startTime: Date.now() });
+		modmailChannel.send(`${unimportant ? '' : client.config.mainServer.staffRoles.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}\n\`Case ID: ${caseId}\` New ModMail from ${message.author.toString()} (${message.author.tag}). A communication portal has been opened for ${unimportant ? '20' : '10'} minutes.\nRequest extra time with \`et ${caseId}\`\nReply with \`rpl ${caseId} [message]\`\nEnd ModMail with \`end ${caseId} [reason]\`\nModMail Content: ${message.content + '\n' + (message.attachments.first()?.url || '')}`);
+		modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} R: ${message.content + (message.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
 		let collectorEndTimestamp = Date.now() + 10*60*1000;
+		if (unimportant) collectorEndTimestamp += 10 * 60 * 1000;
 		let timeWarning = false;
 		const modReplyCollector = modmailChannel.createMessageCollector(() => true);
 
 		modReplyCollector.on('collect', async modReply => {
-			if (modReply.content.startsWith('extratime')) {
+			if (modReply.content.startsWith('et')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which modmail needs extra time');
+				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which ModMail needs extra time');
 				if (!replyCaseId === caseId) return; // replied to different convo than this
 				collectorEndTimestamp = Date.now() + 10*60*1000;
 				modmailChannel.send('Extra time granted. The communication portal will close in 10 minutes.');
 				timeWarning = false;
-			} else if (modReply.content.startsWith('reply')) {
+			} else if (modReply.content.startsWith('rpl')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which modmail you want to reply to');
+				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which ModMail you want to reply to');
 				if (!replyCaseId === caseId) return; // replied to different convo than this
 				const reply = args.slice(2).join(' ') + '\n' + (modReply.attachments.first()?.url || '');
 				message.channel.send(`:warning: Reply from ${modReply.member.roles.highest.name} ${modReply.author.tag}: ${reply}`);
-				modmailClient.threads.get(message.author.id).messages.push(`M (${modReply.author.username}): ${args.slice(2).join(' ') + (modReply.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
+				modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}): ${args.slice(2).join(' ') + (modReply.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
 				modmailChannel.send(`\`Case ID: ${caseId}\` Reply forwarded.`);
 			} else if (modReply.content.startsWith('end')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which modmail session you want to end');
+				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which ModMail session you want to end');
 				if (!replyCaseId === caseId) return; // replied to different convo than this
 				const reason = args.slice(2).join(' ');
-				message.channel.send(`:x: ${modReply.member.roles.highest.name} ${modReply.author.tag} has ended this modmail session with reason: ${reason}`);
-				await modmailChannel.send(`\`Case ID: ${caseId}\` Modmail session has closed.`);
-				modmailClient.threads.get(message.author.id).messages.push(`M (${modReply.author.username}) Ended session: ${reason}`); // R = recipient, M = moderator
+				message.channel.send(`:x: ${modReply.member.roles.highest.name} ${modReply.author.tag} has ended this ModMail session with reason: ${reason}`);
+				await modmailChannel.send(`\`Case ID: ${caseId}\` ModMail session has closed.`);
+				modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}) Ended session: ${reason}`); // R = recipient, M = moderator
 				modReplyCollector.stop();
 			}
 		});
@@ -578,7 +583,7 @@ modmailClient.on('message', message => {
 		const interval = setInterval(() => {
 			if (Date.now() > collectorEndTimestamp) {
 				modReplyCollector.stop();
-				modmailChannel.send(`\`Case ID: ${caseId}\` Modmail session has closed.`);
+				modmailChannel.send(`\`Case ID: ${caseId}\` ModMail session has closed.`);
 			} else if (Date.now() + 60*1000 > collectorEndTimestamp && !timeWarning) {
 				modmailChannel.send(`\`Case ID: ${caseId}\` Portal closing in 1 minute.`);
 				timeWarning = true;
@@ -589,13 +594,15 @@ modmailClient.on('message', message => {
 			clearInterval(interval);
 			// send embed in modmail channel compiling everything together
 			const embed = new client.embed()
-				.setTitle('Modmail Summary')
-				.setDescription(`\`Case ID: ${caseId}\`\nR: Recipient, M: Moderator\n\`\`\`\n${modmailClient.threads.get(message.author.id).messages.join('\n')}\n\`\`\``)
+				.setTitle('ModMail Summary')
+				.setDescription(`\`Case ID: ${caseId}\`\nR: Recipient: ${message.author.toString()} (${message.author.tag}), M: Moderator - Time Elapsed: ${client.formatTime(Date.now() - modmailClient.threads.get(message.author.id).startTime, 2)} - Times are in UTC\n\`\`\`\n${modmailClient.threads.get(message.author.id).messages.join('\n')}\n\`\`\``)
+				.setFooter('Starting Time')
+				.setTimestamp(modmailClient.threads.get(message.author.id).startTime)
 				.setColor(client.embedColor)
 			modmailChannel.send(embed);
 			// remove from threads collection
-			if (!modmailClient.threads.get(message.author.id).messages.some(x => x.startsWith('M'))) {
-				message.channel.send(':x: The modmail session ended automatically with no response from a moderator. Usually this means that there are no moderators online. Please wait patiently. The moderators will contact you when they come online.');
+			if (!modmailClient.threads.get(message.author.id).messages.some(x => x.includes('] M ('))) {
+				message.channel.send(':x: The ModMail session ended automatically with no response from a moderator. Usually this means that there are no moderators online. Please wait patiently. The moderators will contact you when they come online.');
 			}
 			modmailClient.threads.delete(message.author.id);
 		});
@@ -606,7 +613,8 @@ modmailClient.on('message', message => {
 			.addField(':small_blue_diamond: What?', 'ModMail is a bot that makes it easy to contact a server moderator.', true)
 			.addField(':small_blue_diamond: Why?', 'ModMail should be used when you want to report a rule breaker on this Discord server.', true)
 			.addField(':small_blue_diamond: How?', 'Send me a Direct Message on Discord. Moderators will then solve your problem.', true)
-			.addField(':small_blue_diamond: Don\'ts', 'Do not use ModMail for unimportant situations.\nDo not spam ModMail.\nDo not use ModMail unnecessarily.', true)
+			.addField(':small_blue_diamond: Don\'ts', 'Do not spam ModMail.\nDo not use ModMail unnecessarily.', true)
+			.addField(':small_blue_diamond: Small Things', 'If your concern is not urgent, start your ModMail message with "[Unimportant]". This way the moderators know that they don\'t need to rush.', true)
 			.setColor(client.embedColor)
 		message.channel.send(embed);
 	}
