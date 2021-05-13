@@ -272,7 +272,7 @@ Object.assign(client.starboard, {
 		}
 	},
 	sendEmbed(data) {
-		let description = data.message.content + '\n';
+		let description = [data.message.content, ''];
 		const embed = new client.embed()
 			.setAuthor(`${data.message.member.displayName} [${data.message.author.tag}]`, data.message.author.avatarURL({ format: 'png', size: 128 }))
 			.setTimestamp(data.message.createdTimestamp)
@@ -281,7 +281,7 @@ Object.assign(client.starboard, {
 			.setColor('#ffcc00');
 		let imageSet = false;
 		data.message.embeds.forEach(x => {
-			let text = `\n\\[[Embed](${x.url})] `;
+			let text = `\\[[Embed](${x.url})] `;
 			if (x.provider || x.author) {
 				text += x.provider?.name || x.author.name;
 				if (x.title) {
@@ -300,7 +300,7 @@ Object.assign(client.starboard, {
 					imageSet = true;
 				}
 			}
-			description += text;
+			description.push(text);
 		});
 		data.message.attachments.forEach(attachment => {
 			if (['png', 'jpg', 'webp', 'gif'].some(x => attachment.url?.endsWith(x)) && !imageSet) {
@@ -311,10 +311,15 @@ Object.assign(client.starboard, {
 				if (['png', 'jpg', 'webp'].some(x => attachment.url?.endsWith(x))) type = 'Image';
 				if (['mp4', 'mov', 'webm'].some(x => attachment.url?.endsWith(x))) type = 'Video';
 				if (attachment.url?.endsWith('gif')) type = 'Gif';
-				description += `\n[Embed] ${type}: [${attachment.name}](${attachment.url})`;
+				description.push(`[Embed] ${type}: [${attachment.name}](${attachment.url})`);
 			}
 		});
-		embed.setDescription(description.trim());
+		const descPreview = description.join('\n').trim();
+		if (descPreview.length > 2048) {
+			const diff = descPreview.length - 2048;
+			description[0] = description[0].slice(0, description[0].length - Math.max(3, diff)) + '...';
+		}
+		embed.setDescription(description.join('\n').trim());
 		return client.channels.resolve(client.config.mainServer.channels.starboard).send(`**${data.count}** :star: | ${data.message.channel.toString()}`, embed).then(async x => {
 			x.react('⭐');
 			return x;
