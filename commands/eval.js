@@ -31,7 +31,7 @@ module.exports = {
 				.addField('Output', `\`\`\`\n${err}\n\`\`\``)
 				.setColor('ff0000');
 			message.channel.send(embed).then(errorEmbedMessage => {
-				const messagecollector = new client.messageCollector(message.channel, x => x.content === 'stack' && x.author.id === message.author.id, { max: 1, time: 30000 });
+				const messagecollector = new client.messageCollector(message.channel, x => x.content === 'stack' && x.author.id === message.author.id, { max: 1, time: 60000 });
 				messagecollector.on('collect', collected => {
 					collected.channel.send(`\`\`\`\n${removeUsername(err.stack)}\n\`\`\``);
 				});
