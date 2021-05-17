@@ -50,6 +50,7 @@ module.exports = {
 			} else {
 				const member = message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => {}));
 				if (!member) return message.channel.send('You failed to mention a user from this server.');
+				if (!client.specsDb.hasUser(member.user.id)) return message.channel.send('They haven\'t added any specs yet.');
 				const embed = client.displaySpecs(client, member);
 				return message.channel.send(embed);
 			}

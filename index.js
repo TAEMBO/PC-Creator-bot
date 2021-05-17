@@ -10,15 +10,19 @@ if (!client.config.token && !client.config.modmailBotToken) {
 }
 client.prefix = client.config.prefix;
 client.on("ready", async () => {
-	await client.user.setActivity(",help", {
-		type: "LISTENING", 
-	});
+	setInterval(async () => {
+		await client.user.setActivity(",help", {
+			type: "LISTENING", 
+		});
+	}, 30000);
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
 });
 modmailClient.on("ready", async () => {
-	await modmailClient.user.setActivity("Direct Messages", {
-		type: "LISTENING",
-	});
+	setInterval(async () => {
+		await modmailClient.user.setActivity("Direct Messages", {
+			type: "LISTENING",
+		});
+	}, 30000);
 	console.log(`Modmail Bot active as ${modmailClient.user.tag}`);
 });
 
@@ -438,7 +442,14 @@ client.on("message", async (message) => {
 					const commandCooldownForUser = client.cooldowns.get(message.author.id).get(commandFile.name);
 					if (commandCooldownForUser) {
 						if (commandCooldownForUser > Date.now()) {
-							return message.channel.send(`You need to wait ${Math.ceil((commandCooldownForUser - Date.now()) / 1000)} seconds until you can use this command again.`);
+							const cooldownMention = await message.channel.send(`You need to wait ${Math.ceil((commandCooldownForUser - Date.now()) / 1000)} seconds until you can use this command again.`);
+							if (message.channel.id === client.config.mainServer.channels.suggestions) {
+								setTimeout(async () => {
+									await message.delete();
+									await cooldownMention.delete();
+								}, 20000);
+							}
+							return;
 						} else {
 							client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
 						}

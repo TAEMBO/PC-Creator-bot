@@ -5,7 +5,7 @@ module.exports = {
 		delete require.cache[require.resolve('./../memes.json')];
 		const memes = new client.collection(Object.entries(require('./../memes.json')));
 		const color = '#00cc99'
-		const failed = () => message.channel.send('You failed.');
+		const failed = () => message.channel.send('You failed. The `meme add` process has ended.');
 		if (!args[1]) {
 			const memesPerPage = memes.size / 3;
 			const embed = new client.embed()
@@ -48,11 +48,16 @@ module.exports = {
 
 				await message.channel.send('Send a permanent URL to the meme image. (120s)');
 				const urlMessage = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first();
-				if (urlMessage.content) meme.url = urlMessage.content;
+				if (urlMessage.content) {
+					if (!['jpg', 'png', 'webp', 'gif'].some(x => urlMessage.content.endsWith(x))) {
+						return message.channel.send('Your log-headed ass didn\'t notice that that is not an image url. Your mishap has terminated the `meme add` process. Thanks.');
+					}
+					meme.url = urlMessage.content;
+				}
 				else meme.url = urlMessage.attachments.first()?.url;
 				if (!meme.url) return failed();
 
-				const highestKey = Math.max(...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x))) + 2;
+				const highestKey = Math.max(...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x)), 0) + 2;
 				const allNumbers = Array.from(Array(highestKey).keys()).slice(1);
 				[...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x))].forEach(usedKey => {
 					allNumbers.splice(allNumbers.indexOf(usedKey), 1);
@@ -116,14 +121,16 @@ module.exports = {
 						else decline();
 						return;
 					}
-					await message.channel.send(':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' + meme.url);
-					const approval = (await message.channel.awaitMessages(x => x.author.id === message.author.id && ['y', 'n'].some(y => x.content.toLowerCase().startsWith(y)), { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+					await message.channel.send(':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. Type "cancel" to leave this meme in the queue. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n' + (Math.random() < (1 / 3) ? '\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' : '') + meme.url);
+					const approval = (await message.channel.awaitMessages(x => x.author.id === message.author.id && ['y', 'n', 'cancel'].some(y => x.content.toLowerCase().startsWith(y)), { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 					if (!approval) return failed();
 
 					if (approval.toLowerCase().startsWith('y'))
 						approve();
 					else if (approval.toLowerCase().startsWith('n'))
 						decline();
+					else if (approval.toLowerCase().startsWith('cancel'))
+						message.channel.send('The review process has ended and the unapproved meme remains in the queue.');
 					else
 						failed();
 					return;
