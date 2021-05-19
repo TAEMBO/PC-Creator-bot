@@ -62,7 +62,7 @@ module.exports = {
 			wordUpdate();
 		}
 
-		const guessCollector = message.channel.createMessageCollector(x => x.content.startsWith('guess'));
+		const guessCollector = message.channel.createMessageCollector(x => x.content.toLowerCase().startsWith('guess'));
 
 		guessCollector.on('collect', guessMessage => {
 			const guess = guessMessage.content.slice(6).toLowerCase();
@@ -149,7 +149,7 @@ module.exports = {
 				guessCollector.stop();
 				clearInterval(interval);
 			}
-			message.channel.send(`The word doesn\`t include that ${!textGuess ? 'letter' : 'piece of text'}.\nAn incorrect guess leads to the addition of things to the drawing. It now looks like this:\n\`\`\`\n${stages[fouls - 1].join('\n')}\n\`\`\`` + loseText);
+			message.channel.send(`The word doesn\'t include that ${!textGuess ? 'letter' : 'piece of text'}.\nAn incorrect guess leads to the addition of things to the drawing. It now looks like this:\n\`\`\`\n${stages[fouls - 1].join('\n')}\n\`\`\`` + loseText);
 		}
 		message.channel.send(`I have received a word from ${message.member.toString()}. Anyone can guess letters or the full word by doing \`guess [letter or word]\`\nThe word is:\n\`\`\`\n${hideWord()}\n\`\`\``);
 	},
