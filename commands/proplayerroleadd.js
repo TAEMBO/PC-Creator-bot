@@ -1,6 +1,6 @@
 module.exports = {
 	run: async (client, message, args) => {
-		if (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
+		if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
 		let member;
 		let timedOut = false;
 		if (args[1]) member = message.mentions.members?.first() || (await message.guild.members.fetch(args[1]).catch(() => undefined));

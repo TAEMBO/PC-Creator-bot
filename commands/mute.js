@@ -1,6 +1,6 @@
 module.exports = {
 	run: async (client, message, args) => {
-		if (!message.member.roles.cache.has(client.config.mainServer.roles.moderator)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
+		if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
 		let member;
 		let timedOut = false;
 		if (args[1]) member = message.mentions.members?.first() || (await message.guild.members.fetch(args[1]).catch(() => undefined));
@@ -18,10 +18,10 @@ module.exports = {
 			return message.channel.send('You failed to mention a member.');
 		} else if (!member && timedOut) return;
 		const role = message.guild.roles.cache.find(role => role.id === client.config.mainServer.roles.muted);
-		if (!role) message.channel.send('Indicated role does not exist');
-		if (member.roles.cache.has(role.id)) return message.channel.send(`Cannot mute **${member.user.tag}** because they are already muted.`);
-		member.roles.add(role, `Command done by @${message.author.tag} (${message.author.id})`).then(() => {
-			message.channel.send(`Muted **${member.user.tag}**`);
+		if (!role) return message.channel.send('Indicated role does not exist');
+		if (member.roles.cache.has(role.id)) return message.channel.send(`Cannot mute ${member.user.tag} because they are already muted.`);
+		member.roles.add(role, `Mute command done by @${message.author.tag} (${message.author.id})`).then(() => {
+			message.channel.send(`Muted ${member.user.tag}`);
 		}).catch(() => {
 			message.channel.send('Failed.')
 		});
