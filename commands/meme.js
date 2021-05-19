@@ -18,7 +18,7 @@ module.exports = {
 		} else {
 			if (args[1] === 'add') {
 				await message.channel.send('Creating your own meme...\nWhat is the name of your meme? (60s)');
-				const meme = {};
+				const meme = { adder: `${message.author.tag} (${message.author.id})` };
 
 				meme.name = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!meme.name) return failed();
@@ -37,6 +37,7 @@ module.exports = {
 					await message.channel.send('What is the user ID of the creator of this meme? (60s)');
 					meme.author.name = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 					if (meme.author.name.startsWith('<')) return failed();
+					if (meme.author.name === message.author.id) meme.adder = 'Self';
 				} else if (onDiscord.toLowerCase() === 'n') {
 					meme.author.onDiscord = false;
 					await message.channel.send('Supply a name for the creator of this meme, e.g. their username on the platform that you found this meme on. (90s)');
@@ -144,7 +145,7 @@ module.exports = {
 			const member = meme.author.onDiscord ? (await client.users.fetch(meme.author.name)) : undefined;
 			const embed = new client.embed()
 				.setTitle(meme.name)
-				.setFooter(meme.description)
+				.setFooter(meme.description + ' | Added By: ' + (meme.adder || 'Unknown'))
 				.setColor(color)
 			if (meme.url && meme.url.startsWith('http')) embed.setImage(meme.url);
 			if (member) {
