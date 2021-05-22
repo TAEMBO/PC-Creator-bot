@@ -7,18 +7,24 @@ module.exports = {
 		const color = '#00cc99'
 		const failed = () => message.channel.send('You failed. The `meme add` process has ended.');
 		if (!args[1]) {
-			const memesPerPage = memes.size / 3;
 			const embed = new client.embed()
 				.setTitle('Browse Memes')
-				.setColor(color)
-			for (let i = 0; i < 3; i++) {
-				embed.addField('\u200b', Array.from(memes).slice(Math.ceil(i * memesPerPage), Math.ceil((i + 1) * memesPerPage)).map(x => `\`${x[0]}\` - ${x[1].name}\n`).join(''), true);
-			}
-			message.channel.send(embed);
+				.setColor(color);
+			if (memes.size > 0) {
+				const memesPerPage = memes.size / 3;
+				if (memesPerPage < 1) {
+					embed.addField('\u200b', memes.map((x, key) => `\`${key}\` - ${x.name}\n`).join(''), true);
+				} else {
+					for (let i = 0; i < 3; i++) {
+						embed.addField('\u200b', Array.from(memes).slice(Math.ceil(i * memesPerPage), Math.ceil((i + 1) * memesPerPage)).map(x => `\`${x[0]}\` - ${x[1].name}\n`).join(''), true);
+					}
+				}
+			} else embed.setDescription('No memes have been added yet.');
+			return message.channel.send(embed);
 		} else {
 			if (args[1] === 'add') {
 				await message.channel.send('Creating your own meme...\nWhat is the name of your meme? (60s)');
-				const meme = { adder: `${message.author.tag} (${message.author.id})` };
+				const meme = { adder: `${message.author.tag} (${message.author.id})`, timestamp: Date.now() };
 
 				meme.name = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!meme.name) return failed();
@@ -145,7 +151,7 @@ module.exports = {
 			const member = meme.author.onDiscord ? (await client.users.fetch(meme.author.name)) : undefined;
 			const embed = new client.embed()
 				.setTitle(meme.name)
-				.setFooter(meme.description + ' | Added By: ' + (meme.adder || 'Unknown'))
+				.setFooter(meme.description + ' | Added By: ' + (meme.adder || 'Unknown') + (meme.timestamp ? (` | ${client.formatTime(Date.now() - meme.timestamp, 1, { longNames: (!meme.adder || meme.adder === 'Self') })} ago`) : ''))
 				.setColor(color)
 			if (meme.url && meme.url.startsWith('http')) embed.setImage(meme.url);
 			if (member) {
