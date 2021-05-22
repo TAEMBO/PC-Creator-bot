@@ -339,52 +339,100 @@ client.on('messageDelete', async message => {
 
 // suggestions, starboard wrong emoji removal
 client.on('raw', async e => {
-	if (['MESSAGE_DELETE', 'TYPING_START', 'MESSAGE_CREATE', 'MESSAGE_UPDATE'].includes(e.t)) return;
-	if (e.t === 'MESSAGE_REACTION_ADD') {
-		if (e.d.guild_id !== client.config.mainServer.id) return;
-		if (e.d.channel_id === client.config.mainServer.channels.suggestions) {
-			if (!['✅', '❌'].includes(e.d.emoji.name)) {
-				const channel = client.channels.resolve(e.d.channel_id);
-				const message = await channel.messages.fetch(e.d.message_id);
-				const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
-				reaction.remove();
-			}
-		} else if (e.d.channel_id === client.config.mainServer.channels.starboard) {
-			if (e.d.emoji.name !== '⭐') {
-				const channel = client.channels.resolve(e.d.channel_id);
-				const message = await channel.messages.fetch(e.d.message_id);
-				const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
-				reaction.remove();
-			}
+	if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(e.t)) return;
+	if (e.d.guild_id !== client.config.mainServer.id) return;
+
+	async function suggestions() {
+		if (e.d.channel_id !== client.config.mainServer.channels.suggestions) return;
+		const channel = client.channels.resolve(e.d.channel_id);
+		const message = await channel.messages.fetch(e.d.message_id);
+
+		// wrong emoji
+		if (e.t === 'MESSAGE_REACTION_ADD' && !['✅', '❌'].includes(e.d.emoji.name)) {
+			const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
+			return reaction.remove();
 		}
-		const user = await client.users.fetch(e.d.user_id);
-		const reactionMessage = await client.channels.cache.get(e.d.channel_id).messages.fetch(e.d.message_id);
-		if (e.d.emoji.name !== '⭐' || user.bot) return;
-		if ((reactionMessage.author.id === user.id || reactionMessage.embeds[0]?.footer?.text.includes(user.id)) && Math.random() < 7 / 7 && !client.selfStarAllowed) {
-			console.log(`User starred their own message. starrer: ${user.id}, message sender: ${reactionMessage.author.id}, message footer: ${reactionMessage.embeds[0]?.footer?.text}`);
-			return reactionMessage.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 20000));
+
+		// suggestion embed color
+		let upvotes = message.reactions.resolve('✅');
+		let downvotes = message.reactions.resolve('❌');
+		console.log('SUGGESTION EMBED COLOR\nupvotes', { count: upvotes?.count, name: upvotes?._emoji?.name}, 'downvotes', { count: downvotes?.count, name: downvotes?._emoji?.name}, 'ratio', upvotes?.count / downvotes?.count, 'upvotes - 1 =', upvotes?.count - 1, 'downvotes - 1 =', downvotes?.count - 1);
+
+		upvotes = upvotes?.count - 1;
+		downvotes = downvotes?.count - 1;
+
+		if (typeof upvotes !== 'number' || typeof downvotes !== 'number' || isNaN(upvotes) || isNaN(downvotes)) return;
+		const embed = message.embeds[0];
+
+		function setColor(newColor) {
+			if (embed.hexColor === newColor) return;
+			embed.setColor(newColor);
+			return message.edit(embed);
 		}
-		if (e.d.guild_id !== client.config.mainServer.id) return;
-		if (e.d.channel_id === client.config.mainServer.channels.starboard) {
-			if (!reactionMessage.embeds[0]) return;
-			const footer = reactionMessage.embeds[0].footer.text;
-			client.starboard.increment({ message: { id: footer.slice(4, footer.indexOf(',')) } });
-		} else {
-			client.starboard.increment({ message: reactionMessage });
+
+		if (upvotes / downvotes >= 18) { /* breakthrough, 18 */
+			return setColor('#0420bf');
 		}
-	} else if (e.t === 'MESSAGE_REACTION_REMOVE') {
-		if (e.d.guild_id !== client.config.mainServer.id) return;
-		const user = await client.users.fetch(e.d.user_id);
-		const reactionMessage = await client.channels.cache.get(e.d.channel_id).messages.fetch(e.d.message_id);
-		if (e.d.emoji.name !== '⭐' || user.bot || ((reactionMessage.author.id === user.id || reactionMessage.embeds[0]?.footer?.text.includes(user.id)) && !client.selfStarAllowed)) return; // own message or wrong
-		if (e.d.channel_id === client.config.mainServer.channels.starboard) {
-			if (!reactionMessage.embeds[0]) return;
-			const footer = reactionMessage.embeds[0].footer.text;
-			client.starboard.decrement({ message: { id: footer.slice(4, footer.indexOf(',')) } });
-		} else {
-			client.starboard.decrement({ message: reactionMessage});
+		if (upvotes / downvotes >= 11.5) { /* fantastic, 11.5 */
+			return setColor('#1150cf');
 		}
+		if (upvotes / downvotes >= 7) { /* good, 7 */
+			return setColor('#2f7aeb');
+		}
+		if (upvotes / downvotes <= 1 / 6) { /* bad, 1/6 */
+			return setColor('#355057');
+		}
+		return setColor('#3C9AF1');
 	}
+	suggestions();
+
+	async function starboard() {
+		if (e.t === 'MESSAGE_REACTION_ADD') {
+			const channel = client.channels.resolve(e.d.channel_id);
+			const message = await channel.messages.fetch(e.d.message_id);
+
+			// #starboard wrong emoji 
+			if (e.d.emoji.name !== '⭐' && e.d.channel_id === client.config.mainServer.channels.starboard) {
+				const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
+				return reaction.remove();
+			}
+
+			// #starboard star reactions
+			const user = await client.users.fetch(e.d.user_id);
+			if (e.d.emoji.name !== '⭐' || user.bot) return;
+
+			// starred own message
+			if ((message.author.id === user.id || message.embeds[0]?.footer?.text.includes(user.id)) && Math.random() < 4 / 7 && !client.selfStarAllowed) {
+				return message.channel.send(user.toString() + ', You can\'t star your own message.').then(x => setTimeout(() => x.delete(), 20000));
+			}
+
+			// star increment
+			if (e.d.channel_id === client.config.mainServer.channels.starboard) {
+				if (!message.embeds[0]) return;
+				const footer = message.embeds[0].footer.text;
+				client.starboard.increment({ message: { id: footer.slice(4, footer.indexOf(',')) } });
+			} else {
+				client.starboard.increment({ message });
+			}
+		} else if (e.t === 'MESSAGE_REACTION_REMOVE') {
+			const message = await client.channels.cache.get(e.d.channel_id).messages.fetch(e.d.message_id);
+			const user = await client.users.fetch(e.d.user_id);
+
+			// decrement if self starring is not allowed and a person (not bot) removed reaction star
+			if (e.d.emoji.name !== '⭐' || user.bot || ((message.author.id === user.id || message.embeds[0]?.footer?.text.includes(user.id)) && !client.selfStarAllowed)) return;
+
+			// decrement
+			if (e.d.channel_id === client.config.mainServer.channels.starboard) {
+				if (!message.embeds[0]) return;
+				const footer = message.embeds[0].footer.text;
+				client.starboard.decrement({ message: { id: footer.slice(4, footer.indexOf(',')) } });
+			} else {
+				client.starboard.decrement({ message });
+			}
+		}
+		
+	}
+	starboard();
 });
 
 // give access to #voice-chat-text to members when they join vc
@@ -404,7 +452,6 @@ client.on("message", async (message) => {
 		if (client.games.some(x => x === message.author.tag)) return;
         const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
         const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
-		if (!channel || !pcCreatorServer) return console.log(`could not find channel ${client.config.mainServer.channels.dmForwardChannel} or guild ${client.config.mainServer.id}`);
         const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
         const memberOfPccs = !!guildMemberObject;
         const embed = new client.embed()
@@ -439,26 +486,23 @@ client.on("message", async (message) => {
 			if (commandFile.cooldown) {
 				const member = client.cooldowns.get(message.author.id);
 				if (member) {
-					const commandCooldownForUser = client.cooldowns.get(message.author.id).get(commandFile.name);
-					if (commandCooldownForUser) {
-						if (commandCooldownForUser > Date.now()) {
-							const cooldownMention = await message.channel.send(`You need to wait ${Math.ceil((commandCooldownForUser - Date.now()) / 1000)} seconds until you can use this command again.`);
-							if (message.channel.id === client.config.mainServer.channels.suggestions) {
-								setTimeout(async () => {
-									await message.delete();
-									await cooldownMention.delete();
-								}, 20000);
-							}
-							return;
-						} else {
-							client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
+					if (client.cooldowns.get(message.author.id).get(commandFile.name) > Date.now()) {
+						const cooldownMention = await message.channel.send(`You need to wait ${Math.ceil((commandCooldownForUser - Date.now()) / 1000)} seconds until you can use this command again.`);
+						if (message.channel.id === client.config.mainServer.channels.suggestions) {
+							setTimeout(async () => {
+								await message.delete();
+								await cooldownMention.delete();
+							}, 20000);
 						}
+						return;
 					} else {
 						client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
 					}
 				} else {
-					client.cooldowns.set(message.author.id, new client.collection())
-					client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
+					if (!client.config.eval.whitelist.includes(message.author.id)) {
+						client.cooldowns.set(message.author.id, new client.collection())
+						client.cooldowns.get(message.author.id).set(commandFile.name, Date.now() + (commandFile.cooldown * 1000))
+					}
 				}
 			}
 
@@ -487,7 +531,7 @@ client.on("message", async (message) => {
 		if (message.content.toLowerCase().includes("uwu")) {
 			message.reply("You received an honorary ban!");
 		}
-		if (message.author.id === '155149108183695360' && ['was muted', 'was banned'].some(x => message.embeds[0]?.description?.includes(x))) {
+		if (message.author.id === '155149108183695360' && ['was muted', 'was banned', 'has been warned'].some(x => message.embeds[0]?.description?.includes(x))) {
 			message.channel.send(':partying_face: :tada:');
 		}
 		// do not remove titanus
