@@ -3,10 +3,12 @@ const client = new Discord.Client({disableEveryone: true});
 const modmailClient = new Discord.Client({ disableEveryone: true });
 const fs = require('fs');
 const path = require('path');
-client.config = require("./config.json");
-if (!client.config.token && !client.config.modmailBotToken) {
+try {
 	client.config = require("./config-test.json");
 	console.log('Using ./config-test.json');
+} catch (error) {
+	client.config = require("./config.json");
+	console.log('Using ./config.json');
 }
 client.prefix = client.config.prefix;
 client.on("ready", async () => {
@@ -43,7 +45,7 @@ Object.assign(client, {
 	embedColor: 3971825,
 	starLimit: 3,
 	selfStarAllowed: false
-});
+}, require('./tokens.json'));
 
 // meme approval queue
 client.memeQueue = new client.collection();
