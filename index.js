@@ -45,7 +45,8 @@ Object.assign(client, {
 	embedColor: 3971825,
 	starLimit: 3,
 	selfStarAllowed: false
-}, require('./tokens.json'));
+});
+Object.assign(client.config, require('./tokens.json'));
 
 // meme approval queue
 client.memeQueue = new client.collection();
