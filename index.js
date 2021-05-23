@@ -10,7 +10,6 @@ try {
 	client.config = require("./config.json");
 	console.log('Using ./config.json');
 }
-client.tokens = require("./tokens.json");
 client.prefix = client.config.prefix;
 client.on("ready", async () => {
 	setInterval(async () => {
@@ -684,8 +683,8 @@ modmailClient.on('message', message => {
 });
 
 if (client.config.botSwitches.pccb) {
-	client.login(client.tokens.token);
+	client.login(client.config.token);
 }
 if (client.config.botSwitches.modmail) {
-	modmailClient.login(client.tokens.modmailBotToken);
+	modmailClient.login(client.config.modmailBotToken);
 }
