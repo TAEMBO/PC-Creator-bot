@@ -358,10 +358,10 @@ client.on('raw', async e => {
 		// suggestion embed color
 		let upvotes = message.reactions.resolve('✅');
 		let downvotes = message.reactions.resolve('❌');
-		console.log('SUGGESTION EMBED COLOR\nupvotes', { count: upvotes?.count, name: upvotes?._emoji?.name}, 'downvotes', { count: downvotes?.count, name: downvotes?._emoji?.name}, 'ratio', upvotes?.count / downvotes?.count, 'upvotes - 1 =', upvotes?.count - 1, 'downvotes - 1 =', downvotes?.count - 1);
+		console.log('SUGGESTION EMBED COLOR\nupvotes', { count: upvotes?.count, name: upvotes?._emoji?.name}, 'downvotes', { count: downvotes?.count, name: downvotes?._emoji?.name}, 'ratio', upvotes?.count / downvotes?.count);
 
-		upvotes = upvotes?.count - 1;
-		downvotes = downvotes?.count - 1;
+		upvotes = upvotes?.count;
+		downvotes = downvotes?.count;
 
 		if (typeof upvotes !== 'number' || typeof downvotes !== 'number' || isNaN(upvotes) || isNaN(downvotes)) return;
 		const embed = message.embeds[0];
@@ -375,13 +375,13 @@ client.on('raw', async e => {
 		if (upvotes / downvotes >= 18) { /* breakthrough, 18 */
 			return setColor('#0420bf');
 		}
-		if (upvotes / downvotes >= 11.5) { /* fantastic, 11.5 */
+		if (upvotes / downvotes >= 12) { /* fantastic, 12 */
 			return setColor('#1150cf');
 		}
-		if (upvotes / downvotes >= 7) { /* good, 7 */
+		if (upvotes / downvotes >= 6) { /* good, 6 */
 			return setColor('#2f7aeb');
 		}
-		if (upvotes / downvotes <= 1 / 6) { /* bad, 1/6 */
+		if (upvotes / downvotes <= 2 / 7) { /* bad, 2/7 */
 			return setColor('#355057');
 		}
 		return setColor('#3C9AF1');
