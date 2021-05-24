@@ -602,7 +602,7 @@ modmailClient.on('message', message => {
 			return;
 		}
 		const caseId = (Date.now() + '').slice(0, -5);
-		const unimportant = message.content.toLowerCase().startsWith('[unimportant]');
+		const unimportant = message.content.toLowerCase().startsWith('[unimportant]') || message.content.toLowerCase().startsWith('unimportant');
 		message.channel.send(`ModMail received! :white_check_mark:\nWait for a reply. If you\'re reporting a user, send additional messages including the user ID of the user you\'re reporting, screenshots and message links. All messages will be forwarded to a moderator.\n\`Case ID: ${caseId}\``);
 		modmailClient.threads.set(message.author.id, { messages: [], caseId, startTime: Date.now() });
 		modmailChannel.send(`${unimportant ? '' : client.config.mainServer.staffRoles.map(x => '<@&' + client.config.mainServer.roles[x] + '>').join(' ')}\n\`Case ID: ${caseId}\` New ModMail from ${message.author.toString()} (${message.author.tag}). A communication portal has been opened for ${unimportant ? '20' : '10'} minutes.\nRequest extra time with \`et ${caseId}\`\nReply with \`rpl ${caseId} [message]\`\nEnd ModMail with \`end ${caseId} [reason]\`\nModMail Content: ${message.content + '\n' + (message.attachments.first()?.url || '')}`);
@@ -616,37 +616,35 @@ modmailClient.on('message', message => {
 			if (modReply.content.startsWith('et')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which ModMail needs extra time');
 				if (!replyCaseId === caseId) return; // replied to different convo than this
 				collectorEndTimestamp = Date.now() + 10*60*1000;
-				modmailChannel.send('Extra time granted. The communication portal will close in 10 minutes.');
 				timeWarning = false;
+				return modmailChannel.send('Extra time granted. The communication portal will close in 10 minutes.');
 			} else if (modReply.content.startsWith('rpl')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which ModMail you want to reply to');
 				if (!replyCaseId === caseId) return; // replied to different convo than this
 				const reply = args.slice(2).join(' ') + '\n' + (modReply.attachments.first()?.url || '');
-				message.channel.send(`:warning: Reply from ${modReply.member.roles.highest.name} ${modReply.author.tag}: ${reply}`);
+				if (reply.trim().length === 0) return modReply.reply(`\`Case ID: ${caseId}\` Your reply needs to contain text or an attachment. Reply not forwarded.`);
 				modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}): ${args.slice(2).join(' ') + (modReply.attachments.first()?.url ? '[Attachment]' : '')}`); // R = recipient, M = moderator
-				modmailChannel.send(`\`Case ID: ${caseId}\` Reply forwarded.`);
+				message.channel.send(`:warning: Reply from ${modReply.member.roles.highest.name} ${modReply.author.tag}: ${reply}`);
+				return modmailChannel.send(`\`Case ID: ${caseId}\` Reply forwarded.`);
 			} else if (modReply.content.startsWith('end')) {
 				const args = modReply.content.split(' ');
 				const replyCaseId = args[1];
-				if (!replyCaseId) return modmailChannel.send('You need to add a case id so its clear which ModMail session you want to end');
 				if (!replyCaseId === caseId) return; // replied to different convo than this
 				const reason = args.slice(2).join(' ');
-				message.channel.send(`:x: ${modReply.member.roles.highest.name} ${modReply.author.tag} has ended this ModMail session with reason: ${reason}`);
-				await modmailChannel.send(`\`Case ID: ${caseId}\` ModMail session has closed.`);
-				modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}) Ended session: ${reason}`); // R = recipient, M = moderator
-				modReplyCollector.stop();
+				message.channel.send(`:x: ${modReply.member.roles.highest.name} ${modReply.author.tag} has ended this ModMail session with${reason ? ` reason: ${reason}` : 'out a reason.'}`);
+				await modmailChannel.send(`\`Case ID: ${caseId}\` ModMail session has been closed${reason ? '' : ' without a reason'}.`);
+				modmailClient.threads.get(message.author.id).messages.push(`${summaryTimestamp()} M (${modReply.author.username}) Ended session. Reason: ${reason}`); // R = recipient, M = moderator
+				return modReplyCollector.stop();
 			}
 		});
 
 		const interval = setInterval(() => {
 			if (Date.now() > collectorEndTimestamp) {
 				modReplyCollector.stop();
-				modmailChannel.send(`\`Case ID: ${caseId}\` ModMail session has closed.`);
+				modmailChannel.send(`\`Case ID: ${caseId}\` ModMail session has closed. Moderator, please contact Recipient personally.`);
 			} else if (Date.now() + 60*1000 > collectorEndTimestamp && !timeWarning) {
 				modmailChannel.send(`\`Case ID: ${caseId}\` Portal closing in 1 minute.`);
 				timeWarning = true;
