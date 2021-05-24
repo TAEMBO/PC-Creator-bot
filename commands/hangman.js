@@ -155,5 +155,6 @@ module.exports = {
 	},
 	name: 'hangman',
 	description: 'Play the hangman game with other Discord users',
-	cooldown: 60
+	cooldown: 60,
+	category: 'Fun'
 };

@@ -25,5 +25,6 @@ module.exports = {
 	},
 	name: 'piglatin',
 	description: 'Translates text into Pig Latin',
-	usage: ['text']
+	usage: ['text'],
+	category: 'Fun'
 };
