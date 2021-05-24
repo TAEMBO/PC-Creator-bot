@@ -39,8 +39,8 @@ Object.assign(client, {
 	},
 	memberCount_LastGuildFetchTimestamp: 0,
 	helpDefaultOptions: {
-		parts: ['name', 'usage', 'shortDescription', 'alias'],
-		titles: ['alias']
+		insertEmpty: false,
+		parts: ['name', 'usage', 'description', 'alias']
 	},
 	embedColor: 3971825,
 	starLimit: 3,
