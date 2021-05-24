@@ -29,5 +29,6 @@ module.exports = {
 	name: 'starboardstats',
 	description: 'See statistics from starboard',
 	alias: ['sbs'],
-	cooldown: 30
+	cooldown: 30,
+	category: 'Fun'
 };

@@ -8,6 +8,7 @@ module.exports = {
 	},
 	name: 'block',
 	usage: ['userID or mention'],
-	description: 'End subscription of forwarded DM messages by this user. Also disables Modmail.',
+	description: 'Block user from sending DMs to the bot or ModMail. Used as a punishment for users who abuse the aforementioned entities.',
+	shortDescription: 'Block user from DMing bot.',
 	category: 'Moderation'
 };

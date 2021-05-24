@@ -1,7 +1,8 @@
 module.exports = { 
 	run: (client, message, args) => {
-		message.channel.send(`Ping: **${client.ws.ping}ms**`);
+		message.channel.send(`WebSocket Latency: **${client.ws.ping}ms**`);
 	},
 	name: 'ping',
-	description: 'Shows amount of time it takes for the bot to respond',
+	description: 'Average latency of bot client\'s shards\' last heartbeat from sending to ack in milliseconds. No it\'s not _your_ ping.',
+	shortDescription: 'Average Websocket latency'
 };

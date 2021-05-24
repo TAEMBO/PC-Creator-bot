@@ -1,5 +1,6 @@
 module.exports = {
 	run: (client, message, args) => {
+		if (!args[1]) return message.channel.send(`You need to search for a GPU with \`${client.prefix}gpuamd [gpu name]\``);
 		if (args[1].toUpperCase() === '6800') {
 			message.channel.send({
 				embed: {
@@ -75,5 +76,6 @@ module.exports = {
 		} 
 	},
 	name: 'gpuamd',
+	usage: ['gpu name'],
 	description: 'Info about AMD GPUs'
 };

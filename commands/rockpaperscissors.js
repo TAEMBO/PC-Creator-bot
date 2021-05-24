@@ -63,5 +63,6 @@ module.exports = {
 	name: 'rockpaperscissors',
 	description: 'Play rock paper scissors against another person',
 	alias: ['rps'],
-	cooldown: 28
+	cooldown: 28,
+	category: 'Fun'
 };

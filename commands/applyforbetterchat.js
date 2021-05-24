@@ -7,7 +7,7 @@ module.exports = {
 		const role = message.guild.roles.cache.get(client.config.mainServer.roles.levelOne);
 		if (age && messages) {
 			if (member.roles.cache.has(role.id)) return message.channel.send(`${member.user.id === message.author.id ? 'You' : 'They'} already have the **${role.name}** role, but since you asked, heres ${member.user.id === message.author.id ? 'your' : 'their'} progress:\n${messages ? ':white_check_mark:' : ':x:'} ${client.userLevels.getUser(member.user.id)}/${client.userLevels._requirements.messages} messages\n${age ? ':white_check_mark:' : ':x:'} ${Math.floor((Date.now() - member.joinedTimestamp) / 1000 / 60 / 60 / 24)}d/${Math.floor(client.userLevels._requirements.age / 1000 / 60 / 60 / 24)}d time on server.`);
-			await message.channel.send(`${member.user.id === message.author.id ? 'You' : 'They'}\'re eligible for access to the **${role.name}** role.`);
+			await message.channel.send(`${member.user.id === message.author.id ? 'You' : 'They'}\'re eligible for access to the **${role.name}** role.${member.user.id === message.author.id ? '' : ` Their progress:\n${messages ? ': white_check_mark: ' : ': x: '} ${client.userLevels.getUser(member.user.id)}/${client.userLevels._requirements.messages} messages\n${age ? ': white_check_mark: ' : ': x:'} ${Math.floor((Date.now() - member.joinedTimestamp) / 1000 / 60 / 60 / 24)}d/${Math.floor(client.userLevels._requirements.age / 1000 / 60 / 60 / 24)}d time on server.`}`);
 			if (message.author.id === member.user.id) {
 				await member.roles.add(role.id);
 				message.channel.send(`You\'ve received the **${role.name}** role. You can now access <#${client.config.mainServer.channels.betterGeneral}>`);
