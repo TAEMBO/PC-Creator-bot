@@ -15,8 +15,8 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 		message.channel.send(embed)
 			// add reactions to go forward or backward pages
 			.then(async botMessage => {
-				let endTimestamp = Date.now() + 90000;
-				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id, { time: 240000 });
+				let endTimestamp = Date.now() + 60000;
+				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id);
 				collector.on('collect', async (reaction, user) => {
 					endTimestamp = Date.now() + 90000;
 					if (reaction.emoji.name === '◀️') {
@@ -57,8 +57,7 @@ module.exports = {
     run: (client, message, args) => {
 		// if they ask for a specific page (number)
 		if (parseInt(args[1])) {
-			console.log(client.commands.pages[parseInt(args[1]) - 1]);
-			if (!client.commands.pages[parseInt(args[1]) - 1]) return message.channel.send('That page doesnt exist');
+			if (!client.commands.pages[parseInt(args[1]) - 1]) return message.channel.send('That page number doesn\'t exist.');
 			return helpPage(parseInt(args[1]) - 1, client, message, args);
 		}
 		// category (name)
@@ -70,7 +69,7 @@ module.exports = {
 		if (command) {
 			const embed = new client.embed()
 				.setTitle(`__Commands: ${command.name}__`)
-				.setDescription(client.commandInfo(client, command, { insertEmpty: true, parts: ['name', 'usage', 'description', 'alias', 'category', 'autores'] }))
+				.setDescription(client.commandInfo(client, command, { insertNewline: true, parts: ['name', 'usage', 'description', 'shortDescription', 'alias', 'category', 'autores'], titles: ['name', 'usage', 'shortDescription', 'alias', 'category', 'autores'] }))
 				.setColor(3971825)
 			return message.channel.send(embed);
 		} 
