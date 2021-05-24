@@ -33,6 +33,16 @@ module.exports = {
 				meme.description = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!meme.description) return failed();
 
+				await message.channel.send('Send a permanent URL to the meme image. (60s)');
+				const urlMessage = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first();
+				if (urlMessage.content) {
+					if (!['jpg', 'png', 'webp', 'gif'].some(x => urlMessage.content.endsWith(x))) {
+						return message.channel.send('Your log-headed ass didn\'t notice that that\'s not an image url. Your mishap has terminated the `meme add` process. Thanks.');
+					}
+					meme.url = urlMessage.content;
+				} else meme.url = urlMessage.attachments.first()?.url;
+				if (!meme.url) return failed();
+
 				await message.channel.send('Is the creator of this meme a member of the PC Creator Discord server? Answer with y/n. (30s)');
 				const onDiscord = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 30000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!onDiscord) return failed();
@@ -52,17 +62,6 @@ module.exports = {
 					return failed();
 				}
 				if (!meme.author.name) return failed();
-
-				await message.channel.send('Send a permanent URL to the meme image. (120s)');
-				const urlMessage = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first();
-				if (urlMessage.content) {
-					if (!['jpg', 'png', 'webp', 'gif'].some(x => urlMessage.content.endsWith(x))) {
-						return message.channel.send('Your log-headed ass didn\'t notice that that is not an image url. Your mishap has terminated the `meme add` process. Thanks.');
-					}
-					meme.url = urlMessage.content;
-				}
-				else meme.url = urlMessage.attachments.first()?.url;
-				if (!meme.url) return failed();
 
 				const highestKey = Math.max(...memes.keyArray().map(x => parseInt(x)).filter(x => !isNaN(x)), ...client.memeQueue.keyArray().map(x => parseInt(x)), 0) + 2;
 				const allNumbers = Array.from(Array(highestKey).keys()).slice(1);
@@ -163,7 +162,9 @@ module.exports = {
 		}
 	},
 	name: 'meme',
-	description: 'Works like xkcd, images are given a number and you can view a specific image if you know the number. This command is for memes made by the PCC community',
+	description: 'Works like xkcd, images are given a number and you can view a specific image if you know the number. This command is for memes made by the PCC community.',
+	shortDescription: 'View user-generated memes.',
 	usage: ['key/"add"/"review"'],
-	alias: ['memes']
+	alias: ['memes'],
+	category: 'Fun'
 };
