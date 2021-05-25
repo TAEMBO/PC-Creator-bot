@@ -31,8 +31,8 @@ module.exports = (client, command, options = { insertNewline: false, parts: [], 
 		e();
 	}
 	if (options.parts.includes('shortDescription')) {
-		if (options.titles.includes('shortDescription')) text += 'Shorter description: ';
 		if (command.shortDescription) {
+			if (options.titles.includes('shortDescription')) text += 'Shorter description: ';
 			text += command.shortDescription;
 			e();
 		} else if (!options.titles.includes('shortDescription') && command.description) {
