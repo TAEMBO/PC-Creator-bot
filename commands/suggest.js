@@ -1,7 +1,7 @@
 module.exports = {
 	run: async (client, message, args) => {
 		if (message.channel.id !== client.config.mainServer.channels.suggestions) {
-			client.cooldowns.get(message.author.id).set('suggest', 0);
+			client.cooldowns.get(message.author.id)?.set('suggest', 0);
 			return message.channel.send(`This command only works in <#${client.config.mainServer.channels.suggestions}>`);
 		}
 		await message.delete();
