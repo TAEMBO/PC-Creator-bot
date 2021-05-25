@@ -12,12 +12,12 @@ module.exports = {
 				},
 				{
 					"name": "Motherboard",
-					"value": "ASOS ROG B450-E",
+					"value": "ASOS MAXIMUS VIII",
 					"inline": true
 				},
 				{
 					"name": "CPU",
-					"value": "RMD A6-9400",
+					"value": "INTOL G3900",
 					"inline": true
 				},
 				{
@@ -42,7 +42,7 @@ module.exports = {
 				},
 				{
 					"name": "Cooler",
-					"value": "DEEPCOL MAXX GTE",
+					"value": "DEEPCOL 15 PWM",
 					"inline": true
 				},
 				{
