@@ -367,25 +367,27 @@ client.on('raw', async e => {
 		if (typeof upvotes !== 'number' || typeof downvotes !== 'number' || isNaN(upvotes) || isNaN(downvotes)) return;
 		const embed = message.embeds[0];
 
-		function setColor(newColor) {
-			if (embed.hexColor === newColor) return;
+		function changeProperties(newColor, newTitle) {
+			if (embed.hexColor === newColor && embed.title === newTitle) return;
 			embed.setColor(newColor);
+			embed.setTitle(newTitle);
 			return message.edit(embed);
 		}
 
-		if (upvotes / downvotes >= 18) { /* breakthrough, 18 */
-			return setColor('#0420bf');
+		if (upvotes / downvotes >= 18) { // breakthrough, 18
+			return changeProperties('#0000d8', 'Breakthrough Suggestion:');
 		}
-		if (upvotes / downvotes >= 12) { /* fantastic, 12 */
-			return setColor('#1150cf');
+		if (upvotes / downvotes >= 12) { // fantastic, 12
+			return changeProperties('#1433f8', 'Fantastic Suggestion:');
 		}
-		if (upvotes / downvotes >= 6) { /* good, 6 */
-			return setColor('#2f7aeb');
+		if (upvotes / downvotes >= 6) { // good, 6
+			return changeProperties('#2b75ff', 'Good Suggestion:');
 		}
-		if (upvotes / downvotes <= 2 / 7) { /* bad, 2/7 */
-			return setColor('#355057');
+		if (upvotes / downvotes <= 2 / 7) { // bad, 2/7
+			return changeProperties('#514e39', 'Suggestion:');
 		}
-		return setColor('#3C9AF1');
+		// normal
+		return changeProperties('#3C9AF1', 'Suggestion:');
 	}
 	suggestions();
 
