@@ -53,14 +53,13 @@ module.exports = {
 		};
 		console.log(pronounBool('you', 'they'));
 		
-		const messageContents = [
-			pronounBool('You', 'They') + (achievedRoles.length > 0 ? ' already have the ' + achievedRoles + ' role(s).' : ' don\'t have any level roles yet.') // show levels roles that user already has, if any
-		];
+		const messageContents = [];
 
 		if (nextRoleReq) { // if user hasnt yet gotten all the level roles
-			messageContents.push(...[ // show them what their next role is
+			messageContents.push(...[ 
+				pronounBool('You', 'They') + (achievedRoles.length > 0 ? ' already have the ' + achievedRoles + ' role(s).' : ' don\'t have any level roles yet.'), // show levels roles that user already has, if any
 				pronounBool('Your', 'Their') + ' next level role is **' + nextRole.name + '** and here\'s ' + pronounBool('your', 'their') + ' progress:',
-				progressText()
+				progressText() // show them what their next role is
 			]);
 			if (nextRoleReq.eligible) { // if theyre eligible for their next role
 				messageContents.push(...[
