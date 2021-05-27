@@ -114,10 +114,7 @@ client.games = new Discord.Collection();
 // userLevels
 client.userLevels = new database('./userLevels.json', 'object');
 Object.assign(client.userLevels, {
-	_requirements: {
-		age: 1000 * 60 * 60 * 24 * 30 * 2,
-		messages: 1000
-	},
+	_requirements: client.config.mainServer.roles.levels,
 	incrementUser(userid) {
 		const amount = this._content[userid];
 		if (amount) this._content[userid]++;
@@ -130,9 +127,24 @@ Object.assign(client.userLevels, {
 	hasUser(userid) {
 		return !!this._content[userid];
 	},
-	getEligible(userid) {
-		const amount = this.getUser(userid) || 0;
-		return amount >= this._requirements.messages;
+	getEligible(guildMember) {
+		const age = (Date.now() - guildMember.joinedTimestamp) / 1000 / 60 / 60 / 24;
+		const messages = this.getUser(guildMember.user.id);
+		const roles = Object.entries(this._requirements).map((x, key) => {
+			return {
+				role: {
+					level: key,
+					id: x[1].id,
+					has: guildMember.roles.cache.has(x[1].id)
+				},
+				requirements: {
+					age: x[1].age,
+					messages: x[1].messages
+				},
+				eligible: (age >= x[1].age) && (messages >= x[1].messages),
+			}
+		});
+		return { age, messages, roles };
 	},
 });
 client.userLevels.initLoad().intervalSave(300000);
