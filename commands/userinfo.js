@@ -1,6 +1,6 @@
 module.exports = {
 	run: async (client, message, args) => {
-		const member = args[1] ? message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => {})) : message.member;
+		const member = args[1] ? message.mentions.members?.first() || (await client.getMember(message.guild, args.slice(1).join(' ')).catch(() => undefined)) : message.member;
 		if (!member) return message.channel.send('You failed to mention a user from this server.');
 		const embed = new client.embed()
 			.setTitle(`User info: ${member.user.tag}`)
