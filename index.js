@@ -322,12 +322,12 @@ Object.assign(client.starboard, {
 			description.push(text);
 		});
 		data.message.attachments.forEach(attachment => {
-			if (['png', 'jpg', 'webp', 'gif'].some(x => attachment.url?.endsWith(x)) && !imageSet) {
+			if (['png', 'jpg', 'webp', 'gif', 'jpeg'].some(x => attachment.url?.endsWith(x)) && !imageSet) {
 				embed.setImage(data.message.attachments.first().url);
 				imageSet = true;
 			} else if (attachment.url) {
 				let type = 'File';
-				if (['png', 'jpg', 'webp'].some(x => attachment.url?.endsWith(x))) type = 'Image';
+				if (['png', 'jpg', 'webp', 'jpeg'].some(x => attachment.url?.endsWith(x))) type = 'Image';
 				if (['mp4', 'mov', 'webm'].some(x => attachment.url?.endsWith(x))) type = 'Video';
 				if (attachment.url?.endsWith('gif')) type = 'Gif';
 				description.push(`[Embed] ${type}: [${attachment.name}](${attachment.url})`);
@@ -380,7 +380,7 @@ client.on('raw', async e => {
 		const embed = message.embeds[0];
 
 		function changeProperties(newColor, newTitle) {
-			if (embed.hexColor === newColor && embed.title === newTitle) return;
+			if (embed.hexColor === newColor.toLowerCase() && embed.title === newTitle) return;
 			embed.setColor(newColor);
 			embed.setTitle(newTitle);
 			return message.edit(embed);
@@ -392,7 +392,7 @@ client.on('raw', async e => {
 		if (upvotes / downvotes >= 12) { // fantastic, 12
 			return changeProperties('#1433f8', 'Fantastic Suggestion:');
 		}
-		if (upvotes / downvotes >= 6) { // good, 6
+		if (upvotes / downvotes >= 2) { // good, 6
 			return changeProperties('#2b75ff', 'Good Suggestion:');
 		}
 		if (upvotes / downvotes <= 2 / 7) { // bad, 2/7
@@ -479,7 +479,7 @@ client.on("message", async (message) => {
             .setTimestamp(Date.now());
 		let messageAttachmentsText = '';
 		message.attachments.forEach(attachment => {
-			if (!embed.image && ['png', 'jpg', 'webp', 'gif'].some(x => attachment.name.endsWith(x))) embed.setImage(attachment.url);
+			if (!embed.image && ['png', 'jpg', 'webp', 'gif', 'jpeg'].some(x => attachment.name.endsWith(x))) embed.setImage(attachment.url);
 			else messageAttachmentsText += `[${attachment.name}](${attachment.url})\n`;
 		});
 		if (messageAttachmentsText.length > 0) embed.addField('Message Attachments', messageAttachmentsText.trim());

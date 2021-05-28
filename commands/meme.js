@@ -36,7 +36,7 @@ module.exports = {
 				await message.channel.send('Send a permanent URL to the meme image. (60s)');
 				const urlMessage = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first();
 				if (urlMessage.content) {
-					if (!['jpg', 'png', 'webp', 'gif'].some(x => urlMessage.content.endsWith(x))) {
+					if (!['jpg', 'png', 'webp', 'gif', 'jpeg'].some(x => urlMessage.content.endsWith(x))) {
 						return message.channel.send('Your log-headed ass didn\'t notice that that\'s not an image url. Your mishap has terminated the `meme add` process. Thanks.');
 					}
 					meme.url = urlMessage.content;
