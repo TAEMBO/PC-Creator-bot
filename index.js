@@ -392,7 +392,7 @@ client.on('raw', async e => {
 		if (upvotes / downvotes >= 12) { // fantastic, 12
 			return changeProperties('#1433f8', 'Fantastic Suggestion:');
 		}
-		if (upvotes / downvotes >= 2) { // good, 6
+		if (upvotes / downvotes >= 6) { // good, 6
 			return changeProperties('#2b75ff', 'Good Suggestion:');
 		}
 		if (upvotes / downvotes <= 2 / 7) { // bad, 2/7
