@@ -9,6 +9,14 @@ module.exports = {
 					"color": 7780608
 				}
 			})
+		} else if (args[1].toUpperCase() === '3080TI') {
+			message.channel.send({
+				embed: {
+					"title": "NVIDIA GeForce RTX 3080 Ti FE",
+					"description": "**Memory Interface**: 384-bit\n**Memory size**:  12GB\n**Memory type**: GDDR6X\n**Power connectors**: 12-pin\n**TDP**: 350w\n**MSRP**: $1199 USD",
+					"color": 7780608
+				}
+            })
 		} else if (args[1].toUpperCase() === '3080') {
 			message.channel.send({
 				embed: {
@@ -17,6 +25,14 @@ module.exports = {
 					"color": 7780608
 				}
             })
+		} else if (args[1].toUpperCase() === '3070TI') {
+			message.channel.send({
+				embed: {
+					"title": "NVIDIA GeForce RTX 3070 Ti FE",
+					"description": "**Memory Interface**: 256-bit\n**Memory size**:  8GB\n**Memory type**: GDDR6X\n**Power connectors**: 12-pin\n**TDP**: 290w\n**MSRP**: $599 USD",
+					"color": 7780608
+				}
+			})
 		} else if (args[1].toUpperCase() === '3070') {
 			message.channel.send({
 				embed: {

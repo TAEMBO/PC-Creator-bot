@@ -1,8 +1,8 @@
 module.exports = {
     run: async (client, message, args) => {
 		const achiever = {
-			id: '828517833440231427',
-			tag: 'SPACE COWBOY :cowboy:#9802'
+			id: '537292814011072522',
+			tag: 'Mihasa#5788'
 		}
 		const embed = new client.embed()
 			.setTitle('__World Record PC__')
