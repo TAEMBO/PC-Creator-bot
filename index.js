@@ -590,12 +590,16 @@ client.on("message", async (message) => {
 				})) match = command;
 			});
 			if (match) {
-				await message.channel.send(`AutoResponse™ was summoned. Running command \`${client.prefix}${match.name}\`...`);
-				try {
-					match.run(client, Object.assign(message, { content: `${client.prefix}${match.name}` }), [match.name]);
-					match.uses ? match.uses++ : match.uses = 1;
-				} catch (error) {
-					return console.log(`An error occured while running command "${match.name}"`, error, error.stack);
+				if (client.userLevels.getUser(message.author.id) > 3) {
+					await message.channel.send(`AutoResponse™ was summoned. Would \`${client.prefix}${match.name}\` help?`);
+				} else {
+					await message.channel.send(`AutoResponse™ was summoned. Running command \`${client.prefix}${match.name}\`...`);
+					try {
+						match.run(client, Object.assign(message, { content: `${client.prefix}${match.name}` }), [match.name]);
+						match.uses ? match.uses++ : match.uses = 1;
+					} catch (error) {
+						return console.log(`An error occured while running command "${match.name}"`, error, error.stack);
+					}
 				}
 			}
 		}
