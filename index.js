@@ -590,7 +590,7 @@ client.on("message", async (message) => {
 				})) match = command;
 			});
 			if (match) {
-				if (client.userLevels.getUser(message.author.id) > 3) {
+				if (client.userLevels.getUser(message.author.id) > 50) {
 					await message.channel.send(`AutoResponse™ was summoned. Would \`${client.prefix}${match.name}\` help?`);
 				} else {
 					await message.channel.send(`AutoResponse™ was summoned. Running command \`${client.prefix}${match.name}\`...`);
