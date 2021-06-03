@@ -1,5 +1,22 @@
 module.exports = {
 	run: async (client, message, args) => {
+		// if args[1] is "stats", show stats
+		if (args[1] === 'stats') {
+			// days since mar 22, 2021 when userlevels was created
+			const timeActive = Math.floor((Date.now() - 1616371200000) / 1000 / 60 / 60 / 24);
+			// messages sent by each user, unordered array
+			const messageCounts = Object.values(client.userLevels._content);
+			const messageCountsTotal = messageCounts.reduce((a, b) => a + b, 0);
+
+			const embed = new client.embed()
+				.setTitle('Level Roles: Stats [BETA]')
+				.setDescription(`Level Roles was created ${timeActive} days ago.\nSince then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server by ${messageCounts.length.toLocaleString('en-US')} users.\nAn average user has sent ${(messageCountsTotal / messageCounts.length).toFixed(1)} messages.\nThe median user has sent ${messageCounts.sort((a, b) => a - b)[Math.round(messageCounts.length / 2) - 1]} messages.\nThe top 1% of users have sent ${((messageCountsTotal.sort((a, b) => a - b).slice(0, Math.round(messageCounts.length / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toFixed(2)}% of messages while Level Roles has existed.`)
+				.addField('Top Users', Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map(x => `<@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n'))
+				.setColor(client.embedColor)
+			message.channel.send(embed);
+			return;
+		}
+
 		// fetch user or user message sender
 		const member = args[1] ? message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => { })) : message.member;
 
