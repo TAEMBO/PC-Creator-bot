@@ -6,12 +6,19 @@ module.exports = {
 			const timeActive = Math.floor((Date.now() - 1616371200000) / 1000 / 60 / 60 / 24);
 			// messages sent by each user, unordered array
 			const messageCounts = Object.values(client.userLevels._content);
+			// amount of users in messageCounts
+			const userCount = messageCounts.length;
+			// total amount of messages sent
 			const messageCountsTotal = messageCounts.reduce((a, b) => a + b, 0);
+			// average messages sent by user
+			const average = messageCountsTotal / userCount;
+			// messages sent by median user
+			const median = messageCounts.sort((a, b) => a - b)[Math.round(userCount / 2) - 1];
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Stats [BETA]')
-				.setDescription(`Level Roles was created ${timeActive} days ago.\nSince then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server by ${messageCounts.length.toLocaleString('en-US')} users.\nAn average user has sent ${(messageCountsTotal / messageCounts.length).toFixed(1)} messages.\nThe median user has sent ${messageCounts.sort((a, b) => a - b)[Math.round(messageCounts.length / 2) - 1]} messages.\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(messageCounts.length / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toFixed(2)}% of messages while Level Roles has existed.`)
-				.addField('Top Users', Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map(x => `<@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n'))
+				.setDescription(`Level Roles was created ${timeActive} days ago.\nSince then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server by ${userCount.toLocaleString('en-US')} users.\nAn average user has sent ${average.toFixed(2)} messages.\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more or as many messages as an average user.\nThe median user has sent ${median} messages.\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toFixed(2)}% of messages while Level Roles has existed.`)
+				.addField('Top Users by Messages Sent', Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map((x, i) => `\`${i + 1}.\` <@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n'))
 				.setColor(client.embedColor)
 			message.channel.send(embed);
 			return;
