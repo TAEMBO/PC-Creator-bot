@@ -115,10 +115,17 @@ client.games = new Discord.Collection();
 client.userLevels = new database('./userLevels.json', 'object');
 Object.assign(client.userLevels, {
 	_requirements: client.config.mainServer.roles.levels,
+	_milestone: 666666,
 	incrementUser(userid) {
 		const amount = this._content[userid];
 		if (amount) this._content[userid]++;
 		else this._content[userid] = 1;
+		// milestone
+		if (this._milestone && Object.values(this._content).reduce((a, b) => a + b, 0) === this._milestone) {
+			const channel = client.channels.resolve('744401969241653298'); // #server-updates
+			if (!channel) return;
+			channel.send(`:tada: Milestone reached! **${this._milestone.toLocaleString('en-US')}** messages have been sent in this server and recorded by Level Roles. :tada:`);
+		}
 		return this;
 	},
 	getUser(userid) {
