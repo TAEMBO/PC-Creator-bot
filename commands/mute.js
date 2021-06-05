@@ -3,7 +3,7 @@ module.exports = {
 		if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
 		let member;
 		let timedOut = false;
-		if (args[1]) member = message.mentions.members?.first() || (await message.guild.members.fetch(args[1]).catch(() => undefined));
+		if (args[1]) member = message.mentions.members?.first() || (await client.getMember(message.guild, args.slice(1).join(' ')).catch(() => undefined));
 		if (!member) {
 			await message.channel.send('Which member would you like to mute? Reply with a mention or a user ID.').then(async x => {
 				await message.channel.awaitMessages(y => y.author.id === message.author.id, { time: 15000, errors: ['time', 'maxProcessed'], maxProcessed: 1 }).then(async z => {

@@ -3,6 +3,7 @@ const client = new Discord.Client({disableEveryone: true});
 const modmailClient = new Discord.Client({ disableEveryone: true });
 const fs = require('fs');
 const path = require('path');
+const database = require('./database.js');
 try {
 	client.config = require("./config-test.json");
 	console.log('Using ./config-test.json');
@@ -53,9 +54,6 @@ client.memeQueue = new client.collection();
 
 // cooldowns
 client.cooldowns = new client.collection();
-
-// database
-const database = require('./database.js');
 
 // tic tac toe statistics database
 client.tictactoeDb = new database('./ttt.json', 'array'); /* players, winner, draw, startTime, endTime */
@@ -115,13 +113,16 @@ client.games = new Discord.Collection();
 client.userLevels = new database('./userLevels.json', 'object');
 Object.assign(client.userLevels, {
 	_requirements: client.config.mainServer.roles.levels,
-	_milestone: 666666,
+	_milestone() {
+		const total = Object.values(this._content || {}).reduce((a, b) => a + b, 0);
+		return [696969, 800000, 1000000].find(x => x >= total) || undefined;
+	},
 	incrementUser(userid) {
 		const amount = this._content[userid];
 		if (amount) this._content[userid]++;
 		else this._content[userid] = 1;
 		// milestone
-		if (this._milestone && Object.values(this._content).reduce((a, b) => a + b, 0) === this._milestone) {
+		if (this._milestone() && Object.values(this._content).reduce((a, b) => a + b, 0) === this._milestone()) {
 			const channel = client.channels.resolve('744401969241653298'); // #server-updates
 			if (!channel) return;
 			channel.send(`:tada: Milestone reached! **${this._milestone.toLocaleString('en-US')}** messages have been sent in this server and recorded by Level Roles. :tada:`);
@@ -200,6 +201,10 @@ client.specsDb.initLoad().intervalSave(120000);
 // dm forward blacklist
 client.dmForwardBlacklist = new database('./dmforwardblacklist.json', 'array');
 client.dmForwardBlacklist.initLoad().intervalSave(180000);
+
+// mutes
+client.mutes = new database('./mutes.json', 'object');
+client.mutes.initLoad();
 
 // command handler
 client.commands = new Discord.Collection();

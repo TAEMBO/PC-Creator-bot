@@ -15,7 +15,7 @@ module.exports = {
 			// messages sent by median user
 			const median = messageCounts.sort((a, b) => a - b)[Math.round(userCount / 2) - 1];
 			// next message count milestone
-			const milestone = client.userLevels._milestone;
+			const milestone = client.userLevels._milestone();
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Stats [BETA]')
