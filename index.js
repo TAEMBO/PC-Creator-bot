@@ -19,6 +19,14 @@ client.on("ready", async () => {
 		});
 	}, 30000);
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
+
+	// event loop, for mutes
+	setInterval(() => {
+		const now = Date.now();
+		Object.entries(client.mutes._content).filter(x => x[1].time <= now).forEach(async x => {
+			client.unmuteMember(client, (await client.guilds.cache.get(client.config.mainServer.id).members.fetch(x[0])));
+		});
+	}, 5000);
 });
 modmailClient.on("ready", async () => {
 	setInterval(async () => {
@@ -388,6 +396,12 @@ client.on("message", async (message) => {
 	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(' ')[0] === client.prefix + x) && !message.author.bot) {
 		message.reply(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 6000));
 		return message.delete();
+	}
+	if (message.mentions.roles.has('571032502181822506')) { // owner role
+		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000}).then(() => {
+			const muteResult = client.muteMember(client, message.member, { time: 1000 * 60 * 5, reason: 'pinged owner role' });
+			messsage.channel.send(muteResult.text);
+		});
 	}
 	if (message.content.startsWith(client.prefix)) {
 		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');

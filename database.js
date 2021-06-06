@@ -13,6 +13,15 @@ class Database {
 		} else if (this._dataType === 'object') {
 			this._content[data] = data1;
 		}
+		return this;
+	}
+	removeData(key) {
+		if (this._dataType === 'array') {
+			this._content.splice(key, 1);
+		} else if (this._dataType === 'object') {
+			delete this._content[key];
+		}
+		return this;
 	}
 	initLoad() {
 		const json = fs.readFileSync(this._path);
