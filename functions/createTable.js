@@ -15,7 +15,7 @@ module.exports = (columnTitles = [], rowsData = [], options = {}, client) => {
 		return text;
 	}).join(''));
 	// big line
-	rows.push('━'.repeat([...columnWidths, ...(columnSeparator.length > 0 ? columnSeparator.map(x => x.length) : [0])].reduce((a, b) => a + b, 0)));
+	rows.push('━'.repeat(rows[0].length));
 	// data
 	// remove unicode
 	rowsData.map(row => {

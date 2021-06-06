@@ -8,7 +8,7 @@ module.exports = async (message, client) => {
 	if (message.content.toLowerCase().includes("uwu")) {
 		message.reply("You received an honorary ban!");
 	}
-	if (message.author.id === '155149108183695360' && ['was muted', 'was banned', 'has been warned'].some(x => message.embeds[0]?.description?.includes(x))) {
+	if (message.author.id === '155149108183695360' /* dyno */ && ['was muted', 'was banned', 'has been warned'].some(x => message.embeds[0]?.description?.includes(x))) {
 		message.channel.send(':partying_face: :tada:');
 	}
 	if (client.config.enableAutoResponse) {

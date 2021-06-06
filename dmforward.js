@@ -1,5 +1,5 @@
 module.exports = async (message, client) => {
-	if (client.dmForwardBlacklist._content.includes(message.author.id)) return;
+	if (client.dmForwardBlacklist._content.includes(message.author.id) || message.author.bot) return;
 	if (client.games.some(x => x === message.author.tag)) return;
 	const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
 	const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
