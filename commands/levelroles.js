@@ -18,7 +18,7 @@ module.exports = {
 			const milestone = client.userLevels._milestone();
 
 			const embed = new client.embed()
-				.setTitle('Level Roles: Stats [BETA]')
+				.setTitle('Level Roles: Stats')
 				.setDescription(`Level Roles was created ${timeActive} days ago.\nSince then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server by ${userCount.toLocaleString('en-US')} users.\nAn average user has sent ${average.toFixed(2)} messages.\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more or as many messages as an average user.\nThe median user has sent ${median} messages.\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toFixed(2)}% of messages while Level Roles has existed.\nThe next message milestone ${milestone ? `is ${milestone.toLocaleString('en-US')} messages and the current progress is ${((messageCountsTotal / milestone) * 100).toFixed(2)}%.` : `doesn\'t exist.`}`)
 				.addField('Top Users by Messages Sent', Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map((x, i) => `\`${i + 1}.\` <@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n'))
 				.setColor(client.embedColor)
@@ -102,7 +102,8 @@ module.exports = {
 		message.channel.send(messageContents.join('\n')); // compile message and send
 	},
 	name: 'levelroles',
-	description: 'Check your eligibility for level roles.',
+	usage: ['?stats'],
+	description: 'Check your eligibility for level roles or see global stats.',
 	alias: ['lrs'],
 	category: 'Moderation'
 };
