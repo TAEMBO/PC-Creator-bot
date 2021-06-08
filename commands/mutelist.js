@@ -27,7 +27,6 @@ module.exports = {
 				x[1].reason.length > 18 ? x[1].reason.slice(0, 15) + '...' : x[1].reason
 			]
 		}).sort((a, b) => a[0] > b[0]);
-		console.log(tableData);
 		const tableText = client.createTable(['User', 'Time left', 'Reason'], tableData, {
 			columnAlign: ['left', 'middle', 'left'],
 			columnSeparator: ['|', '|', '|']
