@@ -405,10 +405,10 @@ client.on("message", async (message) => {
 		return message.delete();
 	}
 	if (message.mentions.roles.has('571032502181822506')) { // owner role
-		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000}).then(async () => {
+		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000, errors: ['time']}).then(async () => {
 			const muteResult = await client.muteMember(client, message.member, { time: 1000 * 60 * 5, reason: 'pinged owner role' });
 			message.channel.send(muteResult.text);
-		});
+		}).catch(() => {});
 	}
 	if (message.content.startsWith(client.prefix)) {
 		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');
