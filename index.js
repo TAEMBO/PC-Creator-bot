@@ -404,7 +404,13 @@ client.on("message", async (message) => {
 		message.reply(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 6000));
 		return message.delete();
 	}
-	if (message.mentions.roles.has('571032502181822506')) { // owner role
+	const mutableRoles = [
+		client.config.mainServer.roles.trialModerator,
+		client.config.mainServer.roles.moderator,
+		client.config.mainServer.roles.administrator,
+		client.config.mainServer.roles.owner
+	];
+	if (message.mentions.roles.some(mentionedRole => mutableRoles.includes(mentionedRole.id))) {
 		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000, errors: ['time']}).then(async () => {
 			const muteResult = await client.muteMember(client, message.member, { time: 1000 * 60 * 5, reason: 'pinged owner role' });
 			message.channel.send(muteResult.text);
