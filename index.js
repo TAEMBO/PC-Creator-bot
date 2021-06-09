@@ -122,8 +122,15 @@ client.userLevels = new database('./userLevels.json', 'object');
 Object.assign(client.userLevels, {
 	_requirements: client.config.mainServer.roles.levels,
 	_milestone() {
+		const milestones = [666666, 696969, 800000, 1000000]; // always keep the previously achived milestone in the array so the progress is correct. here you can stack as many future milestones as youd like
 		const total = Object.values(this._content || {}).reduce((a, b) => a + b, 0);
-		return [696969, 800000, 1000000].find(x => x >= total) || undefined;
+		const next = milestones.find(x => x >= total) || undefined;
+		const previous = milestones[milestones.indexOf(next) - 1] || 0;
+		return {
+			next,
+			previous,
+			progress: (total - previous) / (next - previous)
+		}
 	},
 	incrementUser(userid) {
 		const amount = this._content[userid];
