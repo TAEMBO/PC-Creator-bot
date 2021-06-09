@@ -14,7 +14,7 @@ module.exports = {
 			return message.channel.send(embed);
 		}
 		const embed = new client.embed()
-			.setTitle('Muted Users')
+			.setTitle('Muted Users (only ones muted with `' + client.prefix + 'mute`)')
 			.setColor(client.embedColor)
 		if (Object.keys(client.mutes._content).length === 0) {
 			embed.setDescription('Nobody is currently muted.')
