@@ -21,7 +21,7 @@ module.exports = {
 			.setTimestamp()
 			.setColor(client.embedColor)
 		console.log('sending suggestion embed', embed);
-		const suggestion = await message.channel.send(embed).then(() => console.log('embed successfully sent')).catch(() => console.log('embed send failed'));
+		const suggestion = await message.channel.send({ embed }).then(() => console.log('embed successfully sent')).catch((err) => console.log('embed send failed because', err));
 		await suggestion.react('✅');
 		await suggestion.react('❌');
 	},
