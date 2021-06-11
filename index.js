@@ -320,7 +320,15 @@ Object.assign(client.starboard, {
 				}
 			} else {
 				const embedMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e);
-				embedMessage.edit(`**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`);
+
+				embedMessage.edit({
+					content: `**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`,
+					embed: embedMessage.embeds[0]
+				}).then(edited => {
+					console.log(`message ${reaction.message.id} has an embed in starboard which was successfully edited. embed: ${edited.embeds[0]}, embedMessage embed: ${embedMessage.embed}`);
+				}).catch(() => {
+					console.log(`message ${reaction.message.id} has an embed in starboard which failed to be edited.`);
+				});
 			}
 		}
 	},
