@@ -294,10 +294,13 @@ Object.assign(client.starboard, {
 		if (dbEntry?.c >= client.starLimit) {
 			if (dbEntry.e) {
 				const embedMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e);
-				embedMessage.edit(`**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`).then(edited => {
-					console.log(`message ${reaction.message.id} has an embed in starboard which was successfully edited. embed: ${edited.embeds[0]}`).catch(() => {
-						console.log(`message ${reaction.message.id} has an embed in starboard which failed to be edited.`)
-					});
+				embedMessage.edit({
+					content: `**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`,
+					embed: embedMessage.embeds[0]
+				}).then(edited => {
+					console.log(`message ${reaction.message.id} has an embed in starboard which was successfully edited. embed: ${edited.embeds[0]}, embedMessage embed: ${embedMessage.embed}`);
+				}).catch(() => {
+					console.log(`message ${reaction.message.id} has an embed in starboard which failed to be edited.`);
 				});
 			} else {
 				const embed = await this.sendEmbed({ count: dbEntry.c, message: reaction.message});
@@ -329,6 +332,8 @@ Object.assign(client.starboard, {
 			.setFooter(`MSG:${data.message.id}, USER:${data.message.author.id}`)
 			.addField('\u200b', `[Jump to Message](${data.message.url})`)
 			.setColor('#ffcc00');
+		
+		// attachments
 		let imageSet = false;
 		data.message.embeds.forEach(x => {
 			let text = `\\[[Embed](${x.url})] `;
@@ -364,12 +369,16 @@ Object.assign(client.starboard, {
 				description.push(`[Embed] ${type}: [${attachment.name}](${attachment.url})`);
 			}
 		});
+
+		// trim content if oversized
 		const descPreview = description.join('\n').trim();
 		if (descPreview.length > 2048) {
 			const diff = descPreview.length - 2048;
 			description[0] = description[0].slice(0, description[0].length - Math.max(3, diff)) + '...';
 		}
 		embed.setDescription(description.join('\n').trim());
+
+		// get channel, send, react
 		return client.channels.resolve(client.config.mainServer.channels.starboard).send(`**${data.count}** :star: | ${data.message.channel.toString()}`, embed).then(async x => {
 			x.react('⭐');
 			return x;
