@@ -30,7 +30,7 @@ client.on("ready", async () => {
 });
 modmailClient.on("ready", async () => {
 	setInterval(async () => {
-		await modmailClient.user.setActivity("Direct Messages", {
+		await modmailClient.user.setActivity("only moderation uses, do not message ModMail for any other reason.", {
 			type: "LISTENING",
 		});
 	}, 30000);
