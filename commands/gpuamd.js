@@ -77,5 +77,5 @@ module.exports = {
 	},
 	name: 'gpuamd',
 	usage: ['gpu name'],
-	description: 'Info about AMD GPUs'
+	description: 'Info about AMD GPUs.'
 };

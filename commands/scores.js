@@ -23,9 +23,9 @@ module.exports = {
 		}
 	},
 	name: 'scores',
-	usage: ['CPU/GPU/RAM'],
+	usage: ['"cpu" / "gpu" / "ram"'],
 	alias: ['benchmarks', 'benchmark', 'score'],
-	description: 'Provides overclocking spreadsheets of in-game items',
+	description: 'Provides overclocking spreadsheets of in-game items.',
 	category: 'PC Creator',
 	autores: ['how/what', 'benchmark/score', 'say/need', 'video/card/gpu/cpu/processor']
 };

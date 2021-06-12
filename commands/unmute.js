@@ -20,7 +20,7 @@ module.exports = {
 	},
 	name: 'unmute',
 	alias: ['removemute'],
-	usage: ['Mention / User ID'],
-	description: 'Remove a mute from someone',
+	usage: ['mention / user id'],
+	description: 'Remove a mute from someone.',
 	category: 'Moderation'
 };

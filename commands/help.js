@@ -77,6 +77,6 @@ module.exports = {
 		return helpPage(undefined, client, message, args);
     },
 	name: 'help',
-	description: 'Info about commands and their usage',
-	usage: ['Command / Category / Page']
+	description: 'Info about commands and their usage.',
+	usage: ['?command / ?category / ?page']
 };

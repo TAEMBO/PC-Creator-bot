@@ -28,7 +28,7 @@ module.exports = {
 	},
 	name: 'proplayerroleremove',
 	alias: ['pprr'],
-	usage: ['Mention / User ID'],
-	description: 'Remove the Pro Player role from someone',
+	usage: ['mention / user id'],
+	description: 'Remove the Pro Player role from someone.',
 	category: 'Moderation'
 };

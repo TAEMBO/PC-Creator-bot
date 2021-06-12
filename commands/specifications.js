@@ -61,8 +61,8 @@ module.exports = {
 		}
 	},
 	name: 'specifications',
-	description: 'View computer parts of other people',
-	usage: ['help/add/edit/delete/user'],
+	description: 'View computer parts of other people.',
+	usage: ['?help / add / edit / delete / user'],
 	alias: ['specs'],
 	cooldown: 10,
 	category: 'Fun'

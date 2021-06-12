@@ -9,7 +9,7 @@ module.exports = {
 		message.channel.send(`Deleted **${deleted.size}** messages from **${message.channel.toString()}**`);
 	},
 	name: 'purge',
-	description: 'Delete many messages from a channel',
+	description: 'Delete many messages from a channel.',
 	category: 'Moderation',
 	usage: ['amount']
 };

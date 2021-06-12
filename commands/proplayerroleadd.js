@@ -27,8 +27,8 @@ module.exports = {
 		});
 	},
 	name: 'proplayerroleadd',
-	usage: ['Mention / User ID'],
+	usage: ['mention / user id'],
 	alias: ['ppra'],
-	description: 'Add the Pro Player role to someone',
+	description: 'Add the Pro Player role to someone.',
 	category: 'Moderation'
 };

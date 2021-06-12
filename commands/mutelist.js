@@ -37,5 +37,5 @@ module.exports = {
 	name: 'mutelist',
 	category: 'Moderation',
 	description: 'Information about muted users.',
-	usage: ['?userID / mention']
+	usage: ['?user id / mention']
 };

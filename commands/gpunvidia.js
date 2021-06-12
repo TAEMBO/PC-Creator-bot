@@ -253,5 +253,5 @@ module.exports = {
 	},
 	name: 'gpunvidia',
 	usage: ['gpu name'],
-	description: 'Info about NVidia GPUs'
+	description: 'Info about NVidia GPUs.'
 };

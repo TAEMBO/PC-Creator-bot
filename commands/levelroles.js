@@ -102,7 +102,7 @@ module.exports = {
 		message.channel.send(messageContents.join('\n')); // compile message and send
 	},
 	name: 'levelroles',
-	usage: ['?stats'],
+	usage: ['?stats / user id / mention'],
 	description: 'Check your eligibility for level roles or see global stats.',
 	alias: ['lrs'],
 	category: 'Moderation'

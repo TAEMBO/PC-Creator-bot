@@ -13,8 +13,8 @@ module.exports = {
 		message.channel.send(embed);
 	},
 	name: 'userinfo',
-	usage: ['Mention / User ID'],
+	usage: ['mention / user id / username'],
 	alias: ['memberinfo', 'user', 'whois'],
-	description: 'Info about a Discord member',
+	description: 'Info about a Discord member.',
 	cooldown: 15
 };

@@ -34,6 +34,6 @@ module.exports = {
 	name: 'mute',
 	usage: ['Mention / User ID', '?time', '?reason'],
 	shortDescription: 'Add a mute to someone.',
-	description: 'Add a mute to someone. Time will be considered the reason if time doesn\'t start with a number. If time or reason is specified in the first message, no more questions will be asked.',
+	description: 'Take administrative action on a peasant by suppressing their right to free speech. Time will be considered the reason if time doesn\'t start with a number. If time or reason is specified in the first message, no more questions will be asked.',
 	category: 'Moderation'
 };
