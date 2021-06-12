@@ -19,14 +19,6 @@ client.on("ready", async () => {
 		});
 	}, 30000);
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
-
-	// event loop, for mutes
-	setInterval(() => {
-		const now = Date.now();
-		Object.entries(client.mutes._content).filter(x => x[1].time <= now).forEach(async x => {
-			client.unmuteMember(client, (await client.guilds.cache.get(client.config.mainServer.id).members.fetch(x[0])));
-		});
-	}, 5000);
 });
 modmailClient.on("ready", async () => {
 	setInterval(async () => {
@@ -399,6 +391,21 @@ client.on('messageDelete', async message => {
 	if (!dbEntry) return;
 	(await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e)).delete();
 });
+
+// event loop, for mutes
+setInterval(() => {
+	const now = Date.now();
+	const date = new Date();
+	Object.entries(client.mutes._content).filter(x => x[1].time <= now).forEach(async x => {
+		client.unmuteMember(client, (await client.guilds.cache.get(client.config.mainServer.id).members.fetch(x[0])));
+	});
+	const formattedDate = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+	const dailyMsgs = require('./dailyMsgs.json');
+	if (!dailyMsgs[formattedDate]) {
+		dailyMsgs[formattedDate] = Object.values(client.userLevels._content).reduce((a, b) => a + b, 0);
+		fs.writeFileSync(__dirname + '/dailyMsgs.json', JSON.stringify(dailyMsgs));
+	}
+}, 5000);
 
 // suggestions, starboard wrong emoji removal
 client.on('raw', async e => {
