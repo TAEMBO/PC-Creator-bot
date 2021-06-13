@@ -13,7 +13,7 @@ module.exports = {
 		}
 		args[1] = args[1].replace(/"/g, '')
 		if (args[1].toUpperCase() === 'CPU') {
-			message.channel.send('https://media.discordapp.net/attachments/787590275110273035/843962251258232882/CPU_Scores.png');
+			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/853326007431462912/CPU-Scores_2.jpg');
 		} else if (args[1].toUpperCase() === 'GPU') {
 			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/845681844766769212/GPU_scores.jpg');
 		} else if (args[1].toUpperCase() === 'RAM') {
