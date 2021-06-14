@@ -17,7 +17,7 @@ module.exports = {
 		} else if (args[1].toUpperCase() === 'GPU') {
 			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/845681844766769212/GPU_scores.jpg');
 		} else if (args[1].toUpperCase() === 'RAM') {
-			message.channel.send('https://media.discordapp.net/attachments/571031705109135361/843909504272826418/image0.png');
+			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/853667767622303774/unknown.png');
 		} else {
 			message.channel.send('You need to add "CPU", "GPU" or "RAM"');
 		}
