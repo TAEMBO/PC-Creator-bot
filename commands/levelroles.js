@@ -101,7 +101,18 @@ module.exports = {
 
 		if (pronounBool()) {
 			const index = Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).map(x => x[0]).indexOf(message.author.id) + 1;
-			messageContents.push(`You're ${index === 1 ? '1st' : index === 2 ? '2nd' : index === 3 ? '3rd' : index + 'th'} in a descending list of all users, ordered by their Level Roles message count.`);
+			const suffix = ((index) => {
+				const numbers = index.toString().split('').reverse(); // eg. 1850 -> [0, 5, 8, 1]
+				if (numbers[1] === '1') { // this is some -teen
+					return 'th';
+				} else {
+					if (numbers[0] === '1') return 'st';
+					else if (numbers[0] === '2') return 'nd';
+					else if (numbers[0] === '3') return 'rd';
+					else return 'th';
+				}
+			})(index);
+			messageContents.push(`You're ${index + suffix} in a descending list of all users, ordered by their Level Roles message count.`);
 		}
 
 		message.channel.send(messageContents.join('\n')); // compile message and send
