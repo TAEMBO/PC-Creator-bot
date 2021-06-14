@@ -429,7 +429,8 @@ client.on("message", async (message) => {
 	if (!message.guild) return;
 	const suggestCommand = client.commands.get('suggest');
 	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(' ')[0] === client.prefix + x) && !message.author.bot) {
-		message.reply(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 6000));
+		console.log('an unrelated message was sent in #suggestions and the message variable has property id value', message.id);
+		message.reply(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 12000));
 		return message.delete();
 	}
 	const mutableRoles = [
@@ -438,6 +439,7 @@ client.on("message", async (message) => {
 		client.config.mainServer.roles.administrator,
 		client.config.mainServer.roles.owner
 	];
+	if (message.mentions.roles.size > 0) console.log('message mentioned', message.mentions.roles.map(x => x.id + ' (' + x.name + ')'));
 	if (message.mentions.roles.some(mentionedRole => mutableRoles.includes(mentionedRole.id))) {
 		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000, errors: ['time']}).then(async () => {
 			const muteResult = await client.muteMember(client, message.member, { time: 1000 * 60 * 5, reason: 'pinged staff role with no purpose' });
