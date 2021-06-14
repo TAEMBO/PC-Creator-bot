@@ -440,7 +440,12 @@ client.on("message", async (message) => {
 		client.config.mainServer.roles.owner
 	];
 	if (message.mentions.roles.size > 0) console.log('message mentioned', message.mentions.roles.map(x => x.id + ' (' + x.name + ')'));
-	if (message.mentions.roles.some(mentionedRole => mutableRoles.includes(mentionedRole.id))) {
+	if (message.mentions.roles.some(mentionedRole => {
+		console.log('message mentioned', mentionedRole.id || mentionedRole, mentionedRole.name);
+		let result = mutableRoles.includes(mentionedRole.id);
+		console.log('mutable roles includes?', result);
+		return result;
+	})) {
 		console.log('awaiting y message');
 		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000, errors: ['time']}).then(async () => {
 			console.log('y message received');
