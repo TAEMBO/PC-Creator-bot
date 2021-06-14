@@ -441,9 +441,12 @@ client.on("message", async (message) => {
 	];
 	if (message.mentions.roles.size > 0) console.log('message mentioned', message.mentions.roles.map(x => x.id + ' (' + x.name + ')'));
 	if (message.mentions.roles.some(mentionedRole => mutableRoles.includes(mentionedRole.id))) {
+		console.log('awaiting y message');
 		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000, errors: ['time']}).then(async () => {
+			console.log('y message received');
 			const muteResult = await client.muteMember(client, message.member, { time: 1000 * 60 * 5, reason: 'pinged staff role with no purpose' });
 			message.channel.send(muteResult.text);
+			console.log('mute success:', muteResult.success);
 		}).catch(() => {});
 	}
 	if (message.content.startsWith(client.prefix)) {

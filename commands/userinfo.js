@@ -10,7 +10,7 @@ module.exports = {
 			.addField(':small_blue_diamond: Roles', member.roles.cache.size > 1 ? member.roles.cache.filter(x => x.id !== message.guild.roles.everyone.id).sort((a, b) => b.position - a.position).map(x => x.name).join(member.roles.cache.size > 4 ? ', ' : '\n').slice(0, 1024) : 'None')
 			.setColor(member.displayColor || '#fefefe')
 			.setImage(member.user.avatarURL({ format: 'png', dynamic: true, size: 2048}) || member.user.defaultAvatarURL)
-		message.channel.send(embed);
+		message.channel.send(embed || 'something went wrong');
 	},
 	name: 'userinfo',
 	usage: ['mention / user id / username'],
