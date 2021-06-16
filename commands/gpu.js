@@ -69,8 +69,6 @@ module.exports = {
 				}
 			}
 		})();
-		console.log('namesearch', '"' + nameSearch + '"');
-		console.log('rawfilters', searchTerms.slice(filtersStart));
 		const filters = searchTerms.slice(filtersStart).filter(x => x.length > 0).map(filter => {
 			const operatorStartIndex = ['<', '>', '=', '~'].map(x => filter.indexOf(x)).find(x => x >= 0);
 			const operator = filter.slice(operatorStartIndex, operatorStartIndex + 1);
@@ -100,7 +98,6 @@ module.exports = {
 			}
 		});
 		if (filters.find(x => !x)) return;
-		console.log('filters', filters);
 		const gpus = (() => {
 			if (manufacturer) {
 				if (manufacturer === 'nvidia') {
@@ -147,7 +144,6 @@ module.exports = {
 				}
 			});
 			if (filters.length > 0) score += filtersScore / filters.length;
-			console.log(gpu.name, '\n    got score', score);
 			return score;
 		}
 
@@ -158,7 +154,6 @@ module.exports = {
 		}
 
 		if (multipleSearch) {
-			console.log('multiplesearch is active');
 			const rankedGpus = [];
 			if (manufacturer) {
 				gpus[manufacturer].filter(x => x.name).forEach((gpu, key) => {
@@ -167,11 +162,8 @@ module.exports = {
 					rankedGpus.push([key, gpu]);
 				});
 			} else {
-				console.log('no manufacturer');
 				Object.entries(gpus).forEach(manufacturerGpus => {
-					console.log('looking at', manufacturerGpus);
 					manufacturerGpus[1].filter(x => x.name).forEach((gpu, key) => {
-						console.log('ranking', key);
 						gpu.score = rankGpu(gpu);
 						if (gpu.score < 0) return;
 						rankedGpus.push([key, gpu]);
@@ -192,12 +184,18 @@ module.exports = {
 				if (manufacturer) textAddition = `\`${i + 1}. ${gpu[1].name}\`\n`;
 				else textAddition = `\`${i + 1}. ${getManufacturer(gpu[0])} ${gpu[1].name}\`\n`;
 				if (text.length + textAddition.length > 1024) {
-					embed.addField('\u200b', text);
+					embed.addField('\u200b', text, true);
 					text = '';
 				}
 				text += textAddition;
 			});
-			if (text.length > 0) embed.description += '\n' + text;
+			if (text.length > 0) {
+				if (embed.fields.length > 0) {
+					embed.addField('\u200b', text, true);
+				} else {
+					embed.description += '\n' + text;
+				}
+			}
 			if (rankedGpus.length <= limit) {
 				embed.setFooter(`Showing all ${rankedGpus.length} GPUs.`)
 			} else {
@@ -235,7 +233,6 @@ module.exports = {
 				matches.nvidia = gpus.nvidia.filter(x => x.name).find(x => gpus.nvidia.filter(z => z.name).every(y => y.score <= x.score));
 				matches.amd = gpus.amd.filter(x => x.name).find(x => gpus.amd.filter(z => z.name).every(y => y.score <= x.score));
 			}
-			console.log('matches', matches);
 			const bestMatch = Object.entries(matches).find((x, index) => (typeof x[1]?.score === 'number' ? x[1]?.score : -1) >= (typeof Object.entries(matches)[(!index) + 0][1]?.score === 'number' ? Object.entries(matches)[(!index) + 0][1]?.score : -1));
 			if (!bestMatch[1] || bestMatch[1].score < 0) return message.channel.send('That query returned `0` results.');
 			message.channel.send(gpuEmbed(client, bestMatch[1], bestMatch[0]));
