@@ -2,7 +2,7 @@ function gpuEmbed(client, gpu, manufacturer) {
 	let color;
 	if (manufacturer.toLowerCase() === 'nvidia') color = '75b900';
 	else if (manufacturer.toLowerCase() === 'amd') color = 13582629;
-	return new client.embed()
+	const embed = new client.embed()
 		.setTitle(manufacturer.toUpperCase() + ' ' + gpu.name)
 		.addField('Memory Interface', gpu.memoryInterface === 'N/A' ? 'N/A' : gpu.memoryInterface + '-bit', true)
 		.addField('Memory Size', gpu.vram === 'N/A' ? 'N/A' : gpu.vram >= 1024 ? gpu.vram / 1024 + 'GB' : gpu.vram + 'MB', true)
@@ -10,7 +10,9 @@ function gpuEmbed(client, gpu, manufacturer) {
 		.addField('Power Connectors', gpu.powerConnectors === 'N/A' ? 'N/A' : parseInt(gpu.powerConnectors) ? gpu.powerConnectors + ' pin' : gpu.powerConnectors, true)
 		.addField('TDP', gpu.tdp === 'N/A' ? 'N/A' : gpu.tdp + 'W', true)
 		.addField('MSRP', gpu.price === 'N/A' ? 'N/A' : '$' + gpu.price + ' USD', true)
-		.setColor(color)
+		.setColor(color);
+	if (gpu.imageUrl) embed.setImage(gpu.imageUrl);
+	return embed;
 }
 
 module.exports = {
