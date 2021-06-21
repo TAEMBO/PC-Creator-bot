@@ -458,8 +458,8 @@ client.on("message", async (message) => {
 						const cooldownMention = await message.channel.send(`You need to wait ${Math.ceil((commandCooldownForUser - Date.now()) / 1000)} seconds until you can use this command again.`);
 						if (message.channel.id === client.config.mainServer.channels.suggestions) {
 							setTimeout(async () => {
-								await message.delete();
 								await cooldownMention.delete();
+								await message.delete();
 							}, 20000);
 						}
 						return;
