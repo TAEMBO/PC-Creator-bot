@@ -55,7 +55,7 @@ module.exports = {
 			if (manufacturer) {
 				if (firstSearchTermsParts[1]) {
 					filtersStart = 1;
-					return firstSearchTermsParts.slice(1).join(' ').toLowerCase().trim().replace(/ /g, '-');
+					return firstSearchTermsParts.slice(1).join(' ').toLowerCase().trim().replace(/ /g, '');
 				} else {
 					filtersStart = 1;
 					return false;
@@ -67,7 +67,7 @@ module.exports = {
 				}
 				else {
 					filtersStart = 1;
-					return searchTerms[0].toLowerCase().trim().replace(/ /g, '-');
+					return searchTerms[0].toLowerCase().trim().replace(/ /g, '');
 				}
 			}
 		})();
@@ -117,7 +117,7 @@ module.exports = {
 		function rankGpu(gpu) {
 			let score = 0;
 			if (nameSearch) {
-				if (gpu.name.toLowerCase().replace(/ /g, '-').includes(nameSearch)) {
+				if (gpu.name.toLowerCase().replace(/ /g, '').includes(nameSearch)) {
 					score += nameSearch.length / gpu.name.length;
 				} else score -= 1;
 			}
