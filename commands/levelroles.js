@@ -19,7 +19,7 @@ module.exports = {
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Stats')
-				.setDescription(`Level Roles was created ${timeActive} days ago.\nSince then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server by ${userCount.toLocaleString('en-US')} users.\nAn average user has sent ${average.toFixed(2)} messages.\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more than or as many messages as an average user.\nThe median user has sent ${median} messages.\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toFixed(2)}% of messages while Level Roles has existed.\nThe next message milestone ${milestone.next ? `is ${milestone.next.toLocaleString('en-US')} messages and the progress from the previous milestone (${milestone.previous}) to the next is ${(milestone.progress * 100).toFixed(2)}%.` : `doesn\'t exist.`}`)
+				.setDescription(`Level Roles was created ${timeActive} days ago.\nSince then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server by ${userCount.toLocaleString('en-US')} users.\nAn average user has sent ${average.toFixed(2)} messages.\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more than or as many messages as an average user.\nThe median user has sent ${median} messages.\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toFixed(2)}% of messages while Level Roles has existed.\nThe next message milestone ${milestone.next ? `is ${milestone.next.toLocaleString('en-US')} messages and the progress from the previous milestone (${milestone.previous.toLocaleString('en-US')}) to the next is ${(milestone.progress * 100).toFixed(2)}%.` : `doesn\'t exist.`}`)
 				.addField('Top Users by Messages Sent', Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map((x, i) => `\`${i + 1}.\` <@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n'))
 				.setColor(client.embedColor)
 			message.channel.send(embed);
@@ -112,7 +112,7 @@ module.exports = {
 					else return 'th';
 				}
 			})(index);
-			messageContents.push(`You're ${index + suffix} in a descending list of all users, ordered by their Level Roles message count.`);
+			messageContents.push(`You're ${index ? index + suffix : 'last'} in a descending list of all users, ordered by their Level Roles message count.`);
 		}
 
 		message.channel.send(messageContents.join('\n')); // compile message and send
