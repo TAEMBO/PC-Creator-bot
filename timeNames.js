@@ -8,6 +8,10 @@ module.exports = [
 		length: 1000 * 60 * 60 * 24 * 30
 	},
 	{
+		name: 'week',
+		length: 1000 * 60 * 60 * 24 * 7
+	},
+	{
 		name: 'day',
 		length: 1000 * 60 * 60 * 24
 	},
