@@ -55,6 +55,11 @@ module.exports = (client, command, options = { insertNewline: false, parts: [], 
 		text += '`[' + command.autores.join('] [') + ']`';
 		e();
 	}
+	if (options.parts.includes('cooldown') && command.cooldown) {
+		if (options.titles.includes('cooldown')) text += 'Cooldown: ';
+		text += client.formatTime(command.cooldown * 1000, 1, { longNames: true });
+		e();
+	}
 	e();
 	return text;
 };
