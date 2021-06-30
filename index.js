@@ -114,7 +114,7 @@ client.userLevels = new database('./userLevels.json', 'object');
 Object.assign(client.userLevels, {
 	_requirements: client.config.mainServer.roles.levels,
 	_milestone() {
-		const milestones = [666666, 696969, 800000, 1000000]; // always keep the previously achived milestone in the array so the progress is correct. here you can stack as many future milestones as youd like
+		const milestones = [10, 100, 1000, 696969, 800000, 1000000]; // always keep the previously achived milestone in the array so the progress is correct. here you can stack as many future milestones as youd like
 		const total = Object.values(this._content || {}).reduce((a, b) => a + b, 0);
 		const next = milestones.find(x => x >= total) || undefined;
 		const previous = milestones[milestones.indexOf(next) - 1] || 0;
@@ -207,11 +207,15 @@ client.specsDb.initLoad().intervalSave(120000);
 
 // dm forward blacklist
 client.dmForwardBlacklist = new database('./dmforwardblacklist.json', 'array');
-client.dmForwardBlacklist.initLoad().intervalSave(180000);
+client.dmForwardBlacklist.initLoad();
 
 // mutes
 client.mutes = new database('./mutes.json', 'object');
 client.mutes.initLoad();
+
+// channel restrictions
+client.channelRestrictions = new database('./channelRestrictions.json', 'object');
+client.channelRestrictions.initLoad();
 
 // command handler
 client.commands = new Discord.Collection();
@@ -244,6 +248,7 @@ while (client.commands.some(command => !command.hidden && !command.page)) {
 	}
 	command.page = categories[command.category].currentPage;
 }
+client.categoryNames = Object.keys(categories);
 delete categories;
 
 // create pages without contents
@@ -289,10 +294,6 @@ Object.assign(client.starboard, {
 				embedMessage.edit({
 					content: `**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`,
 					embed: embedMessage.embeds[0]
-				}).then(edited => {
-					console.log(`message ${reaction.message.id} has an embed in starboard which was successfully edited. embed: ${edited.embeds[0]}, embedMessage embed: ${embedMessage.embed}`);
-				}).catch(() => {
-					console.log(`message ${reaction.message.id} has an embed in starboard which failed to be edited.`);
 				});
 			} else {
 				const embed = await this.sendEmbed({ count: dbEntry.c, message: reaction.message});
@@ -316,10 +317,6 @@ Object.assign(client.starboard, {
 				embedMessage.edit({
 					content: `**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`,
 					embed: embedMessage.embeds[0]
-				}).then(edited => {
-					console.log(`message ${reaction.message.id} has an embed in starboard which was successfully edited. embed: ${edited.embeds[0]}, embedMessage embed: ${embedMessage.embed}`);
-				}).catch(() => {
-					console.log(`message ${reaction.message.id} has an embed in starboard which failed to be edited.`);
 				});
 			}
 		}
@@ -429,7 +426,6 @@ client.on("message", async (message) => {
 	if (!message.guild) return;
 	const suggestCommand = client.commands.get('suggest');
 	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(' ')[0] === client.prefix + x) && !message.author.bot) {
-		console.log('an unrelated message was sent in #suggestions and the message variable has property id value', message.id);
 		message.reply(`You\'re only allowed to send suggestions in this channel with \`${client.prefix}suggest [suggestion]\`.`).then(x => setTimeout(() => x.delete(), 12000));
 		return message.delete();
 	}
@@ -449,6 +445,14 @@ client.on("message", async (message) => {
 		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
+			console.log(`Running command "${commandFile.name}"`);
+
+			// channel restrictions
+			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category)) {
+				if (!client.hasModPerms(client, message.member) || !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) return console.log('restricted');
+				else console.log('modperms or lvl3');
+			} else console.log('no restrictions');
+
 			// cooldown
 			if (commandFile.cooldown) {
 				const member = client.cooldowns.get(message.author.id);
@@ -474,10 +478,11 @@ client.on("message", async (message) => {
 				}
 			}
 
+			// do the command
 			try {
 				commandFile.run(client, message, args);
 				commandFile.uses ? commandFile.uses++ : commandFile.uses = 1;
-				return 
+				return;
 			} catch (error) {
 				console.log(`An error occured while running command "${commandFile.name}"`, error, error.stack);
 				return message.channel.send('An error occured while executing that command.');
