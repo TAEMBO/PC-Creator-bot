@@ -4,11 +4,19 @@ module.exports = async (e, client) => {
 		if (e.d.channel_id !== client.config.mainServer.channels.suggestions) return;
 		const channel = client.channels.resolve(e.d.channel_id);
 		const message = await channel.messages.fetch(e.d.message_id);
+		const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
 
 		// wrong emoji
 		if (e.t === 'MESSAGE_REACTION_ADD' && !['✅', '❌'].includes(e.d.emoji.name)) {
-			const reaction = message.reactions.resolve(e.d.emoji.id || e.d.emoji.name);
 			return reaction.remove();
+		}
+
+		// self voted
+		const at = (arr, num) => num < 0 ? arr[arr.length + num] : arr[num]; // credit to Lebster#0617 on the coding den discord server
+		if (e.t === 'MESSAGE_REACTION_ADD' && e.d.user_id === at(message.embeds[0].author.name.split('('), -1).slice(0, -1)) {
+			return reaction.users.remove(e.d.user_id).then(() => {
+				channel.send(`<@${e.d.user_id}> You\'re not allowed to vote on your own suggestion!`).then(x => setTimeout(() => x.delete(), 6000));
+			});
 		}
 
 		// suggestion embed color
@@ -28,16 +36,16 @@ module.exports = async (e, client) => {
 			return message.edit(embed);
 		}
 
-		if (upvotes / downvotes >= 18) { // breakthrough, 18
+		if (upvotes / downvotes >= 15.1) { // breakthrough, 17
 			return changeProperties('#0000d8', 'Breakthrough Suggestion:');
 		}
-		if (upvotes / downvotes >= 12) { // fantastic, 12
+		if (upvotes / downvotes >= 10.1) { // fantastic, 12
 			return changeProperties('#1433f8', 'Fantastic Suggestion:');
 		}
-		if (upvotes / downvotes >= 6) { // good, 6
+		if (upvotes / downvotes >= 5.1) { // good, 5.1
 			return changeProperties('#2b75ff', 'Good Suggestion:');
 		}
-		if (upvotes / downvotes <= 2 / 7) { // bad, 2/7
+		if (upvotes / downvotes <= 1 / 3) { // bad, 1/3
 			return changeProperties('#514e39', 'Suggestion:');
 		}
 		// normal
