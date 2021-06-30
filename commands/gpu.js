@@ -181,7 +181,9 @@ module.exports = {
 			else if (manufacturer === 'amd') embed.setColor(13582629);
 			else embed.setColor(client.embedColor);
 			let text = '';
-			rankedGpus.slice(0, limit).forEach((gpu, i) => {
+			const sliced = rankedGpus.slice(0, limit);
+			if (filters.length === 0) sliced.sort((a, b) => a[0] < b[0]);
+			sliced.forEach((gpu, i) => {
 				let textAddition;
 				if (manufacturer) textAddition = `\`${i + 1}. ${gpu[1].name}\`\n`;
 				else textAddition = `\`${i + 1}. ${getManufacturer(gpu[0])} ${gpu[1].name}\`\n`;
