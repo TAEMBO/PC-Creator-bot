@@ -11,7 +11,7 @@ module.exports = {
 			.addField(':small_blue_diamond: Misc', `Hoist: \`${role.hoist}\`\nMentionable: \`${role.mentionable}\`\nPosition: \`${role.position}\` from bottom\nMembers: at least \`${role.members.size}\``)
 			.addField(':small_blue_diamond: Key Permissions', (permissions.includes('ADMINISTRATOR') ? ['ADMINISTRATOR'] : permissions.filter(x => keyPermissions.includes(x))).map(x => {
 				return x.split('_').map((y, i) => i === 0 ? y[0] + y.slice(1).toLowerCase() : y.toLowerCase()).join(' ')
-			}).join(', '))
+			}).join(', ') || 'None')
 			.setColor(role.color || '#fefefe')
 		message.channel.send(embed);
 	},

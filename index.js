@@ -449,7 +449,7 @@ client.on("message", async (message) => {
 
 			// channel restrictions
 			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category)) {
-				if (!client.hasModPerms(client, message.member) || !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) return console.log('restricted');
+				if (!client.hasModPerms(client, message.member) && !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) return console.log('restricted');
 				else console.log('modperms or lvl3');
 			} else console.log('no restrictions');
 
