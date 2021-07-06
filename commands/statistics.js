@@ -13,7 +13,7 @@ module.exports = {
 		});
 		const embed = new client.embed()
 			.setTitle('Statistics: Command Usage')
-			.setDescription('List of commands that have been used in this session, ordered by amount of uses. Table contains command name and amount of uses.\nTotal amount of commands used in this session: ' + client.commands.filter(x => x.uses).map(x => x.uses).reduce((a, b) => a + b, 0))
+			.setDescription('List of commands that have been used in this session, ordered by amount of uses. Table contains command name and amount of uses.\nTotal amount of commands used in this session: ' + client.commands.filter(x => x.uses).map(x => x.uses).reduce((a, b) => a + b, 0) + '\nCommands used per category:\n' + client.categoryNames.map(x => `${x}: ${client.commands.filter(y => y.category === x && y.uses).size}`).join('\n'))
 			.setColor(3971825)
 			.setFooter(`Uptime: ${client.formatTime(client.uptime, 2, { commas: true, longNames: true })}`)
 		if (rows.join('').length > 1024) {
