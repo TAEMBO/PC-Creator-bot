@@ -1,6 +1,6 @@
 module.exports = (client, member) => {
 	const embed = new client.embed()
-		.setAuthor(`${member.displayName} (${member.user.id})`, member.user.avatarURL({ format: 'png', dynamic: true, size: 128 }))
+		.setAuthor(`${member.displayName} (${member.user.id})`, member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 128 }))
 		.setTitle(`Specs`)
 		.setDescription(`These are their computer specs. Use \`${client.prefix}specifications help\` to learn more about this command.`)
 		.setColor(client.embedColor)
