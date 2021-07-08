@@ -36,17 +36,17 @@ module.exports = async (e, client) => {
 			return message.edit(embed);
 		}
 
-		if (upvotes / downvotes >= 15.1) { // breakthrough, 17
-			return changeProperties('#0000d8', 'Breakthrough Suggestion:');
+		if (upvotes / downvotes >= 15.1) { // breakthrough, 15.1
+			return changeProperties('#f1c40f', 'Breakthrough Suggestion:');
 		}
-		if (upvotes / downvotes >= 10.1) { // fantastic, 12
-			return changeProperties('#1433f8', 'Fantastic Suggestion:');
+		if (upvotes / downvotes >= 10.1) { // fantastic, 10.1
+			return changeProperties('#00e100', 'Fantastic Suggestion:');
 		}
 		if (upvotes / downvotes >= 5.1) { // good, 5.1
-			return changeProperties('#2b75ff', 'Good Suggestion:');
+			return changeProperties('#1aefd3', 'Good Suggestion:');
 		}
 		if (upvotes / downvotes <= 1 / 3) { // bad, 1/3
-			return changeProperties('#514e39', 'Suggestion:');
+			return changeProperties('#514e39', 'Controversial Suggestion:');
 		}
 		// normal
 		return changeProperties('#3C9AF1', 'Suggestion:');
