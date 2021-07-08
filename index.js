@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: true});
 const modmailClient = new Discord.Client({ disableEveryone: true });
 const fs = require('fs');
+const guildInvites = new Map();
 const path = require('path');
 const database = require('./database.js');
 try {
@@ -12,6 +13,11 @@ try {
 	console.log('Using ./config.json');
 }
 client.prefix = client.config.prefix;
+
+client.on('inviteCreate', async invite => {
+    if (invite.guild.id !== client.config.mainServer.id) return; 
+    guildInvites.set(member.client.config.mainServer.id);
+    });
 client.on("ready", async () => {
 	setInterval(async () => {
 		await client.user.setActivity(",help", {
@@ -19,6 +25,7 @@ client.on("ready", async () => {
 		});
 	}, 30000);
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
+	console.log(guildInvites.set);
 });
 modmailClient.on("ready", async () => {
 	setInterval(async () => {
@@ -419,6 +426,27 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 	} else if (oldState.channelID && !newState.channelID) {
 		newState.member.roles.remove(memberRole);
 	}
+});
+
+client.on('guildMemberAdd', async member => {
+    const cachedInvites = guildInvites.get(member.client.guilds.cache.get(member.client.config.mainServer.id));
+    const newInvites = await member.guild.fetchInvites();
+    guildInvites.set(member.client.config.mainServer.id)
+	console.log('hello');
+    try {
+        const usedInvite = newInvites.find(inv => cachedInvites.get(inv.code).uses < inv.uses);
+        const embed = new MessageEmbed()
+            .setDescription(`${member.user.tag} is the ${member.guild.memberCount} to join.\nJoined using ${usedInvite.inviter.tag}\nNumber of uses: ${usedInvite.uses}`)
+            .setTimestamp()
+            .setTitle(`${usedInvite.url}`);
+        const welcomeChannel = member.guild.channels.cache.find(channel => channel.id === '572673322891083776');
+        if(welcomeChannel) {
+            welcomeChannel.send(embed).catch(err => console.log(err));
+        }
+    }
+    catch(err) {
+        console.log(err);
+    }
 });
 
 client.on("message", async (message) => {

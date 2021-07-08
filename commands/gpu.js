@@ -245,5 +245,6 @@ module.exports = {
 	name: 'gpu',
 	description: 'Info about IRL GPUs.',
 	usage: ['"help" / manufacturer', 'name', 'filter', '?"-s" / "-sl"'],
+	category: 'Real Computers',
 	cooldown: 10
 }

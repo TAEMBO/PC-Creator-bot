@@ -1,7 +1,7 @@
 module.exports = async (message, client) => {
 	if (client.dmForwardBlacklist._content.includes(message.author.id) || message.author.bot) return;
 	if (client.games.some(x => x === message.author.tag)) return;
-	const channel = client.channels.cache.get(client.config.mainServer.channels.dmForwardChannel);
+	const channel = client.channels.cache.get(client.config.mainServer.channels.staffLogs);
 	const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
 	const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
 	const memberOfPccs = !!guildMemberObject;

@@ -11,5 +11,6 @@ module.exports = {
 	},
 	name: 'cable',
 	alias: ['bandwidth', 'hdmi'],
+	category: 'Real Computers',
 	description: 'Shows the bandwidth for HDMI and DisplayPort'
 };

@@ -4,5 +4,6 @@ module.exports = {
 	},
 	name: 'link',
 	alias: ['pcpplink'],
+	category: 'Real Computers',
 	description: 'Shows the correct pcpp link to use when sending a list'
 };

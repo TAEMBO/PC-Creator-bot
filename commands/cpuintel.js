@@ -3,6 +3,7 @@ module.exports = {
 		client.cpuCommand(client, message, args);
 	},
 	name: 'cpuintel',
-	description: 'Info about Intel CPUs',
+	description: 'Info about IRL Intel CPUs',
+	category: 'Real Computers',
 	cooldown: 10
 };
