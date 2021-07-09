@@ -37,19 +37,19 @@ module.exports = async (e, client) => {
 		}
 
 		if (upvotes / downvotes >= 15.1) { // breakthrough, 15.1
-			return changeProperties('#f1c40f', 'Breakthrough Suggestion:');
+			return changeProperties('#37BE73', 'Breakthrough Suggestion:');
 		}
 		if (upvotes / downvotes >= 10.1) { // fantastic, 10.1
-			return changeProperties('#00e100', 'Fantastic Suggestion:');
+			return changeProperties('#EE2A6E', 'Fantastic Suggestion:');
 		}
 		if (upvotes / downvotes >= 5.1) { // good, 5.1
-			return changeProperties('#1aefd3', 'Good Suggestion:');
+			return changeProperties('#6A36FB', 'Good Suggestion:');
 		}
 		if (upvotes / downvotes <= 1 / 3) { // bad, 1/3
-			return changeProperties('#514e39', 'Controversial Suggestion:');
+			return changeProperties('#9C9C9C', 'Controversial Suggestion:');
 		}
 		// normal
-		return changeProperties('#3C9AF1', 'Suggestion:');
+		return changeProperties('#269CD0', 'Suggestion:');
 	}
 	suggestions();
 
