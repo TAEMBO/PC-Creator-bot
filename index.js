@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const client = new Discord.Client({disableEveryone: true});
+const client = new Discord.Client({ disableEveryone: true, partials: ['MESSAGE', 'REACTION'] });
 const modmailClient = new Discord.Client({ disableEveryone: true });
 const fs = require('fs');
 const guildInvites = new Map();
@@ -391,6 +391,7 @@ Object.assign(client.starboard, {
 });
 client.starboard.initLoad().intervalSave(60000);
 client.on('messageDelete', async message => {
+	if (message.partial) return;
 	const dbEntry = client.starboard._content[message.id];
 	if (!dbEntry) return;
 	(await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e)).delete();
@@ -411,12 +412,23 @@ setInterval(() => {
 	}
 }, 5000);
 
-// suggestions, starboard wrong emoji removal
-client.on('raw', async e => {
-	if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(e.t)) return;
-	require('./reactionRaw.js')(e, client);
-});
+// suggestions, starboard
+client.on('messageReactionAdd', async (reaction, user) => {
+	require('./reactionRaw.js')({
+		t: 'message_reaction_add',
+		reaction: (reaction.partial ? await reaction.fetch() : reaction),
+		user
+	}, client);
 
+});
+client.on('messageReactionRemove', async (reaction, user) => {
+	require('./reactionRaw.js')({
+		t: 'message_reaction_remove',
+		reaction: (reaction.partial ? await reaction.fetch() : reaction),
+		user
+	}, client);
+
+});
 // give access to #voice-chat-text to members when they join vc
 client.on('voiceStateUpdate', (oldState, newState) => {
 	const memberRole = oldState.guild.roles.cache.get("747630391392731218");
@@ -429,6 +441,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 });
 
 client.on('guildMemberAdd', async member => {
+	if (member.partial) return;
     const cachedInvites = guildInvites.get(member.client.guilds.cache.get(member.client.config.mainServer.id));
     const newInvites = await member.guild.fetchInvites();
     guildInvites.set(member.client.config.mainServer.id)
@@ -450,6 +463,7 @@ client.on('guildMemberAdd', async member => {
 });
 
 client.on("message", async (message) => {
+	if (message.partial) return
     if (message.channel.type === 'dm') require('./dmforward.js')(message, client);
 	if (!message.guild) return;
 	const suggestCommand = client.commands.get('suggest');
@@ -477,9 +491,8 @@ client.on("message", async (message) => {
 
 			// channel restrictions
 			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category) || client.channelRestrictions._content[message.channel.id]?.some(x => x.includes(commandFile.name))) {
-				if (!client.hasModPerms(client, message.member) && !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) return console.log('restricted');
-				else console.log('modperms or lvl3');
-			} else console.log('no restrictions');
+				if (!client.hasModPerms(client, message.member) && !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) return;
+			}
 
 			// cooldown
 			if (commandFile.cooldown) {
