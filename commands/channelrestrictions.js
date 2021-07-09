@@ -46,11 +46,6 @@ function displayCr(channels = [], client) {
 }
 module.exports = {
 	run: (client, message, args) => {
-		// the permission code
-		if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
-
-		// permission code location 1; peasants cant use this command at all
-		
 		if (args[1]) {
 			if (args[1] === 'categorynames') {
 				const embed = new client.embed()
@@ -66,8 +61,7 @@ module.exports = {
 				const channelId = message.mentions.channels.first().id;
 
 				if (args[2]) {
-
-					// permission code location 2; peasants can view active restrictions and acceptable category names, but cannot modify anything
+					if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`);
 
 					let restrictionsForThisChannel = client.channelRestrictions._content[channelId];
 
