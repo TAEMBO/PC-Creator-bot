@@ -476,7 +476,7 @@ client.on("message", async (message) => {
 			console.log(`Running command "${commandFile.name}"`);
 
 			// channel restrictions
-			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category)) {
+			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category) || client.channelRestrictions._content[message.channel.id]?.some(x => x.includes(commandFile.name))) {
 				if (!client.hasModPerms(client, message.member) && !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) return console.log('restricted');
 				else console.log('modperms or lvl3');
 			} else console.log('no restrictions');
