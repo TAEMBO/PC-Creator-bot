@@ -16,7 +16,7 @@ module.exports = {
 			.setTitle(`Suggestion:`)
 			.setDescription(message.content.slice(message.content.indexOf(' ') + 1))
 			.setTimestamp()
-			.setColor(client.embedColor)
+			.setColor('269CD0')
 		const suggestion = await message.channel.send({ embed });
 		await suggestion.react('✅');
 		await suggestion.react('❌');
