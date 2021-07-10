@@ -80,7 +80,7 @@ module.exports = {
 				message.channel.send(`Invalid operator in \`${property + operator + value}\``);
 				return false;
 			}
-			if (!property) {
+			if (!property || !['name', 'price', 'memoryinterface', 'vram', 'vramtype', 'powerconnectors', 'tdp'].includes(property.toLowerCase())) {
 				message.channel.send(`Invalid property in \`${property + operator + value}\``);
 				return false;
 			}
