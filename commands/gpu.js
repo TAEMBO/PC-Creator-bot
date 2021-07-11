@@ -99,7 +99,7 @@ module.exports = {
 				return { property, operator, value };
 			}
 		});
-		if (filters.find(x => !x)) return;
+		if (filters.find(x => !x) !== undefined) return;
 		const gpus = (() => {
 			if (manufacturer) {
 				if (manufacturer === 'nvidia') {
