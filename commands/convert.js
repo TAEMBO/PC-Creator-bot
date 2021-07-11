@@ -182,7 +182,7 @@ module.exports = {
 		message.channel.send(embed);
 	},
 	name: 'convert',
-	description: 'Convert measurements. Use many starting amounts and units by attaching amounts and units of the same quantity with a comma ",", eg. \`convert 5ft,8in cm\`',
-	shortDescription: 'Convert measurements.',
+	description: '[BETA] Convert measurements. Use many starting amounts and units by attaching amounts and units of the same quantity with a comma ",", eg. \`convert 5ft,8in cm\`',
+	shortDescription: '[BETA] Convert measurements.',
 	usage: ['starting amount and unit', 'target unit']
 }
