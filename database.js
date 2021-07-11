@@ -6,6 +6,7 @@ class Database {
 		this._content = dataType === 'array' ? [] : dataType === 'object' ? {} : undefined;
 		this._path = path.resolve(dir);
 		this._interval = undefined;
+		this._saveNotifs = true;
 	}
 	addData(data, data1) {
 		if (this._dataType === 'array') {
@@ -35,7 +36,7 @@ class Database {
 		const newJson = JSON.stringify(db._content);
 		if (oldJson !== newJson || force) {
 			fs.writeFileSync(db._path, newJson);
-			console.log(this._path + ' Database Saved');
+			if (this._saveNotifs) console.log(this._path + ' Database Saved');
 		}
 		return db;
 	}
@@ -45,6 +46,11 @@ class Database {
 	}
 	stopInterval() {
 		if (this._interval) clearInterval(this._interval);
+		return this;
+	}
+	disableSaveNotifs() {
+		this._saveNotifs = false;
+		console.log(this._path + ' "Database Saved" Notifications Disabled');
 		return this;
 	}
 }

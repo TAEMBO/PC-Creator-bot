@@ -169,7 +169,7 @@ Object.assign(client.userLevels, {
 		return { age, messages, roles };
 	},
 });
-client.userLevels.initLoad().intervalSave(300000);
+client.userLevels.initLoad().intervalSave(3000).disableSaveNotifs();
 
 // specs
 client.specsDb = new database('./specs.json', 'object');
