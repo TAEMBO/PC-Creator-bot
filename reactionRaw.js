@@ -57,7 +57,7 @@ module.exports = async (e, client) => {
 			return changeProperties('#6A36FB', 'Good Suggestion:');
 		}
 		if (upvotes / downvotes <= 1 / 3) { // bad, 1/3
-			return changeProperties('#9C9C9C', 'Controversial Suggestion:');
+			return changeProperties('#4E535E', 'Controversial Suggestion:');
 		}
 		// normal
 		return changeProperties('#269CD0', 'Suggestion:');
