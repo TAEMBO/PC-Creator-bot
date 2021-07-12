@@ -463,7 +463,8 @@ client.on('guildMemberAdd', async member => {
 });
 
 client.on("message", async (message) => {
-	if (message.partial) return
+	if (process.argv[2] === 'dev' && !client.config.eval.whitelist.includes(message.author.id)) return; // bot is being run in dev mode and a non eval whitelisted user sent a message. ignore the message.
+	if (message.partial) return;
     if (message.channel.type === 'dm') require('./dmforward.js')(message, client);
 	if (!message.guild) return;
 	const suggestCommand = client.commands.get('suggest');
