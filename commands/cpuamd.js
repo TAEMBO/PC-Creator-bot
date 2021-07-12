@@ -5,5 +5,5 @@ module.exports = {
 	name: 'cpuamd',
 	description: 'Info about IRL AMD CPUs',
 	category: 'Real Computers',
-	cooldown: 10
+	cooldown: 7
 };

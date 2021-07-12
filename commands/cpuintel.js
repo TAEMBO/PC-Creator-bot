@@ -5,5 +5,5 @@ module.exports = {
 	name: 'cpuintel',
 	description: 'Info about IRL Intel CPUs',
 	category: 'Real Computers',
-	cooldown: 10
+	cooldown: 7
 };
