@@ -136,9 +136,9 @@ Object.assign(client.userLevels, {
 		if (amount) this._content[userid]++;
 		else this._content[userid] = 1;
 		// milestone
-		if (this._milestone() && Object.values(this._content).reduce((a, b) => a + b, 0) === this._milestone()) {
+		if (this._milestone() && Object.values(this._content).reduce((a, b) => a + b, 0) === this._milestone().next) {
 			const channel = client.channels.resolve('744401969241653298'); // #server-updates
-			if (!channel) return;
+			if (!channel) return console.log('tried to send milestone announcement but channel wasnt found');;
 			channel.send(`:tada: Milestone reached! **${this._milestone.toLocaleString('en-US')}** messages have been sent in this server and recorded by Level Roles. :tada:`);
 		}
 		return this;
@@ -219,6 +219,9 @@ client.dmForwardBlacklist.initLoad();
 // mutes
 client.mutes = new database('./mutes.json', 'object');
 client.mutes.initLoad();
+
+// punishments
+client.punishments = new database('./punishments.json', 'array');
 
 // channel restrictions
 client.channelRestrictions = new database('./channelRestrictions.json', 'object');
@@ -397,7 +400,7 @@ client.on('messageDelete', async message => {
 	(await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e)).delete();
 });
 
-// event loop, for mutes
+// event loop, for punishments and daily msgs
 setInterval(() => {
 	const now = Date.now();
 	const date = new Date();
@@ -465,6 +468,7 @@ client.on('guildMemberAdd', async member => {
 client.on("message", async (message) => {
 	if (process.argv[2] === 'dev' && !client.config.eval.whitelist.includes(message.author.id)) return; // bot is being run in dev mode and a non eval whitelisted user sent a message. ignore the message.
 	if (message.partial) return;
+	if (message.author.bot) return;
     if (message.channel.type === 'dm') require('./dmforward.js')(message, client);
 	if (!message.guild) return;
 	const suggestCommand = client.commands.get('suggest');
