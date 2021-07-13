@@ -1,9 +1,9 @@
 module.exports = {
 	run: (client, message, args) => {
-		client.punish(client, message, args, 'mute');
+		client.punish(client, message, args, 'ban');
 	},
-	name: 'mute',
-	description: 'Mute a member.',
+	name: 'ban',
+	description: 'Ban a member.',
 	usage: ['user mention or id', '?time', '?reason'],
 	category: 'Moderation'
 };

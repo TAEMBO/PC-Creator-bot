@@ -216,12 +216,120 @@ client.specsDb.initLoad().intervalSave(120000);
 client.dmForwardBlacklist = new database('./dmforwardblacklist.json', 'array');
 client.dmForwardBlacklist.initLoad();
 
-// mutes
-client.mutes = new database('./mutes.json', 'object');
-client.mutes.initLoad();
-
 // punishments
 client.punishments = new database('./punishments.json', 'array');
+Object.assign(client.punishments, {
+	createId() {
+		return Math.max(...client.punishments._content.map(x => x.id), 0) + 1;
+	},
+	async addPunishment(type = '', member, options = {}, moderator) {
+		const { time, reason } = options;
+		const timeInMillis = time ? client.parseTime(time) : undefined;
+		switch (type) {
+			case 'ban':
+				const banData = { type, id: this.createId(), member: member.user.id, moderator };
+				const dm = await member.send(`You\'ve been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${banData.id})`);
+				const banResult = await member.ban({ reason: `${reason || 'unspecified'} | Case #${banData.id}` }).catch(err => err.message);
+				if (typeof banResult === 'string') {
+					dm.delete();
+					return 'Ban was unsuccessful: ' + banResult;
+				} else {
+					if (timeInMillis) banData.endTime = Date.now() + timeInMillis;
+					if (reason) banData.reason = reason;
+					this.addData(banData);
+					this.forceSave();
+					return `Case #${banData.id}: Successfully banned ${member.user.tag} (${member.user.id}) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
+				}
+			case 'softban':
+				const guild = member.guild;
+				const softbanData = { type, id: this.createId(), member: member.user.id, moderator };
+				const softbanResult = await member.ban({ days: 7, reason: `${reason || 'unspecified'} | Case #${softbanData.id}` }).catch(err => err.message);
+				if (typeof softbanResult === 'string') {
+					return 'Softban (ban) was unsuccessful: ' + softbanResult;
+				} else {
+					const unbanResult = guild.members.unban(softbanData.member, `${reason || 'unspecified'} | Case #${softbanData.id}`).catch(err => err.message);
+					if (typeof unbanResult === 'string') {
+						return 'Softban (unban) was unsuccessful: ' + unbanResult;
+					} else {
+						if (reason) softbanData.reason = reason;
+						this.addData(softbanData);
+						this.forceSave();
+						return `Case #${softbanData.id}: Successfully softbanned ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
+					}
+				}
+			case 'kick':
+				const kickData = { type, id: this.createId(), member: member.user.id, moderator };
+				const kickResult = await member.kick(`${reason || 'unspecified'} | Case #${banData.id}`).catch(err => err.message);
+				if (typeof kickResult === 'string') {
+					return 'Kick was unsuccessful: ' + kickResult;
+				} else {
+					if (reason) kickData.reason = reason;
+					this.addData(kickData);
+					this.forceSave();
+					return `Case #${kickData.id}: Successfully kicked ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
+				}
+			case 'mute':
+				const muteData = { type, id: this.createId(), member: member.user.id, moderator };
+				const muteResult = await member.roles.add(client.config.mainServer.roles.muted, `${reason || 'unspecified'} | Case #${muteData.id}`).catch(err => err.message);
+				if (typeof muteResult === 'string') {
+					return 'Mute was unsuccessful: ' + muteResult;
+				} else {
+					if (timeInMillis) muteData.endTime = Date.now() + timeInMillis;
+					if (reason) muteData.reason = reason;
+					this.addData(muteData);
+					this.forceSave();
+					member.send(`You\'ve been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${muteData.id})`);
+					return `Case #${muteData.id}: Successfully muted ${member.user.tag} (${member.user.id}) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
+				}
+			case 'warn':
+				const warnData = { type, id: this.createId(), member: member.user.id, moderator };
+				const warnResult = await member.send(`You\'ve been warned in ${member.guild.name} for reason \`${reason || 'unspecified'}\` (Case #${warnData.id})`).catch(err => err.message);
+				if (typeof warnResult === 'string') {
+					return 'Warn was unsuccessful: ' + warnResult;
+				} else {
+					if (reason) warnData.reason = reason;
+					this.addData(warnData);
+					this.forceSave();
+					return `Case #${warnData.id}: Successfully warned ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
+				}
+		}
+	},
+	async removePunishment(caseId, moderator, reason) {
+		const punishment = this._content.find(x => x.id === caseId);
+		const id = this.createId();
+		if (!punishment) return 'Punishment not found.';
+		if (['ban', 'mute'].includes(punishment.type)) {
+			const guild = client.guilds.cache.get(client.config.mainServer.id);
+			let removePunishmentResult;
+			if (punishment.type === 'ban') {
+				// unban
+				removePunishmentResult = await guild.members.unban(punishment.member, `${reason || 'unspecified'} | Case #${id}`).catch(err => err.message); // unbanning returns a user
+			} else if (punishment.type === 'mute') {
+				// remove role
+				removePunishmentResult = await (await guild.members.fetch(punishment.member)).roles.remove(client.config.mainServer.roles.muted, `${reason || 'unspecified'} | Case #${id}`).catch(err => err.message);
+				if (typeof removePunishmentResult !== 'string') {
+					removePunishmentResult.send(`You\'ve been unmuted in ${removePunishmentResult.guild.name}.`);
+					removePunishmentResult = removePunishmentResult.user; // removing a role returns a guildmember
+				}
+			}
+			if (typeof removePunishmentResult === 'string') return `Un${punishment.type} wass unsuccessful: ${removePunishmentResult}`;
+			else {
+				this._content[this._content.findIndex(x => x.id === punishment.id)].expired = true;
+				this.addData({ type: `un${punishment.type}`, id, cancels: punishment.id, member: punishment.member, reason, moderator }).forceSave();
+				return `Successfully ${punishment.type === 'ban' ? 'unbanned' : 'unmuted'} ${removePunishmentResult.tag} (${removePunishmentResult.id}) for reason \`${reason || 'unspecified'}\``;
+			}
+		} else {
+			try {
+				this._content.splice(this._content.findIndex(x => x.id === punishment.id), 1);
+				this.addData({ type: 'removeOtherPunishment', id, cancels: punishment.id, member: punishment.member, reason, moderator })
+				return `Successfully removed Case #${punishment.id} (${punishment.type}, ${punishment.member}).`;
+			} catch (error) {
+				return `${punishment.type[0].toUpperCase() + punishment.type.slice(1)} removal was unsuccessful: ${error.message}`;
+			}
+		}
+	}
+});
+client.punishments.initLoad();
 
 // channel restrictions
 client.channelRestrictions = new database('./channelRestrictions.json', 'object');
@@ -400,12 +508,18 @@ client.on('messageDelete', async message => {
 	(await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e)).delete();
 });
 
+// repeated messages
+client.repeatedMessages = {};
+
 // event loop, for punishments and daily msgs
 setInterval(() => {
 	const now = Date.now();
 	const date = new Date();
-	Object.entries(client.mutes._content).filter(x => x[1].time <= now).forEach(async x => {
-		client.unmuteMember(client, (await client.guilds.cache.get(client.config.mainServer.id).members.fetch(x[0])));
+	client.punishments._content.filter(x => x.endTime <= now && !x.expired).forEach(async punishment => {
+		console.log(`${punishment.member}'s ${punishment.type} should expire now`);
+		const unpunishResult = await client.punishments.removePunishment(punishment.id, client.user.id, 'Time\'s up!');
+		console.log(unpunishResult);
+		//client.unmuteMember(client, (await client.guilds.cache.get(client.config.mainServer.id).members.fetch(x[0])));
 	});
 	const formattedDate = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
 	const dailyMsgs = require('./dailyMsgs.json');
@@ -535,6 +649,40 @@ client.on("message", async (message) => {
 			}
 		}
 	} else {
+		// repeated messages
+		if (message.content.length > 10) {
+			const thisContent = message.content.slice(0, 32);
+			if (client.repeatedMessages[message.author.id]) {
+				// add this message to the list
+				client.repeatedMessages[message.author.id].set(message.createdTimestamp, thisContent);
+
+				// this is the time in which 3 messages have to be sent, in milliseconds
+				const threshold = 5000;
+
+				// message mustve been sent after (now - threshold)
+				client.repeatedMessages[message.author.id] = client.repeatedMessages[message.author.id].filter((x, i) => i >= Date.now() - threshold)
+
+				// a spammed message is one that has been sent at least 3 times in the last threshold milliseconds
+				const spammedMessage = client.repeatedMessages[message.author.id].find(x => {
+					return client.repeatedMessages[message.author.id].filter(y => y === x).size >= 3
+				})
+
+				// if a spammed message exists;
+				if (spammedMessage) {
+					// softban
+					const softbanResult = await client.punishments.addPunishment('softban', message.member, { reason: 'repeated messages' }, client.user.id);
+					// send softban result in last channel an identicl message was sent in
+					message.channel.send(softbanResult);
+
+					// and clear their list of long messages
+					delete client.repeatedMessages[message.author.id];
+				}
+			} else {
+				client.repeatedMessages[message.author.id] = new client.collection();
+				client.repeatedMessages[message.author.id].set(message.createdTimestamp, message.content.slice(0, 32));
+			}
+		}
+
 		const BLACKLISTED_CHANNELS = [
 			'748122380383027210', /* bot-commands */
 		];
