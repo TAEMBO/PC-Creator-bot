@@ -14,9 +14,9 @@ try {
 }
 client.prefix = client.config.prefix;
 
-client.on('inviteCreate', async invite => {
+/*client.on('inviteCreate', async invite => {
     guildInvites.set(member.client.config.mainServer.id);
-    });
+    });*/
 client.on("ready", async () => {
 	setInterval(async () => {
 		await client.user.setActivity(",help", {
