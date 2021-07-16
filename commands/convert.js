@@ -255,8 +255,8 @@ module.exports = {
 		message.channel.send(embed);
 	},
 	name: 'convert',
-	description: '[BETA] Convert measurements. Use many starting amounts and units by attaching amounts and units of the same quantity with a space, eg. \`convert 5ft 8in cm\` converts the sum of 5 feet and 8 inches into centimeters. For help with units, add \`help [?quantity]\`',
+	description: '[BETA] Convert measurements. Use many starting amounts and units by attaching amounts and units of the same quantity with a comma, eg. \`convert 5ft, 8in >cm\` converts the sum of 5 feet and 8 inches into centimeters. For help, add \`help\`',
 	shortDescription: '[BETA] Convert measurements.',
-	usage: ['starting amounts and units / help', 'target unit / ?quantity'],
+	usage: ['starting amounts and units / help', '">" target unit / ?quantity'],
 	alias: ['cv']
 }
