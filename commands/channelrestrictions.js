@@ -49,12 +49,20 @@ module.exports = {
 		if (args[1]) {
 			if (args[1] === 'categorynames') {
 				const embed = new client.embed()
-				.setTitle('Acceptable command and category names')
-				.setDescription(client.categoryNames.join(', '))
-				.setFooter('Or any bot command name.')
-				.setColor(client.embedColor)
+					.setTitle('Acceptable command and category names')
+					.setDescription(client.categoryNames.join(', '))
+					.setFooter('Or any bot command name.')
+					.setColor(client.embedColor)
 				return message.channel.send(embed);
-			} else {
+			} else if (['how', 'why', 'what'].includes(args[1])) {
+				const embed = new client.embed()
+					.setTitle('Why can I not do bot commands?')
+					.addField(':small_blue_diamond: The command you tried to do is restricted in this channel.', 'This is to reduce spam and clutter.')
+					.addField(':small_blue_diamond: Try a different channel instead.', '<#748122380383027210> is a channel dedicated to using bot commands.')
+					.addField(':small_blue_diamond: This phenomenom is called _channel restrictions._', `Moderators restrict certain categories of commands from being used in different channels. Active restrictions are available for everyone to see with \`${client.prefix}channelrestrictions\``)
+					.setColor(client.embedColor)
+				return message.channel.send(embed);
+		 	} else {
 
 				if (!message.mentions.channels.first()) return message.channel.send('You must mention a channel.');
 
@@ -153,7 +161,7 @@ module.exports = {
 	alias: ['cr'],
 	description: 'Toggle or view restrictions of entire categories of commands or individual commands from being used in a text channel. Restrictions are overridden by moderators and members who have the Level 3 role. Only moderators are allowed to edit channel restrictions.\n\nUsage:\nDon\'t add anything for a complete list of active restrictions.\nAdd a channel mention to view active restrictions for that channel.\nAdd "categorynames" to view a list of acceptable category names.\nAdd a channel mention and category name to toggle the restriction of that category in that channel.',
 	shortDescription: 'Toggle channel-specific command usage restrictions.',
-	usage: ['?channel mention / "categorynames"', '?category name'],
+	usage: ['?channel mention / "categorynames" / "how"', '?category name'],
 	category: 'Moderation',
 	cooldown: 6
 };
