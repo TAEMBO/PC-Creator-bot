@@ -15,7 +15,6 @@ try {
 client.prefix = client.config.prefix;
 
 client.on('inviteCreate', async invite => {
-    if (invite.guild.id !== client.config.mainServer.id) return; 
     guildInvites.set(member.client.config.mainServer.id);
     });
 client.on("ready", async () => {
@@ -657,7 +656,7 @@ client.on("message", async (message) => {
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, thisContent);
 
 				// this is the time in which 3 messages have to be sent, in milliseconds
-				const threshold = 5000;
+				const threshold = 7000;
 
 				// message mustve been sent after (now - threshold)
 				client.repeatedMessages[message.author.id] = client.repeatedMessages[message.author.id].filter((x, i) => i >= Date.now() - threshold)
