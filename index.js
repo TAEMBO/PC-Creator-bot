@@ -676,7 +676,7 @@ client.on("message", async (message) => {
 				}
 
 				// a spammed message is one that has been sent at least 3 times in the last threshold milliseconds
-				const spammedMessage = client.repeatedMessages[message.author.id].find(x => {
+				const spammedMessage = client.repeatedMessages[message.author.id]?.find(x => {
 					return client.repeatedMessages[message.author.id].filter(y => y === x).size >= 3
 				})
 
