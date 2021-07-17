@@ -222,18 +222,22 @@ Object.assign(client.punishments, {
 		return Math.max(...client.punishments._content.map(x => x.id), 0) + 1;
 	},
 	async addPunishment(type = '', member, options = {}, moderator) {
+		const now = Date.now();
 		const { time, reason } = options;
 		const timeInMillis = time ? client.parseTime(time) : undefined;
 		switch (type) {
 			case 'ban':
-				const banData = { type, id: this.createId(), member: member.user.id, moderator };
+				const banData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				const dm = await member.send(`You\'ve been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${banData.id})`);
 				const banResult = await member.ban({ reason: `${reason || 'unspecified'} | Case #${banData.id}` }).catch(err => err.message);
 				if (typeof banResult === 'string') {
 					dm.delete();
 					return 'Ban was unsuccessful: ' + banResult;
 				} else {
-					if (timeInMillis) banData.endTime = Date.now() + timeInMillis;
+					if (timeInMillis) {
+						banData.endTime = now + timeInMillis;
+						banData.duration = timeInMillis;
+					}
 					if (reason) banData.reason = reason;
 					this.addData(banData);
 					this.forceSave();
@@ -241,7 +245,7 @@ Object.assign(client.punishments, {
 				}
 			case 'softban':
 				const guild = member.guild;
-				const softbanData = { type, id: this.createId(), member: member.user.id, moderator };
+				const softbanData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				const softbanResult = await member.ban({ days: 7, reason: `${reason || 'unspecified'} | Case #${softbanData.id}` }).catch(err => err.message);
 				if (typeof softbanResult === 'string') {
 					return 'Softban (ban) was unsuccessful: ' + softbanResult;
@@ -257,7 +261,7 @@ Object.assign(client.punishments, {
 					}
 				}
 			case 'kick':
-				const kickData = { type, id: this.createId(), member: member.user.id, moderator };
+				const kickData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				const kickResult = await member.kick(`${reason || 'unspecified'} | Case #${banData.id}`).catch(err => err.message);
 				if (typeof kickResult === 'string') {
 					return 'Kick was unsuccessful: ' + kickResult;
@@ -268,12 +272,15 @@ Object.assign(client.punishments, {
 					return `Case #${kickData.id}: Successfully kicked ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
 				}
 			case 'mute':
-				const muteData = { type, id: this.createId(), member: member.user.id, moderator };
+				const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				const muteResult = await member.roles.add(client.config.mainServer.roles.muted, `${reason || 'unspecified'} | Case #${muteData.id}`).catch(err => err.message);
 				if (typeof muteResult === 'string') {
 					return 'Mute was unsuccessful: ' + muteResult;
 				} else {
-					if (timeInMillis) muteData.endTime = Date.now() + timeInMillis;
+					if (timeInMillis) {
+						muteData.endTime = now + timeInMillis;
+						muteData.duration = timeInMillis;
+					}
 					if (reason) muteData.reason = reason;
 					this.addData(muteData);
 					this.forceSave();
@@ -281,7 +288,7 @@ Object.assign(client.punishments, {
 					return `Case #${muteData.id}: Successfully muted ${member.user.tag} (${member.user.id}) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
 				}
 			case 'warn':
-				const warnData = { type, id: this.createId(), member: member.user.id, moderator };
+				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				const warnResult = await member.send(`You\'ve been warned in ${member.guild.name} for reason \`${reason || 'unspecified'}\` (Case #${warnData.id})`).catch(err => err.message);
 				if (typeof warnResult === 'string') {
 					return 'Warn was unsuccessful: ' + warnResult;
@@ -294,6 +301,7 @@ Object.assign(client.punishments, {
 		}
 	},
 	async removePunishment(caseId, moderator, reason) {
+		const now = Date.now();
 		const punishment = this._content.find(x => x.id === caseId);
 		const id = this.createId();
 		if (!punishment) return 'Punishment not found.';
@@ -314,13 +322,13 @@ Object.assign(client.punishments, {
 			if (typeof removePunishmentResult === 'string') return `Un${punishment.type} wass unsuccessful: ${removePunishmentResult}`;
 			else {
 				this._content[this._content.findIndex(x => x.id === punishment.id)].expired = true;
-				this.addData({ type: `un${punishment.type}`, id, cancels: punishment.id, member: punishment.member, reason, moderator }).forceSave();
+				this.addData({ type: `un${punishment.type}`, id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now }).forceSave();
 				return `Successfully ${punishment.type === 'ban' ? 'unbanned' : 'unmuted'} ${removePunishmentResult.tag} (${removePunishmentResult.id}) for reason \`${reason || 'unspecified'}\``;
 			}
 		} else {
 			try {
 				this._content.splice(this._content.findIndex(x => x.id === punishment.id), 1);
-				this.addData({ type: 'removeOtherPunishment', id, cancels: punishment.id, member: punishment.member, reason, moderator })
+				this.addData({ type: 'removeOtherPunishment', id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now }).forceSave()
 				return `Successfully removed Case #${punishment.id} (${punishment.type}, ${punishment.member}).`;
 			} catch (error) {
 				return `${punishment.type[0].toUpperCase() + punishment.type.slice(1)} removal was unsuccessful: ${error.message}`;
