@@ -239,6 +239,7 @@ Object.assign(client.punishments, {
 						banData.duration = timeInMillis;
 					}
 					if (reason) banData.reason = reason;
+					client.makeModlogEntry(banData, client);
 					this.addData(banData);
 					this.forceSave();
 					return `Case #${banData.id}: Successfully banned ${member.user.tag} (${member.user.id}) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
@@ -255,6 +256,7 @@ Object.assign(client.punishments, {
 						return 'Softban (unban) was unsuccessful: ' + unbanResult;
 					} else {
 						if (reason) softbanData.reason = reason;
+						client.makeModlogEntry(softbanData, client);
 						this.addData(softbanData);
 						this.forceSave();
 						return `Case #${softbanData.id}: Successfully softbanned ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
@@ -267,11 +269,13 @@ Object.assign(client.punishments, {
 					return 'Kick was unsuccessful: ' + kickResult;
 				} else {
 					if (reason) kickData.reason = reason;
+					client.makeModlogEntry(kickData, client);
 					this.addData(kickData);
 					this.forceSave();
 					return `Case #${kickData.id}: Successfully kicked ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
 				}
 			case 'mute':
+				if (member.roles.cache.has(client.config.mainServer.roles.muted)) return `Mute was unsuccessful: User already has the **${member.guild.roles.cache.get(client.config.mainServer.roles.muted).name}** role.`
 				const muteData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
 				const muteResult = await member.roles.add(client.config.mainServer.roles.muted, `${reason || 'unspecified'} | Case #${muteData.id}`).catch(err => err.message);
 				if (typeof muteResult === 'string') {
@@ -282,6 +286,7 @@ Object.assign(client.punishments, {
 						muteData.duration = timeInMillis;
 					}
 					if (reason) muteData.reason = reason;
+					client.makeModlogEntry(muteData, client);
 					this.addData(muteData);
 					this.forceSave();
 					member.send(`You\'ve been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${muteData.id})`);
@@ -294,6 +299,7 @@ Object.assign(client.punishments, {
 					return 'Warn was unsuccessful: ' + warnResult;
 				} else {
 					if (reason) warnData.reason = reason;
+					client.makeModlogEntry(warnData, client);
 					this.addData(warnData);
 					this.forceSave();
 					return `Case #${warnData.id}: Successfully warned ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
@@ -321,14 +327,18 @@ Object.assign(client.punishments, {
 			}
 			if (typeof removePunishmentResult === 'string') return `Un${punishment.type} wass unsuccessful: ${removePunishmentResult}`;
 			else {
+				const removePunishmentData = { type: `un${punishment.type}`, id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now };
+				client.makeModlogEntry(removePunishmentData, client);
 				this._content[this._content.findIndex(x => x.id === punishment.id)].expired = true;
-				this.addData({ type: `un${punishment.type}`, id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now }).forceSave();
+				this.addData(removePunishmentData).forceSave();
 				return `Successfully ${punishment.type === 'ban' ? 'unbanned' : 'unmuted'} ${removePunishmentResult.tag} (${removePunishmentResult.id}) for reason \`${reason || 'unspecified'}\``;
 			}
 		} else {
 			try {
+				const removePunishmentData = { type: 'removeOtherPunishment', id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now };
+				client.makeModlogEntry(removePunishmentData, client);
 				this._content[this._content.findIndex(x => x.id === punishment.id)].expired = true;
-				this.addData({ type: 'removeOtherPunishment', id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now }).forceSave()
+				this.addData(removePunishmentData).forceSave();
 				return `Successfully removed Case #${punishment.id} (type: ${punishment.type}, user: ${punishment.member}).`;
 			} catch (error) {
 				return `${punishment.type[0].toUpperCase() + punishment.type.slice(1)} removal was unsuccessful: ${error.message}`;
