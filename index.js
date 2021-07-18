@@ -327,9 +327,9 @@ Object.assign(client.punishments, {
 			}
 		} else {
 			try {
-				this._content.splice(this._content.findIndex(x => x.id === punishment.id), 1);
+				this._content[this._content.findIndex(x => x.id === punishment.id)].expired = true;
 				this.addData({ type: 'removeOtherPunishment', id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now }).forceSave()
-				return `Successfully removed Case #${punishment.id} (${punishment.type}, ${punishment.member}).`;
+				return `Successfully removed Case #${punishment.id} (type: ${punishment.type}, user: ${punishment.member}).`;
 			} catch (error) {
 				return `${punishment.type[0].toUpperCase() + punishment.type.slice(1)} removal was unsuccessful: ${error.message}`;
 			}
@@ -582,7 +582,7 @@ client.on('guildMemberAdd', async member => {
         }
     }
     catch(err) {
-        console.log(err);
+        console.log('error in invite tracking', err);
     }
 });
 
