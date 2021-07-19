@@ -38,8 +38,6 @@ module.exports = async (e, client) => {
 		if (typeof upvotes !== 'number' || typeof downvotes !== 'number' || isNaN(upvotes) || isNaN(downvotes)) return;
 		const embed = message.embeds[0];
 
-		console.log(`new reaction by ${e.user.id} on ${at(message.embeds[0].author.name.split('('), -1).slice(0, -1)}'s suggestion "${embed.description.length > 16 ? embed.description.slice(0, 16) + '...' : embed.description}". the suggestion now has now has ${upvotes} ✅ and ${downvotes} ❌`);
-
 		function changeProperties(newColor, newTitle) {
 			if (embed.hexColor === newColor.toLowerCase() && embed.title === newTitle) return;
 			embed.setColor(newColor);
