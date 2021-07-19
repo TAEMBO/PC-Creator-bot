@@ -136,6 +136,11 @@ const quantities = {
 			name: 'Among Us ඞ:red_square:',
 			value: 0,
 			short: ['SUS']
+		},
+		{
+			name: 'United Arab Emirates dirham :flag_ae:',
+			value: 4.34,
+			short: ['AED', 'د.إ']
 		}
 	],
 	mass: [
@@ -243,19 +248,19 @@ module.exports = {
 			const embed = new client.embed()
 				.setTitle('Convert help')
 				.setColor(client.embedColor)
-				.setDescription(`To convert something, you add **amount** and **unit** combinations to the end of the command. The syntax for an amount and unit combination is \`[amount][unit symbol]\`. Amount and unit combinations are called **arguments**. Arguments are divided into **starters** and a **target unit**. Starters are the starting values that you want to convert to the target unit. A conversion command consists of one or many starters, separated with a comma (\`,\`) in case there are many. After starters comes the target unit, which must have a greater-than sign (\`>\`) before it. The argument(s) after the \`>\`, called the target unit, must not include an amount. It is just a **unit symbol**. Because you cannot convert fruits into lengths, all starters and the target unit must be of the same **quantity**.`)
+				.setDescription(`To convert something, you add **amount** and **unit** combinations to the end of the command. The syntax for an amount and unit combination is \`[amount][unit symbol]\`. Amount and unit combinations are called **arguments**. Arguments are divided into **starters** and a **target unit**. Starters are the starting values that you want to convert to the target unit. A conversion command consists of one or many starters, separated with a comma (\`,\`) in case there are many. After starters comes the target unit, which must have a greater-than sign (\`>\`) or the word "to" before it. The argument(s) after the \`>\` (or "to"), called the target unit, must not include an amount. It is just a **unit symbol**. Because you cannot convert fruits into lengths, all starters and the target unit must be of the same **quantity**.`)
 				.addField('Supported Quantities', Object.keys(quantities).map(x => x[0].toUpperCase() + x.slice(1)).join(', ') + `\n\nTo learn more about a quantity and its units and unit symbols,\ndo \`${client.prefix}convert help [quantity]\``)
-				.addField('Examples', `An amount: "5", "1200300", "1.99"\nA unit: metre, kelvin, Euro\nA unit symbol: "fh", "cm^3", "$", "fl oz"\nAn argument: "180cm", "12.99€", "5km", "16fl oz"\nA target unit: ">km", ">c", ">m2"\nA complete conversion command: "\`${client.prefix}convert 5ft, 8in >cm\`", "\`${client.prefix}convert 300kelvin >celsius\`", "\`${client.prefix}convert 57mm, 3.3cm, 0.4m >cm\`", "\`${client.prefix}convert 2dl, 0.2l >fl oz\`"`)
+				.addField('Examples', `An amount: "5", "1200300", "1.99"\nA unit: metre, kelvin, Euro\nA unit symbol: "fh", "cm^3", "$", "fl oz"\nAn argument: "180cm", "12.99€", "5km", "16fl oz"\nA target unit: ">km", ">c", ">m2"\nA complete conversion command: "\`${client.prefix}convert 5ft, 8in to cm\`", "\`${client.prefix}convert 300kelvin >celsius\`", "\`${client.prefix}convert 57mm, 3.3cm, 0.4m >cm\`", "\`${client.prefix}convert 2dl, 0.2l to fl oz\`"`)
 			return message.channel.send(embed);
 		}
-		if (!message.content.includes('>')) return message.channel.send('There needs to be a greater-than sign (\`>\`) in your message, after the starters and before the target unit.');
-		const starters = args.slice(1, args.indexOf(args.find(x => x.includes('>')))).join(' ').split(',').map(starter => {
+		if (!message.content.includes('>') && !message.content.includes('to')) return message.channel.send('There needs to be a greater-than sign (\`>\`) or the word "to" in your message, after the starters and before the target unit.');
+		const starters = args.slice(1, args.indexOf(args.find(x => x.includes('>') || x.includes('to')))).join(' ').split(',').map(starter => {
 			starter = starter.trim();
 			const unitSymbol = starter.slice(starter.match(/[0-9\,\.\-]*/gi)[0].length).trim();
 			return Object.assign({ amount: parseFloat(starter) }, findUnit(unitSymbol));
 		});
 		if (!starters || starters.length === 0) return message.channel.send('You must convert _something._ Your message has 0 starters.');
-		const target = findUnit(args.slice(args.indexOf(args.find(x => x.includes('>')))).join(' ').slice(1).trim());
+		const target = findUnit(args.slice(args.indexOf(args.find(x => x.includes('>')))).join(' ').slice(1).trim()) || findUnit(args.slice(args.indexOf(args.find(x => x.includes('to')))).join(' ').slice(2).trim());
 		if (!target) return message.channel.send('You must convert _to_ something. Your message doesn\'t have a (valid) target unit.');
 
 		// check that all starters and target are the same quantity
