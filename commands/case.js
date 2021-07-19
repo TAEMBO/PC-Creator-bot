@@ -47,7 +47,7 @@ module.exports = {
 		}
 	},
 	name: 'case',
-	description: 'Get information about a punishment case.',
+	description: 'Get information about a specific punishment case or all the punishments of a user.',
 	usage: ['case # / user id', '?page'],
 	category: 'Moderation',
 	alias: ['cases'],
