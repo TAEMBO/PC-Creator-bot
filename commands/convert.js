@@ -132,6 +132,11 @@ const quantities = {
 			value: 88.37,
 			short: ['INR', '₹']
 		},
+		{
+			name: 'Among Us ඞ:red_square:',
+			value: 0,
+			short: ['SUS']
+		}
 	],
 	mass: [
 		{
