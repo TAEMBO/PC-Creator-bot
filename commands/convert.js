@@ -92,6 +92,46 @@ const quantities = {
 			value: 7.68,
 			short: ['CN¥', 'CNY', 'RMB', '元']
 		},
+		{
+			name: 'Swedish krona :flag_se:',
+			value: 10.25,
+			short: ['SEK', 'kr']
+		},
+		{
+			name: 'Norwegian krone :flag_no:',
+			value: 10.54,
+			short: ['NOK']
+		},
+		{
+			name: 'Danish krone :flag_dk:',
+			value: 7.44,
+			short: ['DKK']
+		},
+		{
+			name: 'Icelandic króna :flag_is:',
+			value: 146.3,
+			short: ['ISK']
+		},
+		{
+			name: 'Czech koruna :flag_cz:',
+			value: 25.69,
+			short: ['CZK', 'Kč']
+		},
+		{
+			name: 'Swiss franc :flag_sw:',
+			value: 1.08,
+			short: ['CFH', 'fr']
+		},
+		{
+			name: 'Ukrainian hryvnia :flag_ua:',
+			value: 32.13,
+			short: ['UAH', '₴', 'грн']
+		},
+		{
+			name: 'Indian rupee :flag_in:',
+			value: 88.37,
+			short: ['INR', '₹']
+		},
 	],
 	mass: [
 		{
@@ -172,15 +212,11 @@ const quantities = {
 	]
 }
 function findUnit(unitNameQuery = '') {
-	console.log('doing findunit on', unitNameQuery);
 	for (let i = 0; i < Object.values(quantities).length; i++) {
 		const unit = Object.values(quantities)[i].find(x => x.name.toLowerCase() === unitNameQuery.toLowerCase() || x.short.some(y => y.toLowerCase() === unitNameQuery.toLowerCase()));
 		if (unit) {
-			console.log('match found in', Object.keys(quantities)[i], ', found', unit);
 			const quantity = Object.keys(quantities)[i];
 			return { quantity, unit };
-		} else {
-			console.log('no match found in', Object.keys(quantities)[i]);
 		}
 	}
 	return null;
@@ -192,10 +228,10 @@ module.exports = {
 			if (wantedQuantity) {
 				const units = quantities[wantedQuantity];
 				const baseValue = units.find(x => x.value === 1 || x.toBase === 'x');
-
+				
 				const embed = new client.embed()
 					.setTitle('Convert help: ' + wantedQuantity)
-					.setDescription(`This quantity comprises ${units.length} units, which are:\n\n${units.sort((a, b) => a.evalRequired ? a.name < b.name : b.value - a.value).map(unit => `**${unit.name[0].toUpperCase() + unit.name.slice(1)}** (${unit.short.map(x => `\`${x}\``).join(', ')})`).join('\n')}`)
+					.setDescription(`This quantity comprises ${units.length} units, which are:\n\n${units.sort((a, b) => a.name.localeCompare(b.name)).map(unit => `**${unit.name[0].toUpperCase() + unit.name.slice(1)}** (${unit.short.map(x => `\`${x}\``).join(', ')})`).join('\n')}`)
 					.setColor(client.embedColor)
 				return message.channel.send(embed);
 			}
@@ -207,18 +243,15 @@ module.exports = {
 				.addField('Examples', `An amount: "5", "1200300", "1.99"\nA unit: metre, kelvin, Euro\nA unit symbol: "fh", "cm^3", "$", "fl oz"\nAn argument: "180cm", "12.99€", "5km", "16fl oz"\nA target unit: ">km", ">c", ">m2"\nA complete conversion command: "\`${client.prefix}convert 5ft, 8in >cm\`", "\`${client.prefix}convert 300kelvin >celsius\`", "\`${client.prefix}convert 57mm, 3.3cm, 0.4m >cm\`", "\`${client.prefix}convert 2dl, 0.2l >fl oz\`"`)
 			return message.channel.send(embed);
 		}
-		if (!message.content.includes('>')) return message.channel.send('There needs to be a greater-than sign (\`>\`) in your message.');
+		if (!message.content.includes('>')) return message.channel.send('There needs to be a greater-than sign (\`>\`) in your message, after the starters and before the target unit.');
 		const starters = args.slice(1, args.indexOf(args.find(x => x.includes('>')))).join(' ').split(',').map(starter => {
 			starter = starter.trim();
 			const unitSymbol = starter.slice(starter.match(/[0-9\,\.\-]*/gi)[0].length).trim();
 			return Object.assign({ amount: parseFloat(starter) }, findUnit(unitSymbol));
 		});
 		if (!starters || starters.length === 0) return message.channel.send('You must convert _something._ Your message has 0 starters.');
-		console.log('args2', args.slice(2).join(' '));
-		const target = findUnit(args.slice(args.indexOf(args.find(x => x.includes('>')))).join(' ').slice(1));
+		const target = findUnit(args.slice(args.indexOf(args.find(x => x.includes('>')))).join(' ').slice(1).trim());
 		if (!target) return message.channel.send('You must convert _to_ something. Your message doesn\'t have a (valid) target unit.');
-
-		console.log('starters', starters);
 
 		// check that all starters and target are the same quantity
 		const usedQuantities = new Set([target.quantity, ...starters.map(x => x.quantity)]);
@@ -235,7 +268,6 @@ module.exports = {
 		} else {
 			absolute = starters.map(starter => starter.amount / starter.unit.value).reduce((a, b) => a + b, 0);
 		}
-		console.log('absolute', absolute);
 
 		// multiply absolute by the value of the target unit		
 		let amountInTarget;
