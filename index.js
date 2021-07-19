@@ -640,7 +640,7 @@ client.on("message", async (message) => {
 						if (message.channel.id === client.config.mainServer.channels.suggestions) {
 							setTimeout(async () => {
 								await cooldownMention.delete();
-								await message.delete();
+								await message.delete().catch(err => console.log('could not delete ,suggest message (on cooldown) because', err.message));
 							}, 20000);
 						}
 						return;
