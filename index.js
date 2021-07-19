@@ -667,7 +667,7 @@ client.on("message", async (message) => {
 		}
 	} else {
 		// repeated messages
-		if (message.content.length > 10) {
+		if (message.content.length > 10 && message.guild.id === client.config.mainServer.id) {
 			const thisContent = message.content.slice(0, 32);
 			if (client.repeatedMessages[message.author.id]) {
 				// add this message to the list
