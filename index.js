@@ -264,7 +264,7 @@ Object.assign(client.punishments, {
 				}
 			case 'kick':
 				const kickData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const kickResult = await member.kick(`${reason || 'unspecified'} | Case #${banData.id}`).catch(err => err.message);
+				const kickResult = await member.kick(`${reason || 'unspecified'} | Case #${kickData.id}`).catch(err => err.message);
 				if (typeof kickResult === 'string') {
 					return 'Kick was unsuccessful: ' + kickResult;
 				} else {
