@@ -14,24 +14,16 @@ specs.json
 
 starboard.json
 
-ttt.json
-
 userLevels.json
 
 dmforwardblacklist.json
 
 tokens.json
 
-cpulist-AMD.json
-
-cpulist-INTEL.json
-
-gpulist-AMD.json
-
-gpulist-NVIDIA.json
-
 mutes.json
 
 dailyMsgs.json
+
 channelRestrictions.json
+
 punishments.json
