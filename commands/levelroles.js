@@ -51,7 +51,7 @@ module.exports = {
 			const millisecondsToMilestone = daysToMilestone * 24 * 60 * 60 * 1000;
 
 			// if less than 30 days of data are available, declare that now
-			const actualDataLength = lastMonth.length - 1;
+			const actualDataLength = Object.keys(dailyMsgs).length - 1;
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Stats')
