@@ -125,6 +125,7 @@ Object.assign(client.userLevels, {
 		const next = milestones.find(x => x >= total) || undefined;
 		const previous = milestones[milestones.indexOf(next) - 1] || 0;
 		return {
+			total,
 			next,
 			previous,
 			progress: (total - previous) / (next - previous)
@@ -135,10 +136,11 @@ Object.assign(client.userLevels, {
 		if (amount) this._content[userid]++;
 		else this._content[userid] = 1;
 		// milestone
-		if (this._milestone() && Object.values(this._content).reduce((a, b) => a + b, 0) === this._milestone().next) {
+		const milestone = this._milestone();
+		if (milestone && milestone.total === this._milestone().next) {
 			const channel = client.channels.resolve('744401969241653298'); // #server-updates
-			if (!channel) return console.log('tried to send milestone announcement but channel wasnt found');;
-			channel.send(`:tada: Milestone reached! **${this._milestone.toLocaleString('en-US')}** messages have been sent in this server and recorded by Level Roles. :tada:`);
+			if (!channel) return console.log('tried to send milestone announcement but channel wasnt found');
+			channel.send(`:tada: Milestone reached! **${milestone.next.toLocaleString('en-US')}** messages have been sent in this server and recorded by Level Roles. :tada:`);
 		}
 		return this;
 	},
