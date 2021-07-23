@@ -230,7 +230,7 @@ Object.assign(client.punishments, {
 		switch (type) {
 			case 'ban':
 				const banData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const dm = await member.send(`You\'ve been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${banData.id})`);
+				const dm = await member.send(`You\'ve been banned from ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${banData.id})`).catch(err => console.log(`dm failed while ${moderator} was banning ${member.user.id} (case ${banData.id}):`, err.message));
 				const banResult = await member.ban({ reason: `${reason || 'unspecified'} | Case #${banData.id}` }).catch(err => err.message);
 				if (typeof banResult === 'string') {
 					dm.delete();
@@ -291,12 +291,12 @@ Object.assign(client.punishments, {
 					client.makeModlogEntry(muteData, client);
 					this.addData(muteData);
 					this.forceSave();
-					member.send(`You\'ve been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${muteData.id})`);
+					member.send(`You\'ve been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${muteData.id})`).catch(err => console.log(`dm failed while ${moderator} was muting ${member.user.id} (case ${muteData.id}):`, err.message));
 					return `Case #${muteData.id}: Successfully muted ${member.user.tag} (${member.user.id}) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
 				}
 			case 'warn':
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const warnResult = await member.send(`You\'ve been warned in ${member.guild.name} for reason \`${reason || 'unspecified'}\` (Case #${warnData.id})`).catch(err => err.message);
+				const warnResult = await member.send(`You\'ve been warned in ${member.guild.name} for reason \`${reason || 'unspecified'}\` (Case #${warnData.id})`).catch(err => console.log(`dm failed while ${moderator} was warning ${member.user.id} (case ${banData.id}):`, err.message));
 				if (typeof warnResult === 'string') {
 					return 'Warn was unsuccessful: ' + warnResult;
 				} else {
