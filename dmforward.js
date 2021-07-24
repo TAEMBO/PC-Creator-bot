@@ -3,7 +3,7 @@ module.exports = async (message, client) => {
 	if (client.games.some(x => x === message.author.tag)) return;
 	const channel = client.channels.cache.get(client.config.mainServer.channels.staffLogs);
 	const pcCreatorServer = client.guilds.cache.get(client.config.mainServer.id);
-	const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id));
+	const guildMemberObject = (await pcCreatorServer.members.fetch(message.author.id).catch(() => undefined));
 	const memberOfPccs = !!guildMemberObject;
 	const embed = new client.embed()
 		.setTitle('Forwarded DM Message')

@@ -152,12 +152,12 @@ const quantities = {
 		{
 			name: 'kilogram',
 			value: 0.001,
-			short: ['kg']
+			short: ['kg', 'kgs']
 		},
 		{
 			name: 'pound',
 			value: 0.00220462262,
-			short: ['lbs']
+			short: ['lbs', 'b']
 		},
 		{
 			name: 'ounce',
