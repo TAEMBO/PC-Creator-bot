@@ -13,11 +13,11 @@ module.exports = {
 		}
 		args[1] = args[1].replace(/"/g, '')
 		if (args[1].toUpperCase() === 'CPU') {
-			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/853326007431462912/CPU-Scores_2.jpg');
+			message.channel.send('https://cdn.discordapp.com/attachments/838857610358292532/871413009015242752/CPU_Scores_3.jpg');
 		} else if (args[1].toUpperCase() === 'GPU') {
-			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/845681844766769212/GPU_scores.jpg');
+			message.channel.send('https://cdn.discordapp.com/attachments/838857610358292532/871324435519520798/GPU_scores_2.jpg');
 		} else if (args[1].toUpperCase() === 'RAM') {
-			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/853667767622303774/unknown.png');
+			message.channel.send('https://cdn.discordapp.com/attachments/838857610358292532/871410897757827153/unknown.png');
 		} else {
 			message.channel.send('You need to add "CPU", "GPU" or "RAM"');
 		}
