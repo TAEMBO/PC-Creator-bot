@@ -24,7 +24,7 @@ client.on("ready", async () => {
 		});
 	}, 30000);
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
-	console.log(guildInvites.set);
+	/*console.log(guildInvites.set);*/
 });
 modmailClient.on("ready", async () => {
 	setInterval(async () => {
