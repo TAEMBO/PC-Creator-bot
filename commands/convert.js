@@ -75,7 +75,7 @@ const quantities = {
 		{
 			name: 'Japanese Yen :flag_jp:',
 			value: 130.84,
-			short: ['JPY', '¥']
+			short: ['JPY', '¥', 'yen', 'jy']
 		},
 		{
 			name: 'New Zealand Dollar :flag_nz:',
