@@ -22,10 +22,6 @@ client.on("ready", async () => {
 		await client.user.setActivity(",help", {
 			type: "LISTENING", 
 		});
-
-		// counting
-		const channel = client.channels.cache.get(client.config.mainServer.channels.counting);
-		channel.send((client.counting._content.i + 1).toString());
 	}, 30000);
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
 	/*console.log(guildInvites.set);*/
@@ -358,11 +354,6 @@ client.punishments.initLoad();
 client.channelRestrictions = new database('./channelRestrictions.json', 'object');
 client.channelRestrictions.initLoad();
 
-// counting
-client.counting = new database('./counting.json', 'object');
-client.counting.initLoad();
-client.counting.disableSaveNotifs();
-
 // command handler
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -608,10 +599,10 @@ client.on('guildMemberAdd', async member => {
 });
 
 client.on("message", async (message) => {
-	if (message.partial) return;
-
 	if (process.argv[2] === 'dev' && !client.config.eval.whitelist.includes(message.author.id)) return; // bot is being run in dev mode and a non eval whitelisted user sent a message. ignore the message.
-    if (message.channel.type === 'dm' && !message.author.bot) require('./dmforward.js')(message, client);
+	if (message.partial) return;
+	if (message.author.bot) return;
+    if (message.channel.type === 'dm') require('./dmforward.js')(message, client);
 	if (!message.guild) return;
 	const suggestCommand = client.commands.get('suggest');
 	if (client.config.mainServer.channels.suggestions === message.channel.id && ![suggestCommand.name, ...suggestCommand.alias].some(x => message.content.split(' ')[0] === client.prefix + x) && !message.author.bot) {
@@ -624,14 +615,13 @@ client.on("message", async (message) => {
 		client.config.mainServer.roles.administrator,
 		client.config.mainServer.roles.owner
 	];
-	if (message.mentions.roles.some(mentionedRole => punishableRoleMentions.includes(mentionedRole.id)) && !message.author.bot) {
+	if (message.mentions.roles.some(mentionedRole => punishableRoleMentions.includes(mentionedRole.id))) {
 		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000, errors: ['time']}).then(async () => {
 			const muteResult = await client.muteMember(client, message.member, { time: 1000 * 60 * 5, reason: 'pinged staff role with no purpose' });
 			message.channel.send(muteResult.text);
 		}).catch(() => {});
 	}
 	if (message.content.startsWith(client.prefix)) {
-		if (message.author.bot) return
 		const args = message.content.slice(client.prefix.length).replace(/\n/g, ' ').split(' ');
 		const commandFile = client.commands.find(x => x.name === args[0] || x.alias?.includes(args[0]));
 		if (commandFile) {
@@ -723,23 +713,6 @@ client.on("message", async (message) => {
 		];
 		// if message was not sent in a blacklisted channel, count towards user level
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id)) client.userLevels.incrementUser(message.author.id);
-
-		// read numbers from #counting
-		if (message.channel.id === client.config.mainServer.channels.counting) {
-			// get number from message
-			const number = message.content.split(' ').map(x => parseInt(x)).find(x => !!x);
-			if (!number) {
-				console.log('non-number sent in #counting');
-			} else {
-				if (number !== client.counting._content.i + 1) {
-					console.log(`${message.author.tag} sent the wrong number in #counting. sent ${number}, shouldve been ${client.counting._content.i + 1}`);
-				} else {
-					client.counting._content.i = number;
-					console.log('new #counting number:', number);
-					client.counting.forceSave();
-				}
-			}
-		}
 
 		require('./autores.js')(message, client);
 	}
