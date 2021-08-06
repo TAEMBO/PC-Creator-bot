@@ -669,14 +669,14 @@ client.on("message", async (message) => {
 		}
 	} else {
 		// repeated messages
-		if (message.content.length > 10 && message.guild.id === client.config.mainServer.id) {
+		if (message.content.length > 10 && ['https://', 'http://'].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
 			const thisContent = message.content.slice(0, 32);
 			if (client.repeatedMessages[message.author.id]) {
 				// add this message to the list
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, thisContent);
 
 				// this is the time in which 3 messages have to be sent, in milliseconds
-				const threshold = 7000;
+				const threshold = 10000;
 
 				// message mustve been sent after (now - threshold)
 				client.repeatedMessages[message.author.id] = client.repeatedMessages[message.author.id].filter((x, i) => i >= Date.now() - threshold)
