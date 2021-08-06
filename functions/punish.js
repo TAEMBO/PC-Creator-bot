@@ -3,11 +3,11 @@ module.exports = async (client, message, args, type) => {
 	let member;
 	if (args[1]) member = message.mentions.members?.first() || (await client.getMember(message.guild, args[1]).catch(() => undefined));
 	if (!member) {
-		await message.channel.send(`Which member would you like to ${type}? Reply with a mention or a user ID.`).then(async x => {
+		await message.channel.send(`Which member would you like to ${type}? Reply with a mention or a user ID. (30s)`).then(async x => {
 			member = await message.channel.awaitMessages(y => y.author.id === message.author.id, { time: 30000, errors: ['time'], max: 1 }).then(async z => {
 				return z.first().mentions.members?.first() || (await message.guild.members.fetch(z.first().content).catch(() => undefined));
 			}).catch(async () => {
-				message.channel.send('Command cancelled after 15 seconds of inactivity.');
+				message.channel.send('Command cancelled after 30 seconds of inactivity.');
 				return 'timedout';
 			});
 		});
@@ -23,11 +23,11 @@ module.exports = async (client, message, args, type) => {
 		reason = args.slice(time ? 3 : 2).join(' ');
 	} else {
 		if (!['softban', 'kick', 'warn'].includes(type)) {
-			await message.channel.send(`How long do you want to ${type} this user for? Type "forever" to ${type} this user forever.`);
+			await message.channel.send(`How long do you want to ${type} this user for? Reply with a time name, or "forever" to ${type} this user forever. (30s)`);
 			time = await message.channel.awaitMessages(x => x.author.id === message.author.id, { time: 30000, errors: ['time'], max: 1 }).then(collected => collected.first()?.content.toLowerCase() === 'forever' ? 'inf' : collected.first()?.content).catch(() => 0);
 			if (time === 0) return message.channel.send('Invalid time.');
 		}
-		await message.channel.send(`Provide a reason for this ${type}. Type "-" to leave the reason unspecified.`);
+		await message.channel.send(`Reply with a reason for this ${type}. Reply "-" to leave the reason unspecified. (30s)`);
 		reason = await message.channel.awaitMessages(x => x.author.id === message.author.id, { time: 30000, errors: ['time'], max: 1 }).then(collected => collected.first()?.content === '-' ? undefined : collected.first()?.content).catch(() => 0);
 		if (reason === 0) return message.channel.send('Invalid reason.');
 	}
