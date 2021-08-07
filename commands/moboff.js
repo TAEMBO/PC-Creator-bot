@@ -1,6 +1,6 @@
 module.exports = {
 	run: (client, message, args) => {
-		message.channel.send("https://media1.tenor.com/images/a6c06a58908f8e28d5b623d846f7137a/tenor.gif?itemid=19940498");
+		message.channel.send("https://im7.ezgif.com/tmp/ezgif-7-fff2a9a1b2e3.gif");
 	},
 	name: 'moboff',
 	category: 'Real Computers',
