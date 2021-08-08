@@ -223,7 +223,7 @@ const quantities = {
 }
 function findUnit(unitNameQuery = '') {
 	for (let i = 0; i < Object.values(quantities).length; i++) {
-		const unit = Object.values(quantities)[i].find(x => x.name.toLowerCase() === unitNameQuery.toLowerCase() || x.short.some(y => y.toLowerCase() === unitNameQuery.toLowerCase()));
+		const unit = Object.values(quantities)[i].find(x => x.short.some(y => y.toLowerCase() === unitNameQuery.toLowerCase()) || x.name.toLowerCase() === unitNameQuery.toLowerCase()) || Object.values(quantities)[i].find(x => x.name.toLowerCase().includes(unitNameQuery.toLowerCase()));
 		if (unit) {
 			const quantity = Object.keys(quantities)[i];
 			return { quantity, unit };
@@ -237,7 +237,6 @@ module.exports = {
 			const wantedQuantity = Object.keys(quantities).find(x => x === args[2]);
 			if (wantedQuantity) {
 				const units = quantities[wantedQuantity];
-				const baseValue = units.find(x => x.value === 1 || x.toBase === 'x');
 				
 				const embed = new client.embed()
 					.setTitle('Convert help: ' + wantedQuantity)
