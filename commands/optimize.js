@@ -6,5 +6,5 @@ module.exports = {
 	description: 'Explains how to complete an optimize FPS order',
 	category: 'PC Creator',
     alias: ['opt'],
-	autores: ['how/what', 'optimize']
+	autores: ['how/what', 'optimize/optimise/fps']
 };
