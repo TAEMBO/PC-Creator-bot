@@ -12,6 +12,9 @@ module.exports = async (e, client) => {
 		const message = reaction.message;
 		const channel = message.channel;
 
+		// the message that this reaction was added to, must be a suggestion embed, sent by the bot. this rules out cases where reactions are added on messages like ",suggest" that were sent when the bot was offline
+		if (!message.embeds[0]?.author?.name || message.author.id !== client.user.id) return;
+
 		// wrong emoji
 		if (e.t === 'message_reaction_add' && !['✅', '❌'].includes(e.reaction.emoji.name)) {
 			return reaction.remove();
@@ -21,7 +24,7 @@ module.exports = async (e, client) => {
 		
 		// self voted
 		// if a reaction was added by a user whose id is in the embed author name
-		if (e.t === 'message_reaction_add' && message.embeds[0]?.author?.name && e.user.id === at(message.embeds[0].author.name.split('('), -1).slice(0, -1)) {
+		if (e.t === 'message_reaction_add' && e.user.id === at(message.embeds[0].author.name.split('('), -1).slice(0, -1)) {
 			// remove the users reaction and notify them
 			return reaction.users.remove(e.user.id).then(() => {
 				channel.send(`<@${e.user.id}> You\'re not allowed to vote on your own suggestion!`).then(x => setTimeout(() => x.delete(), 6000));
