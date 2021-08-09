@@ -12,7 +12,10 @@ module.exports = async (e, client) => {
 		const message = reaction.message;
 		const channel = message.channel;
 
-		// the message that this reaction was added to, must be a suggestion embed, sent by the bot. this rules out cases where reactions are added on messages like ",suggest" that were sent when the bot was offline
+		// if a reaction was added to a message that starts with ",suggest", this suggests that the bot has been offline and someone has tried to do a suggestion. to keep the chat clean, the bot will delete ",suggest" messages when it sees reactions added to them
+		if (message.author.id !== client.user.id && message.content.startsWith(client.prefix + 'suggest')) return message.delete();
+
+		// there may also be other cases where reading a reaction properly could cause errors, so do it properly only on suggestion embeds sent by the bot.
 		if (!message.embeds[0]?.author?.name || message.author.id !== client.user.id) return;
 
 		// wrong emoji
