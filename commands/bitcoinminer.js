@@ -2,7 +2,7 @@ module.exports = {
     run: async (client, message, args) => {
 		const embed = new client.embed()
 			.setTitle("Best Bitcoin build")
-			.setDescription("All items in this list are buyable with in-game money.\nCost: $3000")
+			.setDescription("All items in this list are buyable with in-game money.\nCost: $2980")
 			.setColor(client.embedColor)
 			.addFields([
 				{
@@ -51,12 +51,12 @@ module.exports = {
 					"inline": true
 				}
 			])
-			.setImage('https://images-ext-2.discordapp.net/external/tnkw9dUOYfhUtyYlnKn7tmckIdNo5oIBkd4peFQezcw/https/media.discordapp.net/attachments/778848112588095559/866837595241054258/image0.png')
+			.setImage('https://media.discordapp.net/attachments/571031705109135361/873973732874551416/Bitcoin_Pc.jpg')
         message.channel.send(embed);
     },
 	name: 'bitcoinminer',
 	description: 'Shows the current best bitcoin mining setup for only in-game money.',
 	category: 'PC Creator',
 	alias: ['bitcoin', 'btcpc'],
-	autores: ['what/how/make/build/create/is', 'best/money/cheap/good', 'bitcoin/btc/coin', 'miner/mining', 'pc/computer/rig']
+	autores: ['what/how/make/build/create/is', 'best/money/cheap/good', 'bitcoin/btc/bit coin', 'miner/mining/mine', 'pc/computer/rig']
 };
