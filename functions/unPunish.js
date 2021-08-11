@@ -2,6 +2,7 @@
 // takes case id, removes it from json
 // if its a mute or ban, remove muted role from punishment.member or unban member
 module.exports = async (client, message, args, type) => {
+	if (message.guild.id !== client.config.mainServer.id) return message.channel.send('this command doesnt work in this server');
 	if (!client.hasModPerms(client, message.member)) return message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command.`);
 	let punishment;
 	if (args[1]) punishment = client.punishments._content.find(x => x.id == args[1])
