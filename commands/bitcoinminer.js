@@ -22,12 +22,12 @@ module.exports = {
 				},
 				{
 					"name": "RAM",
-					"value": "GODRAM DDR4 4GB",
+					"value": "L15S 4GB",
 					"inline": true
 				},
 				{
 					"name": "GPUS",
-					"value": "3x GIGABATE GTX 1080 Ti\n(or 1090 Ti, no difference in performance)",
+					"value": "3x GEFORCE RTX 2060",
 					"inline": true
 				},
 				{
@@ -37,7 +37,7 @@ module.exports = {
 				},
 				{
 					"name": "PSU",
-					"value": "ZALMVN ZM1000",
+					"value": "MWE RED",
 					"inline": true
 				},
 				{

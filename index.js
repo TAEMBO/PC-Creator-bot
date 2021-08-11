@@ -676,7 +676,7 @@ client.on("message", async (message) => {
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, thisContent);
 
 				// this is the time in which 3 messages have to be sent, in milliseconds
-				const threshold = 10000;
+				const threshold = 15000;
 
 				// message mustve been sent after (now - threshold)
 				client.repeatedMessages[message.author.id] = client.repeatedMessages[message.author.id].filter((x, i) => i >= Date.now() - threshold)
