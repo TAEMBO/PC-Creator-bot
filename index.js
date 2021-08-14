@@ -296,7 +296,7 @@ Object.assign(client.punishments, {
 				}
 			case 'warn':
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
-				const warnResult = await member.send(`You\'ve been warned in ${member.guild.name} for reason \`${reason || 'unspecified'}\` (Case #${warnData.id})`).catch(err => console.log(`dm failed while ${moderator} was warning ${member.user.id} (case ${banData.id}):`, err.message));
+				const warnResult = await member.send(`You\'ve been warned in ${member.guild.name} for reason \`${reason || 'unspecified'}\` (Case #${warnData.id})`).catch(err => console.log(`dm failed while ${moderator} was warning ${member.user.id} (case ${warnData.id}):`, err.message));
 				if (typeof warnResult === 'string') {
 					return 'Warn was unsuccessful: ' + warnResult;
 				} else {

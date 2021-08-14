@@ -1,5 +1,6 @@
 module.exports = {
 	run: async (client, message, args) => {
+		if (message.guild.id !== client.config.mainServer.id) return message.channel.send('wrong server');
 		const amount = parseInt(args[1]);
 		const modRole = client.config.mainServer.roles.moderator;
 		if (!message.member.roles.cache.has(modRole)) return message.channel.send(`You need the **${message.guild.roles.cache.get(modRole).name}** role to use this command.`);
