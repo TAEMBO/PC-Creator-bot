@@ -22,7 +22,7 @@ module.exports = {
 		// if they did help and didnt put anything else in the command, get help embed and send it
 		if (args[1].toLowerCase() === 'help' && args.length === 2) {
 			const embed = new client.embed()
-			.setTitle('GPU Command Help [BETA]')
+			.setTitle('GPU Command Help')
 			.setColor(client.embedColor)
 			.setDescription('This command searches a list of real life GPUs and supplies you with technical information about them. This guide explains how to use this command properly.')
 			.addField('Search Terms', 'Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.')
