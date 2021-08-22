@@ -35,12 +35,15 @@ module.exports = {
 				else return 0;
 			}).slice(-(dataLength + 1));
 
+			// if data is shorter than 30d (data is available from less than 30 truthy days), take that into account when calculating average
+			const actualDataLength = lastMonth.filter(x => x).length - 1;
+
 			// messages today relative to yesterday, daily change in msgs
 			const msgsPerDay = lastMonth.slice(1).map((day, i) =>{
 				return day[1] - (lastMonth[i][1] || day[1])
 			});
 			// average msgs per day
-			const averageMsgsPerDay = msgsPerDay.reduce((a, b) => a + b, 0) / dataLength;
+			const averageMsgsPerDay = msgsPerDay.reduce((a, b) => a + b, 0) / actualDataLength;
 
 			// time in milliseconds to reach milestone
 			// messages left until next milestone
@@ -49,9 +52,6 @@ module.exports = {
 			const daysToMilestone = msgsToMilestone / averageMsgsPerDay;
 			// average days in milliseconds
 			const millisecondsToMilestone = daysToMilestone * 24 * 60 * 60 * 1000;
-
-			// if less than 30 days of data are available, declare that now
-			const actualDataLength = Object.keys(dailyMsgs).length - 1;
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Stats')
