@@ -424,6 +424,7 @@ Object.assign(client.starboard, {
 		else {
 			this.addData(reaction.message.id, { c: 1, a: reaction.message.author.id });
 			dbEntry = this._content[reaction.message.id];
+			if (!reaction.message.author.id) return;
 		}
 		if (dbEntry?.c >= client.starLimit) {
 			if (dbEntry.e) {
