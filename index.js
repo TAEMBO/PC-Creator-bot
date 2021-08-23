@@ -676,7 +676,7 @@ client.on("message", async (message) => {
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, thisContent);
 
 				// this is the time in which 3 messages have to be sent, in milliseconds
-				const threshold = 15000;
+				const threshold = 30000;
 
 				// message mustve been sent after (now - threshold)
 				client.repeatedMessages[message.author.id] = client.repeatedMessages[message.author.id].filter((x, i) => i >= Date.now() - threshold)
@@ -687,10 +687,17 @@ client.on("message", async (message) => {
 					delete client.repeatedMessages[message.author.id];
 				}
 
-				// a spammed message is one that has been sent at least 3 times in the last threshold milliseconds
+				// if user has sent 3 times, notify them
+				if (client.repeatedMessages[message.author.id]?.find(x => {
+					return client.repeatedMessages[message.author.id].filter(y => y === x).size === 3;
+				})) {
+					message.reply('Stop spamming that message!');
+				}
+
+				// a spammed message is one that has been sent at least 4 times in the last threshold milliseconds
 				const spammedMessage = client.repeatedMessages[message.author.id]?.find(x => {
-					return client.repeatedMessages[message.author.id].filter(y => y === x).size >= 3
-				})
+					return client.repeatedMessages[message.author.id].filter(y => y === x).size >= 4;
+				});
 
 				// if a spammed message exists;
 				if (spammedMessage) {
