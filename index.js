@@ -674,7 +674,7 @@ client.on("message", async (message) => {
 			const thisContent = message.content.slice(0, 32);
 			if (client.repeatedMessages[message.author.id]) {
 				// add this message to the list
-				client.repeatedMessages[message.author.id].set(message.createdTimestamp, thisContent);
+				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: thisContent, ch: message.channel.id });
 
 				// this is the time in which 3 messages have to be sent, in milliseconds
 				const threshold = 60000;
@@ -690,14 +690,14 @@ client.on("message", async (message) => {
 
 				// if user has sent 3 times, notify them
 				if (client.repeatedMessages[message.author.id]?.find(x => {
-					return client.repeatedMessages[message.author.id].filter(y => y === x).size === 3;
+					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 3;
 				})) {
 					message.reply('Stop spamming that message!');
 				}
 
 				// a spammed message is one that has been sent at least 4 times in the last threshold milliseconds
 				const spammedMessage = client.repeatedMessages[message.author.id]?.find(x => {
-					return client.repeatedMessages[message.author.id].filter(y => y === x).size >= 4;
+					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size >= 4;
 				});
 
 				// if a spammed message exists;
@@ -707,12 +707,23 @@ client.on("message", async (message) => {
 					// send softban result in last channel an identicl message was sent in
 					message.channel.send(softbanResult);
 
+					// timestamp of first spammed message
+					const spamOriginTimestamp = client.repeatedMessages[message.author.id].firstKey();
+
+					// send info about this user and their spamming
+					message.channel.send(`The messages they spammed included:\n\`https://\` ${message.content.toLowerCase().includes('https://') ? ':white_check_mark:' : ':x:'}\n\`http://\` ${message.content.toLowerCase().includes('http://') ? ':white_check_mark:' : ':x:'}\n\`@everyone\` ${message.content.toLowerCase().includes(`<@&${message.guild.id}>`) ? ':white_check_mark:' : ':x:'}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join('\n')}\nThreshold: ${threshold}ms`);
+
 					// and clear their list of long messages
 					delete client.repeatedMessages[message.author.id];
 				}
 			} else {
 				client.repeatedMessages[message.author.id] = new client.collection();
-				client.repeatedMessages[message.author.id].set(message.createdTimestamp, message.content.slice(0, 32));
+				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: message.content.slice(0, 32), ch: message.channel.id });
+
+				// auto delete after 2 minutes
+				setTimeout(() => {
+					delete client.repeatedMessages[message.author.id];
+				}, 120000);
 			}
 		}
 
