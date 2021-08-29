@@ -7,33 +7,43 @@ const quantities = {
 		},
 		{
 			name: 'centimetre',
-			value: 100,
+			value: 0.01,
 			short: ['cm', 'centimeter']
 		},
 		{
 			name: 'millimetre',
-			value: 1000,
+			value: 0.001,
 			short: ['mm', 'millimeter']
 		},
 		{
 			name: 'kilometre',
-			value: 0.001,
+			value: 1000,
 			short: ['km', 'kilometer']
 		},
 		{
 			name: 'mile',
-			value: 0.000621371192,
+			value: 1609.344,
 			short: ['mi']
 		},
 		{
 			name: 'foot',
-			value: 3.2808399,
+			value: 0.3048,
 			short: ['ft', '\'']
 		},
 		{
 			name: 'inch',
-			value: 39.3700787,
+			value: 0.0254,
 			short: ['in', '\"']
+		},
+		{
+			name: 'light-year',
+			value: 9460528400000000,
+			short: ['ly', 'lightyear']
+		},
+		{
+			name: 'astronomical unit',
+			value: 149597870700,
+			short: ['au']
 		}
 	],
 	currency: [
@@ -44,102 +54,102 @@ const quantities = {
 		},
 		{
 			name: 'US Dollar :flag_us:',
-			value: 1.19,
+			value: 0.85,
 			short: ['USD', '$'],
 		},
 		{
 			name: 'pound sterling :flag_gb:',
-			value: 0.86,
+			value: 1.17,
 			short: ['GBP', '£']
 		},
 		{
 			name: 'Turkish Lira :flag_tr:',
-			value: 10.24,
+			value: 0.1,
 			short: ['TRY', 'TL', '₺']
 		},
 		{
 			name: 'Russian Ruble :flag_ru:',
-			value: 88.27,
+			value: 0.012,
 			short: ['RUB', '₽']
 		},
 		{
 			name: 'Canadian Dollar :flag_ca:',
-			value: 1.48,
+			value: 0.67,
 			short: ['CAD']
 		},
 		{
 			name: 'Australian Dollar :flag_au:',
-			value: 1.59,
+			value: 0.62,
 			short: ['AUD']
 		},
 		{
 			name: 'Japanese Yen :flag_jp:',
-			value: 130.84,
+			value: 0.0077,
 			short: ['JPY', '¥', 'yen', 'jy']
 		},
 		{
 			name: 'New Zealand Dollar :flag_nz:',
-			value: 1.7,
+			value: 0.59,
 			short: ['NZD']
 		},
 		{
 			name: 'Indonesian Rupiah :flag_id:',
-			value: 17205.91,
+			value: 0.000059,
 			short: ['IDR', 'Rp']
 		},
 		{
 			name: 'Chinese Yuan Renminbi :flag_cn:',
-			value: 7.68,
+			value: 0.13,
 			short: ['CN¥', 'CNY', 'RMB', '元']
 		},
 		{
 			name: 'Swedish krona :flag_se:',
-			value: 10.25,
+			value: 0.098,
 			short: ['SEK', 'kr']
 		},
 		{
 			name: 'Norwegian krone :flag_no:',
-			value: 10.54,
+			value: 0.097,
 			short: ['NOK']
 		},
 		{
 			name: 'Danish krone :flag_dk:',
-			value: 7.44,
+			value: 0.13,
 			short: ['DKK']
 		},
 		{
 			name: 'Icelandic króna :flag_is:',
-			value: 146.3,
+			value: 0.0067,
 			short: ['ISK']
 		},
 		{
 			name: 'Czech koruna :flag_cz:',
-			value: 25.69,
+			value: 0.039,
 			short: ['CZK', 'Kč']
 		},
 		{
 			name: 'Swiss franc :flag_sw:',
-			value: 1.08,
+			value: 0.93,
 			short: ['CFH', 'fr']
 		},
 		{
 			name: 'Ukrainian hryvnia :flag_ua:',
-			value: 32.13,
+			value: 0.031,
 			short: ['UAH', '₴', 'грн']
 		},
 		{
 			name: 'Indian rupee :flag_in:',
-			value: 88.37,
+			value: 0.012,
 			short: ['INR', '₹']
 		},
 		{
 			name: 'Among Us ඞ:red_square:',
-			value: 0,
+			value: -Infinity,
 			short: ['SUS']
 		},
 		{
 			name: 'United Arab Emirates dirham :flag_ae:',
-			value: 4.34,
+			value: 0.23,
 			short: ['AED', 'د.إ']
 		}
 	],
@@ -151,17 +161,17 @@ const quantities = {
 		},
 		{
 			name: 'kilogram',
-			value: 0.001,
+			value: 1000,
 			short: ['kg', 'kgs']
 		},
 		{
 			name: 'pound',
-			value: 0.00220462262,
+			value: 453.59237,
 			short: ['lbs', 'b']
 		},
 		{
 			name: 'ounce',
-			value: 0.0352739619,
+			value: 28.3495231,
 			short: ['oz']
 		}
 	],
@@ -173,27 +183,27 @@ const quantities = {
 		},
 		{
 			name: 'centimetre cubed',
-			value: 1000000,
+			value: 0.000001,
 			short: ['cm^3', 'cm3', 'centimeter cubed']
 		},
 		{
 			name: 'US fluid ounce',
-			value: 33814.0227,
+			value: 0.0000295735296,
 			short: ['fl oz', 'floz']
 		},
 		{
 			name: 'litre',
-			value: 1000,
+			value: 0.001,
 			short: ['l', 'liter']
 		},
 		{
 			name: 'desilitre',
-			value: 10000,
+			value: 0.0001,
 			short: ['dl', 'desiliter']
 		},
 		{
 			name: 'millilitre',
-			value: 1000000,
+			value: 0.000001,
 			short: ['ml', 'milliliter']
 		}
 	],
@@ -219,11 +229,136 @@ const quantities = {
 			short: ['°F', 'fh', 'f'],
 			evalRequired: true
 		}
+	],
+	time: [
+		{
+			name: 'millisecond',
+			value: 0.001,
+			short: ['ms']
+		},
+		{
+			name: 'second',
+			value: 1,
+			short: ['s']
+		},
+		{
+			name: 'minute',
+			value: 60,
+			short: ['m', 'min']
+		},
+		{
+			name: 'hour',
+			value: 3600,
+			short: ['h']
+		},
+		{
+			name: 'day',
+			value: 86400,
+			short: ['d']
+		},
+		{
+			name: 'week',
+			value: 604800,
+			short: ['w']
+		},
+		{
+			name: 'month',
+			value: 2592000,
+			short: ['mo']
+		},
+		{
+			name: 'year',
+			value: 31556952,
+			short: ['y']
+		},
+	],
+	force: [
+		{
+			name: 'newton',
+			value: 1,
+			short: ['N']
+		},
+		{
+			name: 'kilonewton',
+			value: 1000,
+			short: ['kN']
+		},
+		{
+			name: 'dyne',
+			value: 100000,
+			short: ['dyn']
+		},
+		{
+			name: 'pound-force',
+			value: 4.448222,
+			short: ['lbf']
+		},
+		{
+			name: 'poundal',
+			value: 0.1382550,
+			short: ['pdl']
+		},
+		{
+			name: 'kip',
+			value: 4448.22,
+			short: ['kip']
+		},
+		{
+			name: 'kilogram-force',
+			value: 9.806650,
+			short: ['kgf']
+		},
+	],
+	energy: [
+		{
+			name: 'joule',
+			value: 1,
+			short: ['J']
+		},
+		{
+			name: 'kilowatt-hour',
+			value: 3600000,
+			short: ['kWh']
+		},
+		{
+			name: 'calorie',
+			value: 4.184,
+			short: ['cal']
+		},
+		{
+			name: 'electronvolt',
+			value: 0.0000000000000000001602176634,
+			short: ['eV']
+		},
+		{
+			name: 'foot-pound force',
+			value: 1.355818,
+			short: ['ft⋅lbf', 'ftlbf', 'ftlb']
+		},
 	]
 }
 function findUnit(unitNameQuery = '') {
+	// short search
 	for (let i = 0; i < Object.values(quantities).length; i++) {
-		const unit = Object.values(quantities)[i].find(x => x.short.some(y => y.toLowerCase() === unitNameQuery.toLowerCase()) || x.name.toLowerCase() === unitNameQuery.toLowerCase()) || Object.values(quantities)[i].find(x => x.name.toLowerCase().includes(unitNameQuery.toLowerCase()));
+		const unit = Object.values(quantities)[i].find(x => x.short.some(y => y.toLowerCase() === unitNameQuery.toLowerCase()));
+		if (unit) {
+			const quantity = Object.keys(quantities)[i];
+			return { quantity, unit };
+		}
+	}
+
+	// name identical search
+	for (let i = 0; i < Object.values(quantities).length; i++) {
+		const unit = Object.values(quantities)[i].find(x => x.name.toLowerCase() === unitNameQuery.toLowerCase());
+		if (unit) {
+			const quantity = Object.keys(quantities)[i];
+			return { quantity, unit };
+		}
+	}
+
+	// name inclusive search
+	for (let i = 0; i < Object.values(quantities).length; i++) {
+		const unit = Object.values(quantities)[i].find(x => x.name.toLowerCase().includes(unitNameQuery.toLowerCase()));
 		if (unit) {
 			const quantity = Object.keys(quantities)[i];
 			return { quantity, unit };
@@ -250,21 +385,93 @@ module.exports = {
 				.setDescription(`To convert something, you add **amount** and **unit** combinations to the end of the command. The syntax for an amount and unit combination is \`[amount][unit symbol]\`. Amount and unit combinations are called **arguments**. Arguments are divided into **starters** and a **target unit**. Starters are the starting values that you want to convert to the target unit. A conversion command consists of one or many starters, separated with a comma (\`,\`) in case there are many. After starters comes the target unit, which must have a greater-than sign (\`>\`) or the word "to" before it. The argument(s) after the \`>\` (or "to"), called the target unit, must not include an amount. It is just a **unit symbol**. Because you cannot convert fruits into lengths, all starters and the target unit must be of the same **quantity**.`)
 				.addField('Supported Quantities', Object.keys(quantities).map(x => x[0].toUpperCase() + x.slice(1)).join(', ') + `\n\nTo learn more about a quantity and its units and unit symbols,\ndo \`${client.prefix}convert help [quantity]\``)
 				.addField('Examples', `An amount: "5", "1200300", "1.99"\nA unit: metre, kelvin, Euro\nA unit symbol: "fh", "cm^3", "$", "fl oz"\nAn argument: "180cm", "12.99€", "5km", "16fl oz"\nA target unit: ">km", ">c", ">m2"\nA complete conversion command: "\`${client.prefix}convert 5ft, 8in to cm\`", "\`${client.prefix}convert 300kelvin >celsius\`", "\`${client.prefix}convert 57mm, 3.3cm, 0.4m >cm\`", "\`${client.prefix}convert 2dl, 0.2l to fl oz\`"`)
+				.addField('NEW: Fraction Conversion', 'Use division in your commands to achieve something, for example velocity conversion. In fraction conversion, all the starters\' and the target\'s unit symbol must be a fraction. The syntax for a fraction is \`[unit symbol]["/" or "per"][unit symbol]\`. All of the numerators must be of the same quantity. Same for the denominators. You cannot mix fractions and non-fractions. Examples of Fraction Conversion:\n\`${client.prefix}convert 5m/s >km/h\`\n\`${client.prefix}convert 5 miles per hour, 1 meter per second to kilometers per hour\`')
 			return message.channel.send(embed);
 		}
 		if (!message.content.includes('>') && !message.content.includes('to')) return message.channel.send('There needs to be a greater-than sign (\`>\`) or the word "to" in your message, after the starters and before the target unit.');
-		const starters = args.slice(1, args.indexOf(args.find(x => x.includes('>') || x.includes('to')))).join(' ').split(',').map(starter => {
+		// lets define the > or to, that theyre using
+		const usedSeparator = message.content.includes('>') ? '>' : 'to';
+		const starters = args.slice(1, args.indexOf(args.find(x => x.includes(usedSeparator)))).join(' ').split(',').map(starter => {
 			starter = starter.trim();
-			const unitSymbol = starter.slice(starter.match(/[0-9\,\.\-]*/gi)[0].length).trim();
-			return Object.assign({ amount: parseFloat(starter) }, findUnit(unitSymbol));
+
+			// fraction
+			if (starter.includes('/') || starter.includes(' per ')) {
+				const separator = starter.includes('/') ? '/' : 'per';
+				const multiplier = starter.match(/[0-9\,\.\-]*/gi)[0];
+				const numeratorUnitSymbol = starter.slice(multiplier.length, starter.indexOf(separator)).trim();
+				const numeratorUnit = findUnit(numeratorUnitSymbol.endsWith('s') ? numeratorUnitSymbol.slice(0, numeratorUnitSymbol.length - 1) : numeratorUnitSymbol);
+				const denominatorUnitSymbol = starter.slice(starter.indexOf(separator) + separator.length).trim();
+				const denominatorUnit = findUnit(denominatorUnitSymbol);
+				if (!numeratorUnit) {
+					message.channel.send(numeratorUnitSymbol + ' is wrong.');
+					return;
+				}
+				if (!denominatorUnit) {
+					message.channel.send(denominatorUnitSymbol + ' is wrong.');
+					return;
+				}
+				const division = numeratorUnit.unit.value / denominatorUnit.unit.value;
+				const amount = parseFloat(multiplier);
+				return {
+					amount,
+					quantity: 'mixed',
+					unit: {
+						numeratorQuantity: numeratorUnit.quantity,
+						denominatorQuantity: denominatorUnit.quantity,
+						name: numeratorUnit.unit.name + '(s) per ' + denominatorUnit.unit.name,
+						value: 1 / division,
+						short: [numeratorUnit.unit.short[0] + '/' + denominatorUnit.unit.short[0]]
+					}
+				};
+			} else {
+				const unitSymbol = starter.slice(starter.match(/[0-9\,\.\-]*/gi)[0].length).trim();
+				return Object.assign({ amount: parseFloat(starter) }, findUnit(unitSymbol.endsWith('s') ? unitSymbol.slice(0, unitSymbol.length - 1) : unitSymbol));
+			}
 		});
 		if (!starters || starters.length === 0) return message.channel.send('You must convert _something._ Your message has 0 starters.');
-		const target = findUnit(args.slice(args.indexOf(args.find(x => x.includes('>')))).join(' ').slice(1).trim()) || findUnit(args.slice(args.indexOf(args.find(x => x.includes('to')))).join(' ').slice(2).trim());
+
+		const target = (() => {
+			const targetPortion = args.slice(args.indexOf(args.find(x => x.includes(usedSeparator)))).join(' ').slice(usedSeparator.length).trim();
+
+			// target: fraction
+			if (targetPortion.includes('/') || targetPortion.includes(' per ')) {
+				const separator = targetPortion.includes('/') ? '/' : 'per';
+				const numeratorUnitSymbol = targetPortion.slice(0, targetPortion.indexOf(separator)).trim();
+				const numeratorUnit = findUnit(numeratorUnitSymbol.endsWith('s') ? numeratorUnitSymbol.slice(0, numeratorUnitSymbol.length - 1) : numeratorUnitSymbol);
+				const denominatorUnitSymbol = targetPortion.slice(targetPortion.indexOf(separator) + separator.length).trim();
+				const denominatorUnit = findUnit(denominatorUnitSymbol);
+				if (!numeratorUnit) {
+					message.channel.send(numeratorUnitSymbol + ' is wrong.');
+					return;
+				}
+				if (!denominatorUnit) {
+					message.channel.send(denominatorUnitSymbol + ' is wrong.');
+					return;
+				}
+				const division = numeratorUnit.unit.value / denominatorUnit.unit.value;
+				return {
+					quantity: 'mixed',
+					unit: {
+						numeratorQuantity: numeratorUnit.quantity,
+						denominatorQuantity: denominatorUnit.quantity,
+						name: numeratorUnit.unit.name + '(s) per ' + denominatorUnit.unit.name,
+						value: 1 / division,
+						short: [numeratorUnit.unit.short[0] + '/' + denominatorUnit.unit.short[0]]
+					}
+				};
+			} else {
+				// target 1 unit
+				return findUnit(targetPortion.endsWith('s') ? targetPortion.slice(0, targetPortion.length - 1) : targetPortion);
+				
+			}
+		})();
 		if (!target) return message.channel.send('You must convert _to_ something. Your message doesn\'t have a (valid) target unit.');
 
 		// check that all starters and target are the same quantity
 		const usedQuantities = new Set([target.quantity, ...starters.map(x => x.quantity)]);
-		if (usedQuantities.size > 1) return message.channel.send(`All starting units and the target unit must be of the same quantity. The quantities you used were \`starters: ${starters.map(x => toString(x.quantity)).join(', ')}. target: ${toString(target.quantity)}\``);
+		const numeratorQuantities = new Set([target.unit.numeratorQuantity, ...starters.map(x => x.unit.numeratorQuantity)]);
+		const denominatorQuantities = new Set([target.unit.denominatorQuantity, ...starters.map(x => x.unit.denominatorQuantity)]);
+		if (usedQuantities.size > 1 || numeratorQuantities.size > 1 || denominatorQuantities.size > 1) return message.channel.send(`All starting units and the target unit must be of the same quantity. The quantities you used were \`${[...usedQuantities, ...numeratorQuantities, ...denominatorQuantities].filter(x => x)}\``);
 		const quantity = [...usedQuantities][0];
 
 		// get absolute value: sum of all starters (starter amount * starter unit value)
