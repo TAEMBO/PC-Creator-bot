@@ -399,7 +399,7 @@ module.exports = {
 				const separator = starter.includes('/') ? '/' : 'per';
 				const multiplier = starter.match(/[0-9\,\.\-]*/gi)[0];
 				const numeratorUnitSymbol = starter.slice(multiplier.length, starter.indexOf(separator)).trim();
-				const numeratorUnit = findUnit(numeratorUnitSymbol.endsWith('s') ? numeratorUnitSymbol.slice(0, numeratorUnitSymbol.length - 1) : numeratorUnitSymbol);
+				const numeratorUnit = findUnit(numeratorUnitSymbol.endsWith('s') && numeratorUnitSymbol.length !== 1 ? numeratorUnitSymbol.slice(0, numeratorUnitSymbol.length - 1) : numeratorUnitSymbol);
 				const denominatorUnitSymbol = starter.slice(starter.indexOf(separator) + separator.length).trim();
 				const denominatorUnit = findUnit(denominatorUnitSymbol);
 				if (!numeratorUnit) {
@@ -419,13 +419,13 @@ module.exports = {
 						numeratorQuantity: numeratorUnit.quantity,
 						denominatorQuantity: denominatorUnit.quantity,
 						name: numeratorUnit.unit.name + '(s) per ' + denominatorUnit.unit.name,
-						value: 1 / division,
+						value: division,
 						short: [numeratorUnit.unit.short[0] + '/' + denominatorUnit.unit.short[0]]
 					}
 				};
 			} else {
 				const unitSymbol = starter.slice(starter.match(/[0-9\,\.\-]*/gi)[0].length).trim();
-				return Object.assign({ amount: parseFloat(starter) }, findUnit(unitSymbol.endsWith('s') ? unitSymbol.slice(0, unitSymbol.length - 1) : unitSymbol));
+				return Object.assign({ amount: parseFloat(starter) }, findUnit(unitSymbol.endsWith('s') && unitSymbol.length !== 1 ? unitSymbol.slice(0, unitSymbol.length - 1) : unitSymbol));
 			}
 		});
 		if (!starters || starters.length === 0) return message.channel.send('You must convert _something._ Your message has 0 starters.');
@@ -437,7 +437,7 @@ module.exports = {
 			if (targetPortion.includes('/') || targetPortion.includes(' per ')) {
 				const separator = targetPortion.includes('/') ? '/' : 'per';
 				const numeratorUnitSymbol = targetPortion.slice(0, targetPortion.indexOf(separator)).trim();
-				const numeratorUnit = findUnit(numeratorUnitSymbol.endsWith('s') ? numeratorUnitSymbol.slice(0, numeratorUnitSymbol.length - 1) : numeratorUnitSymbol);
+				const numeratorUnit = findUnit(numeratorUnitSymbol.endsWith('s') && numeratorUnitSymbol.length !== 1 ? numeratorUnitSymbol.slice(0, numeratorUnitSymbol.length - 1) : numeratorUnitSymbol);
 				const denominatorUnitSymbol = targetPortion.slice(targetPortion.indexOf(separator) + separator.length).trim();
 				const denominatorUnit = findUnit(denominatorUnitSymbol);
 				if (!numeratorUnit) {
@@ -455,13 +455,13 @@ module.exports = {
 						numeratorQuantity: numeratorUnit.quantity,
 						denominatorQuantity: denominatorUnit.quantity,
 						name: numeratorUnit.unit.name + '(s) per ' + denominatorUnit.unit.name,
-						value: 1 / division,
+						value: division,
 						short: [numeratorUnit.unit.short[0] + '/' + denominatorUnit.unit.short[0]]
 					}
 				};
 			} else {
 				// target 1 unit
-				return findUnit(targetPortion.endsWith('s') ? targetPortion.slice(0, targetPortion.length - 1) : targetPortion);
+				return findUnit(targetPortion.endsWith('s') && targetPortion.length !== 1 ? targetPortion.slice(0, targetPortion.length - 1) : targetPortion);
 				
 			}
 		})();
@@ -482,7 +482,7 @@ module.exports = {
 				return eval(starter.unit.toBase);
 			}).reduce((a, b) => a + b, 0);
 		} else {
-			absolute = starters.map(starter => starter.amount / starter.unit.value).reduce((a, b) => a + b, 0);
+			absolute = starters.map(starter => starter.amount * starter.unit.value).reduce((a, b) => a + b, 0);
 		}
 
 		// multiply absolute by the value of the target unit		
@@ -491,7 +491,7 @@ module.exports = {
 			let x = absolute;
 			amountInTarget = eval(target.unit.toSelf);
 		} else {
-			amountInTarget = absolute * target.unit.value;
+			amountInTarget = absolute / target.unit.value;
 		}
 
 		// display amount and target unit symbol
