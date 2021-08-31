@@ -144,7 +144,7 @@ const quantities = {
 		},
 		{
 			name: 'Among Us ඞ:red_square:',
-			value: -Infinity,
+			value: 0,
 			short: ['SUS']
 		},
 		{
@@ -469,8 +469,8 @@ module.exports = {
 
 		// check that all starters and target are the same quantity
 		const usedQuantities = new Set([target.quantity, ...starters.map(x => x.quantity)]);
-		const numeratorQuantities = new Set([target.unit.numeratorQuantity, ...starters.map(x => x.unit.numeratorQuantity)]);
-		const denominatorQuantities = new Set([target.unit.denominatorQuantity, ...starters.map(x => x.unit.denominatorQuantity)]);
+		const numeratorQuantities = new Set([target?.unit?.numeratorQuantity, ...starters.map(x => x?.unit?.numeratorQuantity)]);
+		const denominatorQuantities = new Set([target?.unit?.denominatorQuantity, ...starters.map(x => x?.unit?.denominatorQuantity)]);
 		if (usedQuantities.size > 1 || numeratorQuantities.size > 1 || denominatorQuantities.size > 1) return message.channel.send(`All starting units and the target unit must be of the same quantity. The quantities you used were \`${[...usedQuantities, ...numeratorQuantities, ...denominatorQuantities].filter(x => x)}\``);
 		const quantity = [...usedQuantities][0];
 
