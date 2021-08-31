@@ -144,7 +144,7 @@ const quantities = {
 		},
 		{
 			name: 'Among Us ඞ:red_square:',
-			value: 0,
+			value: NaN,
 			short: ['SUS']
 		},
 		{
@@ -425,7 +425,7 @@ module.exports = {
 				};
 			} else {
 				const unitSymbol = starter.slice(starter.match(/[0-9\,\.\-]*/gi)[0].length).trim();
-				return Object.assign({ amount: parseFloat(starter) }, findUnit(unitSymbol.endsWith('s') && unitSymbol.length !== 1 ? unitSymbol.slice(0, unitSymbol.length - 1) : unitSymbol));
+				return Object.assign({ amount: parseFloat(starter) }, findUnit(unitSymbol.endsWith('s') && unitSymbol.length > 3 ? unitSymbol.slice(0, unitSymbol.length - 1) : unitSymbol));
 			}
 		});
 		if (!starters || starters.length === 0) return message.channel.send('You must convert _something._ Your message has 0 starters.');
@@ -461,7 +461,7 @@ module.exports = {
 				};
 			} else {
 				// target 1 unit
-				return findUnit(targetPortion.endsWith('s') && targetPortion.length !== 1 ? targetPortion.slice(0, targetPortion.length - 1) : targetPortion);
+				return findUnit(targetPortion.endsWith('s') && targetPortion.length > 3 ? targetPortion.slice(0, targetPortion.length - 1) : targetPortion);
 				
 			}
 		})();
