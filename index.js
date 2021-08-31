@@ -14,17 +14,17 @@ try {
 }
 client.prefix = client.config.prefix;
 
-/*client.on('inviteCreate', async invite => {
-    guildInvites.set(member.client.config.mainServer.id);
-    });*/
 client.on("ready", async () => {
 	setInterval(async () => {
-		await client.user.setActivity(",help", {
-			type: "LISTENING", 
-		});
-	}, 30000);
+		await client.user.setPresence({
+			status: 'dnd',
+			activity: {
+				name: `${client.prefix}help`,
+				type: 'LISTENING'
+			}
+		})
+	}, 2000);
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
-	/*console.log(guildInvites.set);*/
 });
 modmailClient.on("ready", async () => {
 	setInterval(async () => {
