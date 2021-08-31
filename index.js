@@ -19,7 +19,7 @@ client.on("ready", async () => {
 		await client.user.setPresence({
 			status: 'dnd',
 			activity: {
-				name: ',help',
+				name: `${client.prefix}help`,
 				type: 'LISTENING'
 			}
 		})
