@@ -1,7 +1,7 @@
 module.exports = [
 	{
 		name: 'year',
-		length: 1000 * 60 * 60 * 24 * 30.436875 * 12
+		length: 1000 * 60 * 60 * 24 * 365
 	},
 	{
 		name: 'month',
