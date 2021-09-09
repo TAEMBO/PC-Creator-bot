@@ -46,23 +46,30 @@ module.exports = {
 			const averageMsgsPerDay = msgsPerDay.reduce((a, b) => a + b, 0) / actualDataLength;
 
 			// acceleration of messages per day
-			const accelPerMin = (msgsPerDay[actualDataLength - 1] - msgsPerDay[0]) / (actualDataLength /* days*/ * 24 /* hours */ * 60 /* minutes */);
+			function accelAverage(data) {
+				return data.reduce((a, b) => a + b, 0) / data.length;
+			}
+			const accel1 = accelAverage(msgsPerDay.slice(-7));
+			const accel2 = accelAverage(msgsPerDay.slice(0, 7));
+			console.log(accel1, accel2);
+			const accelPerHour = ((accelAverage(msgsPerDay.slice(-7)) - accelAverage(msgsPerDay.slice(0, 7))) / (actualDataLength * 24)) /* for some reason */ / 24;
+			console.log({accelPerHour});
 			
 			// predict
-			let minutes = 0;
+			let hours = 0;
 			let serverHalted = false;
-			let predictedMsgsPerMinute = averageMsgsPerDay / (24 * 60);
+			let predictedMsgsPerHour = averageMsgsPerDay / 24;
 			let messagesSent = messageCountsTotal;
 			if (milestone.next) {
-				while (messagesSent < milestone.next && predictedMsgsPerMinute > 0) {
-					messagesSent += predictedMsgsPerMinute;
-					predictedMsgsPerMinute += accelPerMin;
-					minutes++;
+				while (messagesSent < milestone.next && predictedMsgsPerHour > 0) {
+					messagesSent += predictedMsgsPerHour;
+					predictedMsgsPerHour += accelPerHour;
+					hours++;
 				}
 				if (messagesSent < milestone.next) serverHalted = true;
 			}
 			// turn minutes into milliseconds
-			const millisecondsToMilestone = minutes * 60 * 1000;
+			const millisecondsToMilestone = hours * 60 * 60 * 1000;
 
 			const embed = new client.embed()
 				.setTitle('Level Roles: Stats')
