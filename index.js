@@ -17,7 +17,7 @@ client.prefix = client.config.prefix;
 client.on("ready", async () => {
 	setInterval(async () => {
 		await client.user.setPresence({
-			status: 'idle',
+			status: 'dnd',
 			activity: {
 				name: `${client.prefix}help`,
 				type: 'LISTENING'
