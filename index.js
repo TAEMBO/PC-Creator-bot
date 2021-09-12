@@ -40,6 +40,7 @@ Object.assign(client, {
 	embed: Discord.MessageEmbed,
 	messageCollector: Discord.MessageCollector,
 	collection: Discord.Collection,
+	messageattachment: Discord.MessageAttachment,
 	cpulist: {
 		INTEL: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-INTEL.json')),
 		AMD: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-AMD.json')),
