@@ -1,6 +1,10 @@
 module.exports = {
 	run: async (client, message, args) => {
 		if (message.guild.id !== client.config.mainServer.id) return message.channel.send('This command doesn\'t work in this server.');
+
+		// dailymsgs.json
+		const dailyMsgs = require('../dailyMsgs.json');
+
 		// if args[1] is "stats", show stats
 		if (args[1] === 'stats') {
 			// days since mar 22, 2021 when userlevels was created
@@ -17,9 +21,7 @@ module.exports = {
 			const median = messageCounts.sort((a, b) => a - b)[Math.round(userCount / 2) - 1];
 			// next message count milestone
 			const milestone = client.userLevels._milestone();
-
-			// dailymsgs.json
-			const dailyMsgs = require('../dailyMsgs.json');
+			
 			// days to get average from
 			const dataLength = 30;
 			// last 30d, sorted by date ascending
@@ -49,11 +51,7 @@ module.exports = {
 			function accelAverage(data) {
 				return data.reduce((a, b) => a + b, 0) / data.length;
 			}
-			const accel1 = accelAverage(msgsPerDay.slice(-7));
-			const accel2 = accelAverage(msgsPerDay.slice(0, 7));
-			console.log(accel1, accel2);
 			const accelPerHour = ((accelAverage(msgsPerDay.slice(-7)) - accelAverage(msgsPerDay.slice(0, 7))) / (actualDataLength * 24)) /* for some reason */ / 24;
-			console.log({accelPerHour});
 			
 			// predict
 			let hours = 0;
@@ -78,6 +76,101 @@ module.exports = {
 				.setColor(client.embedColor)
 			message.channel.send(embed);
 			return;
+		} else if (args[1] === 'dailymsgs' || args[1] === 'dmsgs') {
+			const data = Object.values(dailyMsgs).map((x, i, a) => x - (a[i - 1] || x)).slice(1).slice(-60);
+			const accuracy = 1000;
+			const maxValue = Math.ceil(Math.max(...data) / accuracy) * accuracy;
+
+			const textSize = 32;
+
+			const canvas = require('canvas');
+			const fs = require('fs');
+			const img = canvas.createCanvas(950, 450);
+			const ctx = img.getContext('2d');
+
+			const graphOrigin = [10, 50];
+			const graphSize = [700, 360];
+			const nodeWidth = graphSize[0] / (data.length - 1);
+			ctx.fillStyle = '#36393f';
+			ctx.fillRect(0, 0, img.width, img.height);
+
+			// grey horizontal lines
+			ctx.lineWidth = 3;
+			ctx.strokeStyle = '#202225';
+			const linescount = maxValue / accuracy;
+			for (let i = 0; i <= linescount; i++) {
+				ctx.beginPath();
+				const y = graphOrigin[1] + (i * (graphSize[1] / linescount));
+				ctx.lineTo(graphOrigin[0], y);
+				ctx.lineTo(graphOrigin[0] + graphSize[0], y);
+				ctx.stroke();
+				ctx.closePath();
+			}
+
+			// 30d mark
+			ctx.setLineDash([8, 16]);
+			ctx.beginPath();
+			const lastMonthStart = graphOrigin[0] + (nodeWidth * (data.length - 30));
+			ctx.lineTo(lastMonthStart, graphOrigin[1]);
+			ctx.lineTo(lastMonthStart, graphOrigin[1] + graphSize[1]);
+			ctx.stroke();
+			ctx.closePath();
+			ctx.setLineDash([]);
+
+			// draw points
+			ctx.strokeStyle = '#5865F2';
+			ctx.fillStyle = '#5865F2';
+			ctx.lineWidth = 3;
+
+
+			function getYCoordinate(value) {
+				return ((1 - (value / maxValue)) * graphSize[1]) + graphOrigin[1];
+			}
+
+			let lastCoords = [];
+			data.forEach((val, i) => {
+				ctx.beginPath();
+				if (lastCoords) ctx.moveTo(...lastCoords);
+				if (val < 0) val = 0;
+				const x = i * nodeWidth + graphOrigin[0];
+				const y = getYCoordinate(val);
+				ctx.lineTo(x, y);
+				lastCoords = [x, y];
+				ctx.stroke();
+				ctx.closePath();
+
+				// ball
+				ctx.beginPath();
+				ctx.arc(x, y, ctx.lineWidth * 1.2, 0, 2 * Math.PI)
+				ctx.closePath();
+				ctx.fill();
+
+			});
+
+			// draw text
+			ctx.font = '400 ' + textSize + 'px sans-serif';
+			ctx.fillStyle = 'white';
+
+			// highest value
+			const maxx = graphOrigin[0] + graphSize[0] + textSize;
+			const maxy = graphOrigin[1] + (textSize / 3);
+			ctx.fillText(maxValue.toLocaleString('en-US'), maxx, maxy);
+
+			// lowest value
+			const lowx = graphOrigin[0] + graphSize[0] + textSize;
+			const lowy = graphOrigin[1] + graphSize[1] + (textSize / 3);
+			ctx.fillText('0 msgs/day', lowx, lowy);
+
+			// 30d
+			ctx.fillText('30d ago', lastMonthStart, graphOrigin[1] - (textSize / 3));
+
+			// time ->
+			const tx = graphOrigin[0] + (textSize / 2);
+			const ty = graphOrigin[1] + graphSize[1] + (textSize);
+			ctx.fillText('time ->', tx, ty);
+
+			const attachment = new client.messageattachment(img.toBuffer(), 'dailymsgs.png');
+			return message.channel.send('LevelRoles Messages per Day in ' + client.guilds.cache.get(client.config.mainServer.id).name, { files: [attachment] });
 		}
 
 		// fetch user or user message sender
@@ -172,7 +265,7 @@ module.exports = {
 		message.channel.send(messageContents.join('\n')); // compile message and send
 	},
 	name: 'levelroles',
-	usage: ['?stats / user id / mention'],
+	usage: ['?user ID / mention / "stats" / "dailymsgs"'],
 	description: 'Check your eligibility for level roles or see global stats.',
 	alias: ['lrs'],
 	category: 'Moderation',
