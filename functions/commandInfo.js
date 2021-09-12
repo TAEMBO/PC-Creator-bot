@@ -16,13 +16,13 @@ module.exports = (client, command, options = { insertNewline: false, parts: [], 
 		}
 		text += '`' + client.prefix + command.name;
 		if (options.parts.includes('usage') && command.usage) {
-			text += ' [' + command.usage.join('] [') + ']';
+			text += ' ' + command.usage.map(x => x.startsWith('?') ? '?[' + x.slice(1) + ']' : '[' + x + ']').join(' ');
 		}
 		text += '`';
 		e();
 	} else if (options.parts.includes('usage') && command.usage) {
 		if (options.titles.includes('usage')) text += 'Usage: ';
-		text += '`[' + command.usage.join('] [') + ']`';
+		text += '`' + command.usage.map(x => x.startsWith('?') ? '?[' + x + ']' : '[' + x + ']').join(' ') + '`';
 		e();
 	}
 	if (options.parts.includes('description') && command.description) {
