@@ -670,12 +670,21 @@ client.on("message", async (message) => {
 			}
 		}
 	} else {
+
+		function onTimeout() {
+			if (client.repeatedMessages[message.author.id].nicknameChanged) message.member.setNickname(null, 'repeated messages; false alarm');
+			delete client.repeatedMessages[message.author.id];
+		}
+
 		// repeated messages
 		if (message.content.length > 10 && ['.com', '.ru', 'https://', 'http://', `<@&${message.guild.id}>`].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
 			const thisContent = message.content.slice(0, 32);
 			if (client.repeatedMessages[message.author.id]) {
 				// add this message to the list
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: thisContent, ch: message.channel.id });
+
+				// reset timeout
+				client.repeatedMessages[message.author.id].to = setTimeout(onTimeout, 60000);
 
 				// this is the time in which 3 messages have to be sent, in milliseconds
 				const threshold = 60000;
@@ -687,6 +696,7 @@ client.on("message", async (message) => {
 				if (client.repeatedMessages[message.author.id]?.find(x => {
 					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 2;
 				})) {
+					client.repeatedMessages[message.author.id].nicknameChanged = true;
 					message.member.setNickname('⚠ Possible Scammer ⚠', 'repeated messages');
 				}
 
@@ -723,10 +733,7 @@ client.on("message", async (message) => {
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: message.content.slice(0, 32), ch: message.channel.id });
 
 				// auto delete after 1 minute
-				setTimeout(() => {
-					delete client.repeatedMessages[message.author.id];
-					message.member.setNickname(null, 'repeated messages; false alarm');
-				}, 60000);
+				client.repeatedMessages[message.author.id].nicknameChanged.to = setTimeout(onTimeout, 60000);
 			}
 		}
 
