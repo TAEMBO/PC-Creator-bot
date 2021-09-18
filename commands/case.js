@@ -34,7 +34,7 @@ module.exports = {
 			});
 
 			// if case id is not a punishment or a user, failed
-			if (!userPunishments || userPunishments.length === 0) return message.channel.send('No punishments found with that Case # or user ID{');
+			if (!userPunishments || userPunishments.length === 0) return message.channel.send('No punishments found with that Case # or user ID');
 
 			const pageNumber = parseInt(args[2]) || 1;
 			const embed = new client.embed()

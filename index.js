@@ -671,7 +671,7 @@ client.on("message", async (message) => {
 		}
 	} else {
 		// repeated messages
-		if (message.content.length > 10 && ['https://', 'http://', `<@&${message.guild.id}>`].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
+		if (message.content.length > 10 && ['.com', '.ru', 'https://', 'http://', `<@&${message.guild.id}>`].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
 			const thisContent = message.content.slice(0, 32);
 			if (client.repeatedMessages[message.author.id]) {
 				// add this message to the list
