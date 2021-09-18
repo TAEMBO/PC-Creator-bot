@@ -14,7 +14,6 @@
 	"mainServer": {
 		"id":"571031703661969430",
 		"staffRoles": [
-			"administrator",
 			"moderator",
             "trialmoderator"
 		],
