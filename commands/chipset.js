@@ -6,7 +6,7 @@ function chipsetEmbed(client, chipset, manufacturer) {
 		.setTitle(manufacturer.toUpperCase() + ' ' + chipset.name)
 		.addField('Supported CPUs', chipset.supported === 'N/A' ? 'N/A' : chipset.supported, true)
 		.addField('Core OC', chipset.coreOC === 'N/A' ? 'N/A' : chipset.coreOC, true)
-		.addField('Memory OC', chipset.memOC >= 0 ? chipset.memOC + 'MHz' : 'Yes', true)
+		.addField('Memory OC', chipset.memOC === 'N/A' ? 'N/A' : chipset.memOC, true)
 		.addField('Memory channels', chipset.memChan === 'N/A' ? 'N/A' : chipset.memChan, true)
 		.addField('PCIe lanes', chipset.pcieLanes === 'N/A' ? 'N/A' : chipset.pcieLanes, true)
 		.addField('PCIe generation', chipset.pcieGen === 'N/A' ? 'N/A' : chipset.pcieGen, true)
