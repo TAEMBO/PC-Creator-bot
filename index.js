@@ -680,16 +680,17 @@ client.on("message", async (message) => {
 				// this is the time in which 3 messages have to be sent, in milliseconds
 				const threshold = 60000;
 
-				// message mustve been sent after (now - threshold)
+				// message mustve been sent after (now - threshold), so purge those that were sent earlier
 				client.repeatedMessages[message.author.id] = client.repeatedMessages[message.author.id].filter((x, i) => i >= Date.now() - threshold)
 
-				// user hasnt sent long messages in the last threshold milliseconds
-				if (client.repeatedMessages[message.author.id].size === 0) {
-					// delete list
-					delete client.repeatedMessages[message.author.id];
+				// if user has sent the same message 2 times in the last threshold milliseconds, change their nickname
+				if (client.repeatedMessages[message.author.id]?.find(x => {
+					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 2;
+				})) {
+					message.member.setNickname('⚠ Possible Scammer ⚠', 'repeated messages');
 				}
 
-				// if user has sent 3 times, notify them
+				// if user has sent the same message 3 times in the last threshold milliseconds, notify them
 				if (client.repeatedMessages[message.author.id]?.find(x => {
 					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 3;
 				})) {
@@ -721,10 +722,11 @@ client.on("message", async (message) => {
 				client.repeatedMessages[message.author.id] = new client.collection();
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: message.content.slice(0, 32), ch: message.channel.id });
 
-				// auto delete after 2 minutes
+				// auto delete after 1 minute
 				setTimeout(() => {
 					delete client.repeatedMessages[message.author.id];
-				}, 120000);
+					message.member.setNickname(null, 'repeated messages; false alarm');
+				}, 60000);
 			}
 		}
 
