@@ -631,7 +631,10 @@ client.on("message", async (message) => {
 
 			// channel restrictions
 			if (client.channelRestrictions._content[message.channel.id]?.includes(commandFile.category) || client.channelRestrictions._content[message.channel.id]?.some(x => x.includes(commandFile.name))) {
-				if (!client.hasModPerms(client, message.member) && !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) return;
+				if (!client.hasModPerms(client, message.member) && !message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id)) {
+					message.channel.send('Command is restricted in this channel.')
+					setTimeout(() => msg.delete(), 7000)
+				};
 			}
 
 			// cooldown
