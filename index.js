@@ -684,6 +684,7 @@ client.on("message", async (message) => {
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: thisContent, ch: message.channel.id });
 
 				// reset timeout
+				clearTimeout(client.repeatedMessages[message.author.id].to);
 				client.repeatedMessages[message.author.id].to = setTimeout(onTimeout, 60000);
 
 				// this is the time in which 3 messages have to be sent, in milliseconds
@@ -733,7 +734,7 @@ client.on("message", async (message) => {
 				client.repeatedMessages[message.author.id].set(message.createdTimestamp, { cont: message.content.slice(0, 32), ch: message.channel.id });
 
 				// auto delete after 1 minute
-				client.repeatedMessages[message.author.id].nicknameChanged.to = setTimeout(onTimeout, 60000);
+				client.repeatedMessages[message.author.id].to = setTimeout(onTimeout, 60000);
 			}
 		}
 
