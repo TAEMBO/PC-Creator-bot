@@ -673,7 +673,7 @@ client.on("message", async (message) => {
 	} else {
 
 		function onTimeout() {
-			if (client.repeatedMessages[message.author.id].nicknameChanged) message.member.setNickname(null, 'repeated messages; false alarm');
+			if (client.repeatedMessages[message.author.id]?.nicknameChanged) message.member.setNickname(null, 'repeated messages; false alarm');
 			delete client.repeatedMessages[message.author.id];
 		}
 
