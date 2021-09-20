@@ -428,10 +428,11 @@ client.commands.pages.sort((a, b) => {
 client.starboard = new database('./starboard.json', 'object');
 Object.assign(client.starboard, {
 	async increment(reaction) {
-		let dbEntry = this._content[reaction.message.id];
+		let dbEntry = this._content[reaction?.message?.id];
 		if (dbEntry) dbEntry.c++;
 		else {
-			if (!reaction.message.author.id) return;
+			if (!reaction?.message?.author?.id) return;
+			console.log('STARBOARD: tried to increment, but failed. received reaction:', reaction);
 			this.addData(reaction.message.id, { c: 1, a: reaction.message.author.id });
 			dbEntry = this._content[reaction.message.id];
 		}
@@ -443,10 +444,15 @@ Object.assign(client.starboard, {
 					embed: embedMessage.embeds[0]
 				});
 			} else {
-				const embed = await this.sendEmbed({ count: dbEntry.c, message: reaction.message});
+				const starredMessage = reaction?.message.author ? reaction.message : await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(reaction.message.id);
+				if (!starredMessage) {
+					console.log('STARBOARD: could not find message ID:' + reaction.message?.id);
+				}
+				const embed = await this.sendEmbed({ count: dbEntry.c, message: starredMessage});
 				this._content[reaction.message.id].e = embed.id;
 			}
 		}
+		this.forceSave();
 	},
 	async decrement(reaction) {
 		let dbEntry = this._content[reaction.message.id];
@@ -467,6 +473,7 @@ Object.assign(client.starboard, {
 				});
 			}
 		}
+		this.forceSave();
 	},
 	sendEmbed(data) {
 		let description = [data.message.content, ''];
@@ -531,10 +538,10 @@ Object.assign(client.starboard, {
 });
 client.starboard.initLoad().intervalSave(60000);
 client.on('messageDelete', async message => {
-	if (message.partial) return;
 	const dbEntry = client.starboard._content[message.id];
-	if (!dbEntry) return;
+	if (!dbEntry?.e) return;
 	(await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e)).delete();
+	delete client.starboard._content[message.id];
 });
 
 // repeated messages

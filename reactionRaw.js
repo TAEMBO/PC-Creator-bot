@@ -78,7 +78,7 @@ module.exports = async (e, client) => {
 				return e.reaction.remove();
 			}
 
-			// #starboard star reactions
+			// non star emoji or bot
 			if (e.reaction.emoji.name !== '⭐' || e.user.bot) return;
 
 			// starred own message
