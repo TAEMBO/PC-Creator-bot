@@ -6,7 +6,10 @@ module.exports = {
 		const containsEmbed = Object.entries(client.starboard._content).filter(x => x[1].e);
 		const starboardChannel = client.channels.resolve(client.config.mainServer.channels.starboard);
 		const promises = containsEmbed.sort((a, b) => b[1].c - a[1].c).slice(0, 5).map(async x => {
-			const starboardMessage = await starboardChannel.messages.fetch(x[1].e);
+			const starboardMessage = await starboardChannel.messages.fetch(x[1].e).catch(err => {
+				console.log('STARBOARD: could not find message in #starboard with ID ' + x[1].e);
+				return false;
+			});
 			if (!starboardMessage) {
 				return undefined;
 			}
