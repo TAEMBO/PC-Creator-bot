@@ -439,6 +439,9 @@ Object.assign(client.starboard, {
 		if (dbEntry?.c >= client.starLimit) {
 			if (dbEntry.e) {
 				const embedMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e);
+				if (!embedMessage) {
+					delete this._content[reaction.message.id];
+				}
 				embedMessage.edit({
 					content: `**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`,
 					embed: embedMessage.embeds[0]
@@ -466,7 +469,9 @@ Object.assign(client.starboard, {
 				}
 			} else {
 				const embedMessage = await client.channels.resolve(client.config.mainServer.channels.starboard).messages.fetch(dbEntry.e);
-
+				if (!embedMessage) {
+					delete this._content[reaction.message.id];
+				}
 				embedMessage.edit({
 					content: `**${dbEntry.c}** :star: ${embedMessage.content.slice(embedMessage.content.indexOf('|'))}`,
 					embed: embedMessage.embeds[0]

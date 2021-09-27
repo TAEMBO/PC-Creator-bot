@@ -11,7 +11,7 @@ module.exports = {
 				return false;
 			});
 			if (!starboardMessage) {
-				return undefined;
+				delete client.starboard._content[x[0]];
 			}
 			return `**${x[1].c}** :star: By <@${x[1].a}>: [Jump to Starboard](${starboardMessage.url})`;
 		});
