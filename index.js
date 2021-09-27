@@ -171,7 +171,7 @@ Object.assign(client.userLevels, {
 		return { age, messages, roles };
 	},
 });
-client.userLevels.initLoad().intervalSave(3000).disableSaveNotifs();
+client.userLevels.initLoad().intervalSave(15000).disableSaveNotifs();
 
 // specs
 client.specsDb = new database('./specs.json', 'object');
@@ -600,24 +600,29 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 client.on('guildMemberAdd', async member => {
 	if (member.partial) return;
-    const cachedInvites = guildInvites.get(member.client.guilds.cache.get(member.client.config.mainServer.id));
-    const newInvites = await member.guild.fetchInvites();
-    guildInvites.set(member.client.config.mainServer.id)
+	const cachedInvites = guildInvites.get(member.client.guilds.cache.get(member.client.config.mainServer.id));
+	const newInvites = await member.guild.fetchInvites();
+	guildInvites.set(member.client.config.mainServer.id)
 	console.log('hello');
-    try {
-        const usedInvite = newInvites.find(inv => cachedInvites.get(inv.code).uses < inv.uses);
-        const embed = new MessageEmbed()
-            .setDescription(`${member.user.tag} is the ${member.guild.memberCount} to join.\nJoined using ${usedInvite.inviter.tag}\nNumber of uses: ${usedInvite.uses}`)
-            .setTimestamp()
-            .setTitle(`${usedInvite.url}`);
-        const welcomeChannel = member.guild.channels.cache.find(channel => channel.id === '572673322891083776');
-        if(welcomeChannel) {
-            welcomeChannel.send(embed).catch(err => console.log(err));
-        }
-    }
-    catch(err) {
-        console.log('error in invite tracking', err);
-    }
+	try {
+		const usedInvite = newInvites.find(inv => cachedInvites.get(inv.code).uses < inv.uses);
+		const embed = new MessageEmbed()
+			.setDescription(`${member.user.tag} is the ${member.guild.memberCount} to join.\nJoined using ${usedInvite.inviter.tag}\nNumber of uses: ${usedInvite.uses}`)
+			.setTimestamp()
+			.setTitle(`${usedInvite.url}`);
+		const welcomeChannel = member.guild.channels.cache.find(channel => channel.id === '572673322891083776');
+		if(welcomeChannel) {
+			welcomeChannel.send(embed).catch(err => console.log(err));
+		}
+	}
+	catch(err) {
+		console.log('error in invite tracking', err);
+	}
+});
+
+client.on('guildMemberRemove', member => {
+	// remove user from lrs
+	delete client.userLevels._content[member.user.id];
 });
 
 client.on("message", async (message) => {
