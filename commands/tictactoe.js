@@ -3,7 +3,7 @@ module.exports = {
 		const db = client.tictactoeDb;
 		// remove from cooldown
 		const emptyCooldown = () => {
-			client.cooldowns.get(message.author.id).set('tictactoe', Date.now() + 8000);
+			client.cooldowns.get(message.author.id)?.set('tictactoe', Date.now() + 8000);
 		};
 
 		// leaderboards
