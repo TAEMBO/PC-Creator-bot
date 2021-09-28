@@ -1,9 +1,14 @@
 module.exports = {
 	run: async (client, message, args) => {
 		const db = client.tictactoeDb;
+		// remove from cooldown
+		const emptyCooldown = () => {
+			client.cooldowns.get(message.author.id).set('tictactoe', Date.now() + 8000);
+		};
 
 		// leaderboards
 		if (args[1] === 'leaderboard' || args[1] === 'lb') {
+			emptyCooldown();
 			const embed = new client.embed()
 				.setTitle('__Tic Tac Toe Statistics__')
 				.setDescription(`A total of ${db.getTotalGames()} games have been played.`)
@@ -13,6 +18,7 @@ module.exports = {
 			await message.channel.send(`Recent Games\n\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\`\nBest Players (>10 games played)\n\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], db.calcWinPercentage(x[1])]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\`\nMost Active Players\n\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``);
 			return;
 		} else if (args[1] === 'stats') {
+			emptyCooldown();
 			const allPlayers = db.getAllPlayers();
 			let playerStats;
 			let username;
@@ -247,5 +253,6 @@ module.exports = {
 	description: 'Play the famous Tic Tac Toe or noughts and crosses or Xs and Os game with a partner. Add "leaderboard" to the end to see statistics.',
 	shortDescription: 'Play Tic Tac Toe.',
 	alias: ['ttt', 'noughtsandcrosses', 'n&c'],
+	cooldown: 35,
 	category: 'Fun'
 };
