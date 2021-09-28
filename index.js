@@ -731,7 +731,7 @@ client.on("message", async (message) => {
 				if (client.repeatedMessages[message.author.id]?.find(x => {
 					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 3;
 				})) {
-					message.reply('Stop spamming that message!');
+					client.repeatedMessages[message.author.id].warnMsg = await message.reply('Stop spamming that message!');
 				}
 
 				// a spammed message is one that has been sent at least 4 times in the last threshold milliseconds
@@ -751,6 +751,9 @@ client.on("message", async (message) => {
 
 					// send info about this user and their spamming
 					message.channel.send(`The messages they spammed included:\n\`https://\` ${message.content.toLowerCase().includes('https://') ? ':white_check_mark:' : ':x:'}\n\`http://\` ${message.content.toLowerCase().includes('http://') ? ':white_check_mark:' : ':x:'}\n\`@everyone/@here\` ${(message.content.toLowerCase().includes('@everyone') || message.content.toLowerCase().includes('@here')) ? ':white_check_mark:' : ':x:'}\n\`top-level domain\` ${['.com', '.ru', '.org', '.net'].some(x => message.content.toLowerCase().includes(x))}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join('\n')}\nThreshold: ${threshold}ms\nLRS Message Count: ${client.userLevels.getUser(message.author.id)}`);
+
+					// delete the warning message
+					client.repeatedMessages[message.author.id].warnMsg?.delete();
 
 					// and clear their list of long messages
 					delete client.repeatedMessages[message.author.id];
