@@ -770,8 +770,8 @@ client.on("message", async (message) => {
 		const BLACKLISTED_CHANNELS = [
 			'748122380383027210', /* bot-commands */
 		];
-		// if message was not sent in a blacklisted channel, count towards user level
-		if (!BLACKLISTED_CHANNELS.includes(message.channel.id)) client.userLevels.incrementUser(message.author.id);
+		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
+		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
 
 		require('./autores.js')(message, client);
 	}
