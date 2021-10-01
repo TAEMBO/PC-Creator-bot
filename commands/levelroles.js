@@ -75,7 +75,16 @@ module.exports = {
 			message.channel.send(embed);
 			return;
 		} else if (args[1] === 'dailymsgs' || args[1] === 'dmsgs') {
-			const data = Object.values(dailyMsgs).map((x, i, a) => x - (a[i - 1] || x)).slice(1).slice(-60);
+			const data = dailyMsgs.map((x, i, a) => {
+				const yesterday = a[i - 1] || [];
+				return x[1] - (yesterday[1] || x[1]);
+			}).slice(1).slice(-60);
+
+			// handle negative days
+			data.forEach((change, i) => {
+				if (change < 0) data[i] = data[i - 1] || data[i + 1] || 0;
+			});
+
 			const accuracy = 1000;
 			const maxValue = Math.ceil(Math.max(...data) / accuracy) * accuracy;
 
