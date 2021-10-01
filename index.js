@@ -555,17 +555,21 @@ client.repeatedMessages = {};
 // event loop, for punishments and daily msgs
 setInterval(() => {
 	const now = Date.now();
-	const date = new Date();
+	const lrsStart = 1616371200000;
 	client.punishments._content.filter(x => x.endTime <= now && !x.expired).forEach(async punishment => {
 		console.log(`${punishment.member}'s ${punishment.type} should expire now`);
 		const unpunishResult = await client.punishments.removePunishment(punishment.id, client.user.id, 'Time\'s up!');
 		console.log(unpunishResult);
-		//client.unmuteMember(client, (await client.guilds.cache.get(client.config.mainServer.id).members.fetch(x[0])));
 	});
-	const formattedDate = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+	const formattedDate = Math.floor((now - lrsStart) / 1000 / 60 / 60 / 24);
 	const dailyMsgs = require('./dailyMsgs.json');
-	if (!dailyMsgs[formattedDate]) {
-		dailyMsgs[formattedDate] = Object.values(client.userLevels._content).reduce((a, b) => a + b, 0);
+	if (!dailyMsgs.some(x => x[0] === formattedDate)) {
+		let total = Object.values(client.userLevels._content).reduce((a, b) => a + b, 0); // sum of all users
+		const yesterday = dailyMsgs.find(x => x[0] === formattedDate - 1);
+		if (total < yesterday) { // messages went down
+			total = yesterday;
+		}
+		dailyMsgs.push([formattedDate, total]);
 		fs.writeFileSync(__dirname + '/dailyMsgs.json', JSON.stringify(dailyMsgs));
 	}
 }, 5000);

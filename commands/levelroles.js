@@ -24,26 +24,23 @@ module.exports = {
 			
 			// days to get average from
 			const dataLength = 30;
-			// last 30d, sorted by date ascending
-			const lastMonth = Object.entries(dailyMsgs).sort((a, b) => {
-				const aDate = a[0].split('-').map(x => parseInt(x));
-				const bDate = b[0].split('-').map(x => parseInt(x));
-				const yearDiff = aDate[2] - bDate[2];
-				if (yearDiff) return yearDiff;
-				const monthDiff = aDate[1] - bDate[1];
-				if (monthDiff) return monthDiff;
-				const dayDiff = aDate[0] - bDate[0];
-				if (dayDiff) return dayDiff;
-				else return 0;
-			}).slice(-(dataLength + 1));
+
+			// last 30d
+			const lastMonth = dailyMsgs.slice(-(dataLength + 1));
 
 			// if data is shorter than 30d (data is available from less than 30 truthy days), take that into account when calculating average
 			const actualDataLength = lastMonth.filter(x => x).length - 1;
 
 			// messages today relative to yesterday, daily change in msgs
-			const msgsPerDay = lastMonth.slice(1).map((day, i) =>{
-				return day[1] - (lastMonth[i][1] || day[1])
+			const msgsPerDay = lastMonth.slice(1).map((day, i) => {
+				return day[1] - (lastMonth[i][1] || day[1]);
 			});
+
+			// handle negative days
+			msgsPerDay.forEach((change, i) => {
+				if (change < 0) msgsPerDay[i] = msgsPerDay[i - 1] || msgsPerDay[i + 1] || 0;
+			});
+
 			// average msgs per day
 			const averageMsgsPerDay = msgsPerDay.reduce((a, b) => a + b, 0) / actualDataLength;
 
@@ -51,7 +48,7 @@ module.exports = {
 			function accelAverage(data) {
 				return data.reduce((a, b) => a + b, 0) / data.length;
 			}
-			const accelPerHour = ((accelAverage(msgsPerDay.slice(-7)) - accelAverage(msgsPerDay.slice(0, 7))) / (actualDataLength * 24)) /* for some reason */ / 24;
+			let accelPerHour = ((accelAverage(msgsPerDay.slice(-7)) - accelAverage(msgsPerDay.slice(0, 7))) / (actualDataLength * 24)) /* for some reason */ / 24;
 			
 			// predict
 			let hours = 0;
@@ -63,6 +60,7 @@ module.exports = {
 					messagesSent += predictedMsgsPerHour;
 					predictedMsgsPerHour += accelPerHour;
 					hours++;
+					if (hours % 24 === 0) accelPerHour *= 0.93; // reduce accel every day
 				}
 				if (messagesSent < milestone.next) serverHalted = true;
 			}
