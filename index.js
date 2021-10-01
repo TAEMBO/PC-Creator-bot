@@ -648,10 +648,10 @@ client.on("message", async (message) => {
 	];
 	if (message.mentions.roles.some(mentionedRole => punishableRoleMentions.includes(mentionedRole.id))) {
 		console.log('user mentioned staff role');
-		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000, errors: ['time']}).then(async () => {
+		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000, errors: ['time']}).then(async collected => {
 			console.log('received "y" from staff member, indicating to mute someone');
 			try {
-				const muteResult = await client.punishments.addPunishment('mute', message.member, { time: 1000 * 60 * 5, reason: 'pinged staff role with no purpose' }, x.author.id);
+				const muteResult = await client.punishments.addPunishment('mute', message.member, { time: 1000 * 60 * 5, reason: 'pinged staff role with no purpose' }, collected.first().author.id);
 			} catch (error) {
 				console.log('muting failed cuz', error);
 			}
