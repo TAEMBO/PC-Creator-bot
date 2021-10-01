@@ -650,7 +650,11 @@ client.on("message", async (message) => {
 		console.log('user mentioned staff role');
 		message.channel.awaitMessages(x => client.hasModPerms(client, x.member) && x.content === 'y', { max: 1, time: 60000, errors: ['time']}).then(async () => {
 			console.log('received "y" from staff member, indicating to mute someone');
-			const muteResult = await client.punishments.addPunishment('mute', message.member, { time: 1000 * 60 * 5, reason: 'pinged staff role with no purpose' }, x.author.id);
+			try {
+				const muteResult = await client.punishments.addPunishment('mute', message.member, { time: 1000 * 60 * 5, reason: 'pinged staff role with no purpose' }, x.author.id);
+			} catch (error) {
+				console.log('muting failed cuz', error);
+			}
 			console.log('muted with result', muteResult);
 			message.channel.send(muteResult);
 		}).catch(() => console.log('failed to collect "y" from staff'));
