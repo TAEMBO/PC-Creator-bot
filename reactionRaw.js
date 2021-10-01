@@ -12,10 +12,10 @@ module.exports = async (e, client) => {
 		const message = reaction.message;
 		const channel = message.channel;
 
-		// if a reaction was added to a message that starts with ",suggest", this suggests that the bot has been offline and someone has tried to do a suggestion. to keep the chat clean, the bot will delete ",suggest" messages when it sees reactions added to them
+		// delete message and dont handle reaction if message is not a suggestion, but a suggestion command
 		if (message.author.id !== client.user.id && message.content.startsWith(client.prefix + 'suggest')) return message.delete();
 
-		// there may also be other cases where reading a reaction properly could cause errors, so do it properly only on suggestion embeds sent by the bot.
+		// get rid of edge cases; return when message has no embed author or message was not sent by bot
 		if (!message.embeds[0]?.author?.name || message.author.id !== client.user.id) return;
 
 		// wrong emoji
@@ -33,6 +33,16 @@ module.exports = async (e, client) => {
 				channel.send(`<@${e.user.id}> You\'re not allowed to vote on your own suggestion!`).then(x => setTimeout(() => x.delete(), 6000));
 			});
 		}
+
+		// user added reaction and has now reacted to all the emojis on this message
+		if (e.t === 'message_reaction_add' && message.reactions.cache.every(x => x.users.cache.has(e.user.id))) {
+			// remove all their reactions to this message
+			message.reactions.cache.forEach(x => {
+				x.users.remove(e.user.id).catch(() => {/* couldnt remove user from reaction */});
+			});
+			return channel.send(`<@${e.user.id}> Do not react with both :white_check_mark: and :x: to a suggestion! Choose one.`).then(x => setTimeout(() => x.delete(), 8000));
+		}
+
 
 		// suggestion embed color
 		let upvotes = message.reactions.resolve('✅');
