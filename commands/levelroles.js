@@ -5,76 +5,18 @@ module.exports = {
 		// dailymsgs.json
 		const dailyMsgs = require('../dailyMsgs.json');
 
+		// messages sent by each user, unordered array
+		const messageCounts = Object.values(client.userLevels._content);
+
+		// total amount of messages sent
+		const messageCountsTotal = messageCounts.reduce((a, b) => a + b, 0);
+
 		// if args[1] is "stats", show stats
 		if (args[1] === 'stats') {
+
 			// days since mar 22, 2021 when userlevels was created
 			const timeActive = Math.floor((Date.now() - 1616371200000) / 1000 / 60 / 60 / 24);
-			// messages sent by each user, unordered array
-			const messageCounts = Object.values(client.userLevels._content);
-			// amount of users in messageCounts
-			const userCount = messageCounts.length;
-			// total amount of messages sent
-			const messageCountsTotal = messageCounts.reduce((a, b) => a + b, 0);
-			// average messages sent by user
-			const average = messageCountsTotal / userCount;
-			// messages sent by median user
-			const median = messageCounts.sort((a, b) => a - b)[Math.round(userCount / 2) - 1];
-			// next message count milestone
-			const milestone = client.userLevels._milestone();
 			
-			// days to get average from
-			const dataLength = 30;
-
-			// last 30d
-			const lastMonth = dailyMsgs.slice(-(dataLength + 1));
-
-			// if data is shorter than 30d (data is available from less than 30 truthy days), take that into account when calculating average
-			const actualDataLength = lastMonth.filter(x => x).length - 1;
-
-			// messages today relative to yesterday, daily change in msgs
-			const msgsPerDay = lastMonth.slice(1).map((day, i) => {
-				return day[1] - (lastMonth[i][1] || day[1]);
-			});
-
-			// handle negative days
-			msgsPerDay.forEach((change, i) => {
-				if (change < 0) msgsPerDay[i] = msgsPerDay[i - 1] || msgsPerDay[i + 1] || 0;
-			});
-
-			// average msgs per day
-			const averageMsgsPerDay = msgsPerDay.reduce((a, b) => a + b, 0) / actualDataLength;
-
-			// acceleration of messages per day
-			function accelAverage(data) {
-				return data.reduce((a, b) => a + b, 0) / data.length;
-			}
-			let accelPerHour = ((accelAverage(msgsPerDay.slice(-7)) - accelAverage(msgsPerDay.slice(0, 7))) / (actualDataLength * 24)) /* for some reason */ / 24;
-			
-			// predict
-			let hours = 0;
-			let serverHalted = false;
-			let predictedMsgsPerHour = averageMsgsPerDay / 24;
-			let messagesSent = messageCountsTotal;
-			if (milestone.next) {
-				while (messagesSent < milestone.next && predictedMsgsPerHour > 0) {
-					messagesSent += predictedMsgsPerHour;
-					predictedMsgsPerHour += accelPerHour;
-					hours++;
-					if (hours % 24 === 0) accelPerHour *= 0.93; // reduce accel every day
-				}
-				if (messagesSent < milestone.next) serverHalted = true;
-			}
-			// turn minutes into milliseconds
-			const millisecondsToMilestone = hours * 60 * 60 * 1000;
-
-			const embed = new client.embed()
-				.setTitle('Level Roles: Stats')
-				.setDescription(`Level Roles was created ${timeActive} days ago.\nSince then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server by ${userCount.toLocaleString('en-US')} users.\nIn the last ${actualDataLength} days, on average, ${averageMsgsPerDay.toLocaleString('en-US', { maximumFractionDigits: 2 })} messages have been sent every day.\nAn average user has sent ${average.toFixed(2)} messages.\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more than or as many messages as an average user.\nThe median user has sent ${median} messages.\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toLocaleString('en-US', { maximumFractionDigits: 2 })}% of messages while Level Roles has existed.\nThe next message milestone ${milestone.next ? `is ${milestone.next.toLocaleString('en-US')} messages and the progress from the previous milestone (${milestone.previous.toLocaleString('en-US')}) to the next is ${(milestone.progress * 100).toFixed(2)}%.\nAt the current rate, reaching the next milestone would ${(!serverHalted ? 'take ' : `never happen. The server would grind to a halt in `) + client.formatTime(millisecondsToMilestone, 2, { commas: true, longNames: true })}.` : `doesn\'t exist.`}`)
-				.addField('Top Users by Messages Sent', Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map((x, i) => `\`${i + 1}.\` <@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n'))
-				.setColor(client.embedColor)
-			message.channel.send(embed);
-			return;
-		} else if (args[1] === 'dailymsgs' || args[1] === 'dmsgs') {
 			const data = dailyMsgs.map((x, i, a) => {
 				const yesterday = a[i - 1] || [];
 				return x[1] - (yesterday[1] || x[1]);
@@ -176,8 +118,78 @@ module.exports = {
 			const ty = graphOrigin[1] + graphSize[1] + (textSize);
 			ctx.fillText('time ->', tx, ty);
 
-			const attachment = new client.messageattachment(img.toBuffer(), 'dailymsgs.png');
-			return message.channel.send('LevelRoles Messages per Day in ' + client.guilds.cache.get(client.config.mainServer.id).name, { files: [attachment] });
+			const embed = new client.embed()
+				.setTitle('Level Roles: Stats')
+				.setDescription(`Level Roles was created ${timeActive} days ago. Since then, a total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server.`)
+				.addField('Top Users by Messages Sent', Object.entries(client.userLevels._content).sort((a, b) => b[1] - a[1]).slice(0, 5).map((x, i) => `\`${i + 1}.\` <@${x[0]}>: ${x[1].toLocaleString('en-US')}`).join('\n') + `\n\Messages per Day in ${client.guilds.cache.get(client.config.mainServer.id).name}:`)
+				.attachFiles([ { attachment: img.toBuffer(), name: 'dailymsgs.png' } ])
+				.setImage('attachment://dailymsgs.png')
+				.setColor(client.embedColor)
+			message.channel.send(embed);
+			return;
+		} else if (args[1] === 'nerdstats' || args[1] === 'nsts') {
+			
+			// amount of users in messageCounts
+			const userCount = messageCounts.length;
+
+			// average messages sent by user
+			const average = messageCountsTotal / userCount;
+			// messages sent by median user
+			const median = messageCounts.sort((a, b) => a - b)[Math.round(userCount / 2) - 1];
+			// next message count milestone
+			const milestone = client.userLevels._milestone();
+
+			// days to get average from
+			const dataLength = 30;
+
+			// last 30d
+			const lastMonth = dailyMsgs.slice(-(dataLength + 1));
+
+			// if data is shorter than 30d (data is available from less than 30 truthy days), take that into account when calculating average
+			const actualDataLength = lastMonth.filter(x => x).length - 1;
+
+			// messages today relative to yesterday, daily change in msgs
+			const msgsPerDay = lastMonth.slice(1).map((day, i) => {
+				return day[1] - (lastMonth[i][1] || day[1]);
+			});
+
+			// handle negative days
+			msgsPerDay.forEach((change, i) => {
+				if (change < 0) msgsPerDay[i] = msgsPerDay[i - 1] || msgsPerDay[i + 1] || 0;
+			});
+
+			// average msgs per day
+			const averageMsgsPerDay = msgsPerDay.reduce((a, b) => a + b, 0) / actualDataLength;
+
+			// acceleration of messages per day
+			function accelAverage(data) {
+				return data.reduce((a, b) => a + b, 0) / data.length;
+			}
+			let accelPerHour = ((accelAverage(msgsPerDay.slice(-7)) - accelAverage(msgsPerDay.slice(0, 7))) / (actualDataLength * 24)) /* for some reason */ / 24;
+
+			// predict
+			let hours = 0;
+			let serverHalted = false;
+			let predictedMsgsPerHour = averageMsgsPerDay / 24;
+			let messagesSent = messageCountsTotal;
+			if (milestone.next) {
+				while (messagesSent < milestone.next && predictedMsgsPerHour > 0) {
+					messagesSent += predictedMsgsPerHour;
+					predictedMsgsPerHour += accelPerHour;
+					hours++;
+					if (hours % 24 === 0) accelPerHour *= 0.93; // reduce accel every day
+				}
+				if (messagesSent < milestone.next) serverHalted = true;
+			}
+			// turn minutes into milliseconds
+			const millisecondsToMilestone = hours * 60 * 60 * 1000;
+
+			const embed = new client.embed()
+				.setTitle('Level Roles: Stats')
+				.setDescription(`A total of ${messageCountsTotal.toLocaleString('en-US')} messages have been sent in this server by ${userCount.toLocaleString('en-US')} users.\nIn the last ${actualDataLength} days, on average, ${averageMsgsPerDay.toLocaleString('en-US', { maximumFractionDigits: 2 })} messages have been sent every day.\nAn average user has sent ${average.toFixed(2)} messages.\n${((messageCounts.filter(x => x >= average).length / userCount) * 100).toFixed(2)}% of users have sent more than or as many messages as an average user.\nThe median user has sent ${median} messages.\nThe top 1% of users have sent ${((messageCounts.sort((a, b) => b - a).slice(0, Math.round(userCount / 100)).reduce((a, b) => a + b, 0) / messageCountsTotal) * 100).toLocaleString('en-US', { maximumFractionDigits: 2 })}% of messages while Level Roles has existed.\nThe next message milestone ${milestone.next ? `is ${milestone.next.toLocaleString('en-US')} messages and the progress from the previous milestone (${milestone.previous.toLocaleString('en-US')}) to the next is ${(milestone.progress * 100).toFixed(2)}%.\nAt the current rate, reaching the next milestone would ${(!serverHalted ? 'take ' : `never happen. The server would grind to a halt in `) + client.formatTime(millisecondsToMilestone, 2, { commas: true, longNames: true })}.` : `doesn\'t exist.`}`)
+				.setColor(client.embedColor)
+			message.channel.send(embed);
+			return;
 		}
 
 		// fetch user or user message sender
@@ -272,7 +284,7 @@ module.exports = {
 		message.channel.send(messageContents.join('\n')); // compile message and send
 	},
 	name: 'levelroles',
-	usage: ['?user ID / mention / "stats" / "dailymsgs"'],
+	usage: ['?user ID / mention / "stats" / "nerdstats"'],
 	description: 'Check your eligibility for level roles or see global stats.',
 	alias: ['lrs'],
 	category: 'Moderation',
