@@ -35,7 +35,7 @@ module.exports = async (e, client) => {
 		}
 
 		// user added reaction and has now reacted to all the emojis on this message
-		if (e.t === 'message_reaction_add' && message.reactions.cache.every(x => x.users.cache.has(e.user.id))) {
+		if (e.t === 'message_reaction_add' && message.reactions.cache.every(x => x.users.cache.has(e.user.id)) && !e.user.bot) {
 			// remove all their reactions to this message
 			message.reactions.cache.forEach(x => {
 				x.users.remove(e.user.id).catch(() => {/* couldnt remove user from reaction */});
