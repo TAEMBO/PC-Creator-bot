@@ -245,7 +245,7 @@ Object.assign(client.punishments, {
 					client.makeModlogEntry(banData, client);
 					this.addData(banData);
 					this.forceSave();
-					return `Case #${banData.id}: Successfully banned ${member.user.tag} (${member.user.id}) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
+					return `**Case #${banData.id}:** Successfully banned ${member.user.tag} (\`${member.user.id}\`) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
 				}
 			case 'softban':
 				const guild = member.guild;
@@ -262,7 +262,7 @@ Object.assign(client.punishments, {
 						client.makeModlogEntry(softbanData, client);
 						this.addData(softbanData);
 						this.forceSave();
-						return `Case #${softbanData.id}: Successfully softbanned ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
+						return `**Case #${softbanData.id}:** Successfully softbanned ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || 'unspecified'}\``;
 					}
 				}
 			case 'kick':
@@ -275,7 +275,7 @@ Object.assign(client.punishments, {
 					client.makeModlogEntry(kickData, client);
 					this.addData(kickData);
 					this.forceSave();
-					return `Case #${kickData.id}: Successfully kicked ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
+					return `**Case #${kickData.id}:** Successfully kicked ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || 'unspecified'}\``;
 				}
 			case 'mute':
 				if (member.roles.cache.has(client.config.mainServer.roles.muted)) return `Mute was unsuccessful: User already has the **${member.guild.roles.cache.get(client.config.mainServer.roles.muted).name}** role.`
@@ -293,7 +293,7 @@ Object.assign(client.punishments, {
 					this.addData(muteData);
 					this.forceSave();
 					member.send(`You\'ve been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${muteData.id})`).catch(err => console.log(`dm failed while ${moderator} was muting ${member.user.id} (case ${muteData.id}):`, err.message));
-					return `Case #${muteData.id}: Successfully muted ${member.user.tag} (${member.user.id}) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
+					return `**Case #${muteData.id}:** Successfully muted ${member.user.tag} (\`${member.user.id}\`) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
 				}
 			case 'warn':
 				const warnData = { type, id: this.createId(), member: member.user.id, moderator, time: now };
@@ -305,7 +305,7 @@ Object.assign(client.punishments, {
 					client.makeModlogEntry(warnData, client);
 					this.addData(warnData);
 					this.forceSave();
-					return `Case #${warnData.id}: Successfully warned ${member.user.tag} (${member.user.id}) for reason \`${reason || 'unspecified'}\``;
+					return `**Case #${warnData.id}:** Successfully warned ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || 'unspecified'}\``;
 				}
 		}
 	},
