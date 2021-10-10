@@ -13,7 +13,12 @@
 	"enableAutoResponse": true,
 	"mainServer": {
 		"id":"571031703661969430",
+		"modmailPing": [
+			"moderator",
+			"trialmoderator"	
+		],
 		"staffRoles": [
+			"administrator",
 			"moderator",
             "trialmoderator"
 		],

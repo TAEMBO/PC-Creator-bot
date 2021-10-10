@@ -1,6 +1,6 @@
 module.exports = {
     run: async (client, message, args) => {
-        message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/890969454131970078/Bitcoin_PC_2.jpg');
+        message.channel.send('https://cdn.discordapp.com/attachments/838857610358292532/895348340726833192/unknown.png');
     },
 	name: 'bitcoinminer',
 	description: 'Shows the current best bitcoin mining setup for only in-game money.',
