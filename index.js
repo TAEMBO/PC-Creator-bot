@@ -622,6 +622,20 @@ client.on('guildMemberAdd', async member => {
 	catch(err) {
 		console.log('error in invite tracking', err);
 	}
+
+	// mute evasion
+	const evadingCase = client.punishments._content.find(punishment => {
+		if (punishment.type !== 'mute') return false;
+		if (punishment.member !== member.user.id) return false;
+		if (punishment.expired) return false;
+		if (punishment.endTime < Date.now()) return false;
+		return true;
+	});
+	
+	if (evadingCase) {
+		// ban the fucker
+		client.punishments.addPunishment('ban', member, { reason: `mute evasion (Case #${evadingCase.id})` }, client.user.id);
+	}
 });
 
 client.on('guildMemberRemove', member => {
