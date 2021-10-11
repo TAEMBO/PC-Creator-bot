@@ -322,18 +322,19 @@ Object.assign(client.punishments, {
 				removePunishmentResult = await guild.members.unban(punishment.member, `${reason || 'unspecified'} | Case #${id}`).catch(err => err.message); // unbanning returns a user
 			} else if (punishment.type === 'mute') {
 				// remove role
-				const member = await guild.members.fetch(punishment.member);
+				const member = await guild.members.fetch(punishment.member).catch(err => false);
 				if (member) {
 					removePunishmentResult = await member.roles.remove(client.config.mainServer.roles.muted, `${reason || 'unspecified'} | Case #${id}`).catch(err => err.message);
+					
+					if (typeof removePunishmentResult !== 'string') {
+						removePunishmentResult.send(`You\'ve been unmuted in ${removePunishmentResult.guild.name}.`);
+						removePunishmentResult = removePunishmentResult.user; // removing a role returns a guildmember
+					}
 				} else {
 					// user has probably left. quietly remove punishment from json
 					const removePunishmentData = { type: `un${punishment.type}`, id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now };
 					this._content[this._content.findIndex(x => x.id === punishment.id)].expired = true;
 					this.addData(removePunishmentData).forceSave();
-				}
-				if (typeof removePunishmentResult !== 'string') {
-					removePunishmentResult.send(`You\'ve been unmuted in ${removePunishmentResult.guild.name}.`);
-					removePunishmentResult = removePunishmentResult.user; // removing a role returns a guildmember
 				}
 			}
 			if (typeof removePunishmentResult === 'string') return `Un${punishment.type} was unsuccessful: ${removePunishmentResult}`;
