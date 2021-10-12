@@ -17,7 +17,7 @@ module.exports = {
 			.setDescription(message.content.slice(message.content.indexOf(' ') + 1))
 			.setTimestamp()
 			.setColor('269CD0')
-		if (message.attachments.first().width) embed.setImage(message.attachments.first().url);
+		if (message.attachments?.first()?.width) embed.setImage(message.attachments.first().url);
 		const suggestion = await message.channel.send({ embed });
 		await suggestion.react('✅');
 		await suggestion.react('❌');
