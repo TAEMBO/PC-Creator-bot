@@ -3,7 +3,7 @@ module.exports = {
 		if (message.guild.id !== client.config.mainServer.id) return message.channel.send('This command doesn\'t work in this server.');
 
 		// dailymsgs.json
-		const dailyMsgs = require('../dailyMsgs.json');
+		const dailyMsgs = require('../databases/dailyMsgs.json');
 
 		// messages sent by each user, unordered array
 		const messageCounts = Object.values(client.userLevels._content);
