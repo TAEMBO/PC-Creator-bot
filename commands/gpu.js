@@ -103,14 +103,14 @@ module.exports = {
 		const gpus = (() => {
 			if (manufacturer) {
 				if (manufacturer === 'nvidia') {
-					return { nvidia: new client.collection(Object.entries(require('/databases/gpulist-NVIDIA.json'))) };
+					return { nvidia: new client.collection(Object.entries(require('../gpulist-NVIDIA.json'))) };
 				} else if (manufacturer === 'amd') {
-					return { amd: new client.collection(Object.entries(require('/databases/gpulist-AMD.json'))) };
+					return { amd: new client.collection(Object.entries(require('../gpulist-AMD.json'))) };
 				}
 			} else {
 				return {
-					nvidia: new client.collection(Object.entries(require('/databases/gpulist-NVIDIA.json'))),
-					amd: new client.collection(Object.entries(require('/databases/gpulist-AMD.json')))
+					nvidia: new client.collection(Object.entries(require('../gpulist-NVIDIA.json'))),
+					amd: new client.collection(Object.entries(require('../gpulist-AMD.json')))
 				};
 			}
 		})();
