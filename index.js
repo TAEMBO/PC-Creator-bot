@@ -42,8 +42,8 @@ Object.assign(client, {
 	collection: Discord.Collection,
 	messageattachment: Discord.MessageAttachment,
 	cpulist: {
-		INTEL: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-INTEL.json')),
-		AMD: JSON.parse(fs.readFileSync(__dirname + '\\cpulist-AMD.json')),
+		INTEL: JSON.parse(fs.readFileSync(__dirname + '\\/databases/cpulist-INTEL.json')),
+		AMD: JSON.parse(fs.readFileSync(__dirname + '\\/databases/cpulist-AMD.json')),
 	},
 	memberCount_LastGuildFetchTimestamp: 0,
 	helpDefaultOptions: {
@@ -63,7 +63,7 @@ client.memeQueue = new client.collection();
 client.cooldowns = new client.collection();
 
 // tic tac toe statistics database
-client.tictactoeDb = new database('./ttt.json', 'array'); /* players, winner, draw, startTime, endTime */
+client.tictactoeDb = new database('./databases/ttt.json', 'array'); /* players, winner, draw, startTime, endTime */
 Object.assign(client.tictactoeDb, {
 	// global stats
 	getTotalGames() {
@@ -117,7 +117,7 @@ client.tictactoeDb.initLoad().intervalSave();
 client.games = new Discord.Collection();
 
 // userLevels
-client.userLevels = new database('./userLevels.json', 'object');
+client.userLevels = new database('./databases/userLevels.json', 'object');
 Object.assign(client.userLevels, {
 	_requirements: client.config.mainServer.roles.levels,
 	_milestone() {
@@ -174,7 +174,7 @@ Object.assign(client.userLevels, {
 client.userLevels.initLoad().intervalSave(15000).disableSaveNotifs();
 
 // specs
-client.specsDb = new database('./specs.json', 'object');
+client.specsDb = new database('./databases/specs.json', 'object');
 Object.assign(client.specsDb, {
 	editSpecs(id, component, newValue) {
 		const allComponents = Object.keys(this._content[id]);
@@ -215,11 +215,11 @@ Object.assign(client.specsDb, {
 client.specsDb.initLoad().intervalSave(120000);
 
 // dm forward blacklist
-client.dmForwardBlacklist = new database('./dmforwardblacklist.json', 'array');
+client.dmForwardBlacklist = new database('./databases/dmforwardblacklist.json', 'array');
 client.dmForwardBlacklist.initLoad();
 
 // punishments
-client.punishments = new database('./punishments.json', 'array');
+client.punishments = new database('./databases/punishments.json', 'array');
 Object.assign(client.punishments, {
 	createId() {
 		return Math.max(...client.punishments._content.map(x => x.id), 0) + 1;
@@ -361,7 +361,7 @@ Object.assign(client.punishments, {
 client.punishments.initLoad();
 
 // channel restrictions
-client.channelRestrictions = new database('./channelRestrictions.json', 'object');
+client.channelRestrictions = new database('./databases/channelRestrictions.json', 'object');
 client.channelRestrictions.initLoad();
 
 // command handler
@@ -426,7 +426,7 @@ client.commands.pages.sort((a, b) => {
 });
 
 // starboard functionality
-client.starboard = new database('./starboard.json', 'object');
+client.starboard = new database('./databases/starboard.json', 'object');
 Object.assign(client.starboard, {
 	async increment(reaction) {
 		let dbEntry = this._content[reaction?.message?.id];
@@ -563,7 +563,7 @@ setInterval(() => {
 		console.log(unpunishResult);
 	});
 	const formattedDate = Math.floor((now - lrsStart) / 1000 / 60 / 60 / 24);
-	const dailyMsgs = require('./dailyMsgs.json');
+	const dailyMsgs = require('./databases/dailyMsgs.json');
 	if (!dailyMsgs.some(x => x[0] === formattedDate)) {
 		let total = Object.values(client.userLevels._content).reduce((a, b) => a + b, 0); // sum of all users
 		const yesterday = dailyMsgs.find(x => x[0] === formattedDate - 1);
@@ -571,7 +571,7 @@ setInterval(() => {
 			total = yesterday;
 		}
 		dailyMsgs.push([formattedDate, total]);
-		fs.writeFileSync(__dirname + '/dailyMsgs.json', JSON.stringify(dailyMsgs));
+		fs.writeFileSync(__dirname + './databases/dailyMsgs.json', JSON.stringify(dailyMsgs));
 	}
 }, 5000);
 

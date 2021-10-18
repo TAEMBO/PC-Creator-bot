@@ -103,14 +103,14 @@ module.exports = {
 		const chipsets = (() => {
 			if (manufacturer) {
 				if (manufacturer === 'intel') {
-					return { intel: new client.collection(Object.entries(require('../chipsetlist-INTEL.json'))) };
+					return { intel: new client.collection(Object.entries(require('/databases/chipsetlist-INTEL.json'))) };
 				} else if (manufacturer === 'amd') {
-					return { amd: new client.collection(Object.entries(require('../chipsetlist-AMD.json'))) };
+					return { amd: new client.collection(Object.entries(require('/databases/chipsetlist-AMD.json'))) };
 				}
 			} else {
 				return {
-					intel: new client.collection(Object.entries(require('../chipsetlist-INTEL.json'))),
-					amd: new client.collection(Object.entries(require('../chipsetlist-AMD.json')))
+					intel: new client.collection(Object.entries(require('/databases/chipsetlist-INTEL.json'))),
+					amd: new client.collection(Object.entries(require('/databases/chipsetlist-AMD.json')))
 				};
 			}
 		})();

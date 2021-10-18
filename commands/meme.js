@@ -2,8 +2,8 @@ const util = require('util');
 const fs = require('fs');
 module.exports = {
 	run: async (client, message, args) => {
-		delete require.cache[require.resolve('./../memes.json')];
-		const memes = new client.collection(Object.entries(require('./../memes.json')));
+		delete require.cache[require.resolve('./../databases/memes.json')];
+		const memes = new client.collection(Object.entries(require('./../databases/memes.json')));
 		const color = '#00cc99'
 		const failed = () => message.channel.send('You failed. The `meme add` process has ended.');
 		if (!args[1]) {
@@ -89,7 +89,7 @@ module.exports = {
 						// define meme database location
 						let dir = __dirname.split('\\');
 						dir = dir.slice(0, dir.length - 1).join('\\');
-						dir += '\\memes.json';
+						dir += '\\/databases/memes.json';
 
 						// turn collection into JS object
 						let memesJson = {};

@@ -6,24 +6,24 @@ config-test.json
 
 .vscode/settings.json
 
-ttt.json
+/databases/ttt.json
 
-memes.json
+/databases/memes.json
 
-specs.json
+/databases/specs.json
 
-starboard.json
+/databases/starboard.json
 
-userLevels.json
+/databases/userLevels.json
 
-dmforwardblacklist.json
+/databases/dmforwardblacklist.json
 
 tokens.json
 
-mutes.json
+/databases/mutes.json
 
-dailyMsgs.json
+/databases/dailyMsgs.json
 
-channelRestrictions.json
+/databases/channelRestrictions.json
 
-punishments.json
+/databases/punishments.json
