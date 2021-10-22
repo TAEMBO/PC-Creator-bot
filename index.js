@@ -42,8 +42,8 @@ Object.assign(client, {
 	collection: Discord.Collection,
 	messageattachment: Discord.MessageAttachment,
 	cpulist: {
-		INTEL: JSON.parse(fs.readFileSync(__dirname + '\\/databases/cpulist-INTEL.json')),
-		AMD: JSON.parse(fs.readFileSync(__dirname + '\\/databases/cpulist-AMD.json')),
+		INTEL: JSON.parse(fs.readFileSync(__dirname + '\\databases\\cpulist-INTEL.json')),
+		AMD: JSON.parse(fs.readFileSync(__dirname + '\\databases\\cpulist-AMD.json')),
 	},
 	memberCount_LastGuildFetchTimestamp: 0,
 	helpDefaultOptions: {
