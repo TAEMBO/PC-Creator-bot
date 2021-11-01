@@ -801,6 +801,11 @@ client.on("message", async (message) => {
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
 
 		require('./autores.js')(message, client);
+	
+	}
+	//reptile area
+	if (message.content.includes('forgor')) {
+		message.react('💀')
 	}
 });
 modmailClient.threads = new client.collection();
