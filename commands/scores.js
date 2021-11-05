@@ -15,11 +15,11 @@ module.exports = {
 		if (args[1].toUpperCase() === 'CPU') {
 			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/890969405478019142/CPU-Scores_Super_Dark_Mode_2.jpg');
 		} else if (args[1].toUpperCase() === 'GPU') {
-			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/890969426512474142/GPU_Scores_Super_Dark_Mode_3.jpg');
+			message.channel.send('https://cdn.discordapp.com/attachments/838857610358292532/906193805324218388/GPU_Scores_Super_Dark_Mode_4.jpg');
 		} else if (args[1].toUpperCase() === 'RAM') {
 			message.channel.send('https://media.discordapp.net/attachments/838857610358292532/905926830081577000/RAM_scores_Super_Dark_Mode_3.jpg');
 		} else if (args[1].toUpperCase() === 'ALL') {
-			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/890969405478019142/CPU-Scores_Super_Dark_Mode_2.jpg\nhttps://cdn.discordapp.com/attachments/571031705109135361/890969426512474142/GPU_Scores_Super_Dark_Mode_3.jpg\nhttps://media.discordapp.net/attachments/838857610358292532/905926830081577000/RAM_scores_Super_Dark_Mode_3.jpg');
+			message.channel.send('https://cdn.discordapp.com/attachments/571031705109135361/890969405478019142/CPU-Scores_Super_Dark_Mode_2.jpg\nhttps://cdn.discordapp.com/attachments/838857610358292532/906193805324218388/GPU_Scores_Super_Dark_Mode_4.jpg\nhttps://media.discordapp.net/attachments/838857610358292532/905926830081577000/RAM_scores_Super_Dark_Mode_3.jpg');
 		} else {
 			message.channel.send('You need to add "CPU", "GPU" or "RAM"');
 		}
