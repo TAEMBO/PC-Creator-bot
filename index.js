@@ -753,16 +753,16 @@ client.on("message", async (message) => {
 					message.member.setNickname('⚠ Possible Scammer ⚠', 'repeated messages');
 				}
 
-				// if user has sent the same message 3 times in the last threshold milliseconds, notify them
+				/* if user has sent the same message 3 times in the last threshold milliseconds, notify them
 				if (client.repeatedMessages[message.author.id]?.find(x => {
 					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 3;
 				})) {
 					client.repeatedMessages[message.author.id].warnMsg = await message.reply('Stop spamming that message!');
-				}
+				}*/
 
-				// a spammed message is one that has been sent at least 4 times in the last threshold milliseconds
+				// a spammed message is one that has been sent at least 3 times in the last threshold milliseconds
 				const spammedMessage = client.repeatedMessages[message.author.id]?.find(x => {
-					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size >= 4;
+					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size >= 3;
 				});
 
 				// if a spammed message exists;
