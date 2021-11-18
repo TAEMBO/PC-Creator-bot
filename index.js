@@ -803,6 +803,14 @@ client.on("message", async (message) => {
 		require('./autores.js')(message, client);
 	
 	}
+
+	//banned words
+	const bannedWords = ["fuck", "nigg", "fuk", "cunt", "cnut", "bitch", "dick", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", "fag", "faggot"]
+	
+	if (bannedWords.some(word => message.content.includes(word)) && !client.hasModPerms(client, message.member)) {
+	message.delete()
+	message.reply("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
+
 	//reptile area
 	if (message.content.includes('forgor')) {
 		message.react('💀')
