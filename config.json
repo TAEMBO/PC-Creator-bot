@@ -18,6 +18,7 @@
 			"trialmoderator"	
 		],
 		"staffRoles": [
+			"owner",
 			"administrator",
 			"moderator",
             "trialmoderator"
