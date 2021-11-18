@@ -811,6 +811,11 @@ client.on("message", async (message) => {
 	message.delete()
 	message.reply("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
 
+	if (message.content.includes('discord.gg/') && (!message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id))) {
+		message.delete()
+		client.punishments.addPunishment('warn', message.member, { reason: 'Discord advertisement' }, client.user.id)
+		message.reply('No advertising other Discord servers.').then(x => setTimeout(() => x.delete(), 10000))
+	}
 	//reptile area
 	if (message.content.includes('forgor')) {
 		message.react('💀')
