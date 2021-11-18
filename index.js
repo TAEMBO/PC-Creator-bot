@@ -804,19 +804,20 @@ client.on("message", async (message) => {
 	
 	}
 
-	//banned words
+	// handle banned words
 	const bannedWords = ["fuck", "nigg", "fuk", "cunt", "cnut", "bitch", "dick", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", "fag", "faggot"]
 	
 	if (bannedWords.some(word => message.content.includes(word)) && !client.hasModPerms(client, message.member)) {
 	message.delete()
 	message.reply("That word is banned here.").then(x => setTimeout(() => x.delete(), 5000))}
 
+	// handle discord invite links
 	if (message.content.includes('discord.gg/') && (!message.member.roles.cache.has(client.config.mainServer.roles.levels.three.id))) {
 		message.delete()
 		client.punishments.addPunishment('warn', message.member, { reason: 'Discord advertisement' }, client.user.id)
 		message.reply('No advertising other Discord servers.').then(x => setTimeout(() => x.delete(), 10000))
 	}
-	//reptile area
+	// forgor to label this
 	if (message.content.includes('forgor')) {
 		message.react('💀')
 	}
