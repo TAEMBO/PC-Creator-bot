@@ -17,7 +17,7 @@ client.prefix = client.config.prefix;
 client.on("ready", async () => {
 	setInterval(async () => {
 		await client.user.setPresence({
-			status: 'idle',
+			status: 'online',
 			activity: {
 				name: `${client.prefix}help`,
 				type: 'LISTENING'
@@ -754,32 +754,27 @@ client.on("message", async (message) => {
 				}
 
 				// if user has sent the same message 3 times in the last threshold milliseconds, notify them
-				if (client.repeatedMessages[message.author.id]?.find(x => {
+				/*if (client.repeatedMessages[message.author.id]?.find(x => {
 					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size === 3;
 				})) {
 					client.repeatedMessages[message.author.id].warnMsg = await message.reply('Stop spamming that message!');
-				}
+				}*/
 
-				// a spammed message is one that has been sent at least 4 times in the last threshold milliseconds
+				// a spammed message is one that has been sent at least 3 times in the last threshold milliseconds
 				const spammedMessage = client.repeatedMessages[message.author.id]?.find(x => {
-					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size >= 4;
+					return client.repeatedMessages[message.author.id].filter(y => y.cont === x.cont).size >= 3;
 				});
 
 				// if a spammed message exists;
 				if (spammedMessage) {
 					// softban
 					const softbanResult = await client.punishments.addPunishment('softban', message.member, { reason: 'repeated messages' }, client.user.id);
-					// send softban result in last channel an identicl message was sent in
-					message.channel.send(softbanResult);
 
 					// timestamp of first spammed message
 					const spamOriginTimestamp = client.repeatedMessages[message.author.id].firstKey();
 
 					// send info about this user and their spamming
 					client.channels.cache.get(client.config.mainServer.channels.pccbtesting).send(`Anti-spam triggered, here's the details:\n\`https://\` ${message.content.toLowerCase().includes('https://') ? ':white_check_mark:' : ':x:'}\n\`http://\` ${message.content.toLowerCase().includes('http://') ? ':white_check_mark:' : ':x:'}\n\`@everyone/@here\` ${(message.content.toLowerCase().includes('@everyone') || message.content.toLowerCase().includes('@here')) ? ':white_check_mark:' : ':x:'}\n\`top-level domain\` ${['.com', '.ru', '.org', '.net'].some(x => message.content.toLowerCase().includes(x))}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join('\n')}\nThreshold: ${threshold}ms\nLRS Message Count: ${client.userLevels.getUser(message.author.id)}`);
-
-					// delete the warning message
-					client.repeatedMessages[message.author.id].warnMsg?.delete();
 
 					// and clear their list of long messages
 					delete client.repeatedMessages[message.author.id];
