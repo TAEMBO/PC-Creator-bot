@@ -1,6 +1,6 @@
 module.exports = {
 	run: (client, message, args) => {
-		message.channel.send('https://media.discordapp.net/attachments/571031705109135361/698154118270681168/20200410_113651.jpg');
+		message.channel.send('https://cdn.discordapp.com/attachments/838857610358292532/912455051182755880/main.png');
 	},
 	name: 'main',
 	description: 'Provides a picture of where every section of the game is.',
