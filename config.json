@@ -1,73 +1,67 @@
 {
 	"botSwitches": {
-		"pccb": true,
-		"modmail": true
+		"fp": true,
+		"modmail": false
 	},
 	"prefix": ",",
 	"eval": {
-		"allowed": true,
+		"allowed": false,
 		"whitelist": [
-			"615761944154210305"
+			"615761944154210305",
+			"349093541978439685"
 		]
 	},
-	"enableAutoResponse": true,
+	"enableAutoResponse": false,
 	"mainServer": {
-		"id":"571031703661969430",
+		"id":"858054240416432158",
 		"modmailPing": [
-			"moderator",
-			"trialmoderator"	
+			"moderator"	
 		],
 		"staffRoles": [
 			"owner",
 			"administrator",
-			"moderator",
-            "trialmoderator"
+			"moderator"
 		],
 		"roles": {
 			"owner": "571032502181822506",
-			"administrator": "632674518317531137",
-			"moderator": "589435378147262464",
-			"trialmoderator": "697002610892341298",
-			"helper": "697728131003580537",
-			"proplayer": "775736993018806322",
-			"muted": "634438185363046440",
-			"developer": "648546626637398046",
+			"administrator": "901677965631443015",
+			"moderator": "858077018732888084",
+			"muted": "889389102112333864",
+			"everyone": "858054240416432158",
 			"levels": {
                 "one": {
-                    "id": "823249966045855844",
+                    "id": "903539767113814056",
                     "age": 60,
                     "messages": 1000
                 },
                 "two": {
-                    "id": "847167685355896852",
+                    "id": "903539759891243010",
                     "age": 90,
                     "messages": 2000
                 },
                 "three": {
-                    "id": "847167729320067152",
+                    "id": "903539753528459295",
                     "age": 120,
                     "messages": 4000
                 },
                 "four": {
-                    "id": "847167771992916018",
+                    "id": "903539742103203920",
                     "age": 150,
                     "messages": 8000
                 },
                 "five": {
-                    "id": "847167876402249759",
+                    "id": "903539725611184179",
                     "age": 180,
                     "messages": 16000
                 }
             }
 		},
 		"channels": {
-			"staffLogs": "572673322891083776",
-			"betterGeneral": "755920483698081793",
-			"pccbtesting": "775672303047409684",
-			"suggestions": "572541644755435520",
-			"starboard": "829045853540974602",
+			"staffLogs": "879581805529948180",
+			"suggestions": "912591798436761631",
 			"modmail": "837436210183798826",
-			"modlog": "865714090000646144"
+			"modlog": "865714090000646144",
+			"starboard": "914665869391577128"
 
 		}
 	}

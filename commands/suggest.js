@@ -27,8 +27,7 @@ module.exports = {
 		await suggestion.react('❌');
 	},
 	name: 'suggest',
-	description: 'Create a suggestion. Only works in <#572541644755435520>. If an image is attached, it will be included in the suggestion.',
-	category: 'PC Creator',
+	description: `Create a suggestion. Only works in <#912591798436761631>. If an image is attached, it will be included in the suggestion.`,
 	alias: ['suggestion'],
 	usage: ['suggestion'],
 	cooldown: 10800
