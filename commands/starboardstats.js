@@ -1,4 +1,4 @@
-/*module.exports = {
+module.exports = {
 	run: async (client, message, args) => {
 		const embed = new client.embed()
 			.setTitle('__Starboard Statistics__')
@@ -34,4 +34,4 @@
 	alias: ['sbs'],
 	cooldown: 30,
 	category: 'Fun'
-};*/
+};

@@ -19,8 +19,8 @@ client.on("ready", async () => {
 		await client.user.setPresence({
 			status: 'online',
 			activity: {
-				name: `thermal paste applications`,
-				type: 'WATCHING'
+				name: `${client.prefix}help`,
+				type: 'LISTENING'
 			}
 		})
 	}, 2000);
@@ -121,7 +121,7 @@ client.userLevels = new database('./databases/userLevels.json', 'object');
 Object.assign(client.userLevels, {
 	_requirements: client.config.mainServer.roles.levels,
 	_milestone() {
-		const milestones = [10, 100, 69696, 100000, 420000, 696969, 800000, 1000000]; // always keep the previously achived milestone in the array so the progress is correct. here you can stack as many future milestones as youd like
+		const milestones = [10, 100, 1000, 696969, 800000, 1000000]; // always keep the previously achived milestone in the array so the progress is correct. here you can stack as many future milestones as youd like
 		const total = Object.values(this._content || {}).reduce((a, b) => a + b, 0);
 		const next = milestones.find(x => x >= total) || undefined;
 		const previous = milestones[milestones.indexOf(next) - 1] || 0;
@@ -139,7 +139,7 @@ Object.assign(client.userLevels, {
 		// milestone
 		const milestone = this._milestone();
 		if (milestone && milestone.total === this._milestone().next) {
-			const channel = client.channels.resolve('858073309920755773'); // #announcements
+			const channel = client.channels.resolve('744401969241653298'); // #server-updates
 			if (!channel) return console.log('tried to send milestone announcement but channel wasnt found');
 			channel.send(`:tada: Milestone reached! **${milestone.next.toLocaleString('en-US')}** messages have been sent in this server and recorded by Level Roles. :tada:`);
 		}
@@ -242,6 +242,7 @@ Object.assign(client.punishments, {
 						banData.duration = timeInMillis;
 					}
 					if (reason) banData.reason = reason;
+					client.makeModlogEntry(banData, client);
 					this.addData(banData);
 					this.forceSave();
 					return `**Case #${banData.id}:** Successfully banned ${member.user.tag} (\`${member.user.id}\`) ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\``;
@@ -258,6 +259,7 @@ Object.assign(client.punishments, {
 						return 'Softban (unban) was unsuccessful: ' + unbanResult;
 					} else {
 						if (reason) softbanData.reason = reason;
+						client.makeModlogEntry(softbanData, client);
 						this.addData(softbanData);
 						this.forceSave();
 						return `**Case #${softbanData.id}:** Successfully softbanned ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || 'unspecified'}\``;
@@ -270,6 +272,7 @@ Object.assign(client.punishments, {
 					return 'Kick was unsuccessful: ' + kickResult;
 				} else {
 					if (reason) kickData.reason = reason;
+					client.makeModlogEntry(kickData, client);
 					this.addData(kickData);
 					this.forceSave();
 					return `**Case #${kickData.id}:** Successfully kicked ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || 'unspecified'}\``;
@@ -286,6 +289,7 @@ Object.assign(client.punishments, {
 						muteData.duration = timeInMillis;
 					}
 					if (reason) muteData.reason = reason;
+					client.makeModlogEntry(muteData, client);
 					this.addData(muteData);
 					this.forceSave();
 					member.send(`You\'ve been muted in ${member.guild.name} ${timeInMillis ? `for ${client.formatTime(timeInMillis, 4, { longNames: true, commas: true })} (${timeInMillis}ms)` : 'forever'} for reason \`${reason || 'unspecified'}\` (Case #${muteData.id})`).catch(err => console.log(`dm failed while ${moderator} was muting ${member.user.id} (case ${muteData.id}):`, err.message));
@@ -298,6 +302,7 @@ Object.assign(client.punishments, {
 					return 'Warn was unsuccessful: ' + warnResult;
 				} else {
 					if (reason) warnData.reason = reason;
+					client.makeModlogEntry(warnData, client);
 					this.addData(warnData);
 					this.forceSave();
 					return `**Case #${warnData.id}:** Successfully warned ${member.user.tag} (\`${member.user.id}\`) for reason \`${reason || 'unspecified'}\``;
@@ -335,6 +340,7 @@ Object.assign(client.punishments, {
 			if (typeof removePunishmentResult === 'string') return `Un${punishment.type} was unsuccessful: ${removePunishmentResult}`;
 			else {
 				const removePunishmentData = { type: `un${punishment.type}`, id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now };
+				client.makeModlogEntry(removePunishmentData, client);
 				this._content[this._content.findIndex(x => x.id === punishment.id)].expired = true;
 				this.addData(removePunishmentData).forceSave();
 				return `Successfully ${punishment.type === 'ban' ? 'unbanned' : 'unmuted'} ${removePunishmentResult.tag} (${removePunishmentResult.id}) for reason \`${reason || 'unspecified'}\``;
@@ -342,6 +348,7 @@ Object.assign(client.punishments, {
 		} else {
 			try {
 				const removePunishmentData = { type: 'removeOtherPunishment', id, cancels: punishment.id, member: punishment.member, reason, moderator, time: now };
+				client.makeModlogEntry(removePunishmentData, client);
 				this._content[this._content.findIndex(x => x.id === punishment.id)].expired = true;
 				this.addData(removePunishmentData).forceSave();
 				return `Successfully removed Case #${punishment.id} (type: ${punishment.type}, user: ${punishment.member}).`;
@@ -782,8 +789,8 @@ client.on("message", async (message) => {
 		}
 
 		const BLACKLISTED_CHANNELS = [
-			'902524214718902332', /* bot-commands */
-			'879581805529948180' /* staff-logs */
+			'748122380383027210', /* bot-commands */
+			'572673322891083776' /* staff-logs */
 		];
 		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
@@ -793,7 +800,7 @@ client.on("message", async (message) => {
 	}
 
 	// handle banned words
-	const bannedWords = ["shit", "ass", "fuck", "nigg", "fuk", "cunt", "cnut", "bitch", "dick", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", "fag", "faggot"]
+	const bannedWords = ["fuck", "nigg", "fuk", "cunt", "cnut", "bitch", "dick", "d1ck", "pussy", "asshole", "b1tch", "b!tch", "blowjob", "cock", "c0ck", "retard", "fag", "faggot"]
 	
 	if (bannedWords.some(word => message.content.toLowerCase().includes(word)) && !client.hasModPerms(client, message.member) && message.guild.id === client.config.mainServer.id) {
 	message.delete()
@@ -815,7 +822,7 @@ modmailClient.on('message', message => {
 	require('./modmailMessage.js')(message, modmailClient, client);
 });
 
-if (client.config.botSwitches.fp) {
+if (client.config.botSwitches.pccb) {
 	client.login(client.config.token);
 }
 if (client.config.botSwitches.modmail) {
