@@ -7,7 +7,7 @@ module.exports = {
 
             perms.push("SEND_MESSAGES")
             await role.edit({ permissions: perms });
-            message.channel.send('Unlocked channels')     
+            message.channel.send('Unfroze server')     
             
          } else {
             message.channel.send(`You need the **${message.guild.roles.cache.get(client.config.mainServer.roles.moderator).name}** role to use this command`)
