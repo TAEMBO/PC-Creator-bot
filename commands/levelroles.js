@@ -43,8 +43,8 @@ module.exports = {
 			const img = canvas.createCanvas(950, 450);
 			const ctx = img.getContext('2d');
 
-			const graphOrigin = [10, 15];
-			const graphSize = [700, 395];
+			const graphOrigin = [10, 50];
+			const graphSize = [700, 360];
 			const nodeWidth = graphSize[0] / (data.length - 1);
 			ctx.fillStyle = '#36393f';
 			ctx.fillRect(0, 0, img.width, img.height);
