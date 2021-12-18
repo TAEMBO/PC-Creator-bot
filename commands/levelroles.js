@@ -27,8 +27,14 @@ module.exports = {
 				if (change < 0) data[i] = data[i - 1] || data[i + 1] || 0;
 			});
 
-			const accuracy = 1000;
-			const maxValue = Math.ceil(Math.max(...data) / accuracy) * accuracy;
+			const maxValue = Math.max(...data);
+			const maxValueArr = maxValue.toString().split('');
+
+			const first_graph_top = Math.ceil(parseInt(maxValue) * 10 ** (-maxValueArr.length + 1)) * 10 ** (maxValueArr.length - 1);
+			// console.log({ first_graph_top });
+
+			const second_graph_top = Math.ceil(parseInt(maxValue) * 10 ** (-maxValueArr.length + 2)) * 10 ** (maxValueArr.length - 2);
+			// console.log({ second_graph_top });
 
 			const textSize = 32;
 
@@ -37,23 +43,43 @@ module.exports = {
 			const img = canvas.createCanvas(950, 450);
 			const ctx = img.getContext('2d');
 
-			const graphOrigin = [10, 50];
-			const graphSize = [700, 360];
+			const graphOrigin = [10, 15];
+			const graphSize = [700, 395];
 			const nodeWidth = graphSize[0] / (data.length - 1);
 			ctx.fillStyle = '#36393f';
 			ctx.fillRect(0, 0, img.width, img.height);
 
 			// grey horizontal lines
 			ctx.lineWidth = 3;
+			
+			let interval_candidates = [];
+			for (let i = 4; i < 10; i++) {
+				const interval = first_graph_top / i;
+				if (Number.isInteger(interval)) {
+					intervalString = interval.toString();
+					const reference_number = i * Math.max(intervalString.split('').filter(x => x === '0').length / intervalString.length, 0.3) * (['1', '2', '4', '5', '6', '8'].includes(intervalString[0]) ? 1.5 : 0.67)
+					interval_candidates.push([interval, i, reference_number]);
+				}
+			}
+			// console.log({ interval_candidates });
+			const chosen_interval = interval_candidates.sort((a, b) => b[2] - a[2])[0];
+			// console.log({ chosen_interval });
+
+			let previousY;
+			
 			ctx.strokeStyle = '#202225';
-			const linescount = maxValue / accuracy;
-			for (let i = 0; i <= linescount; i++) {
+			for (let i = 0; i <= chosen_interval[1]; i++) {
+				const y = graphOrigin[1] + graphSize[1] - (i * (chosen_interval[0] / second_graph_top) * graphSize[1]);
+				if (y < graphOrigin[1]) continue;
+				const even = ((i + 1) % 2) === 0;
+				if (even) ctx.strokeStyle = '#2c2f33';
 				ctx.beginPath();
-				const y = graphOrigin[1] + (i * (graphSize[1] / linescount));
 				ctx.lineTo(graphOrigin[0], y);
 				ctx.lineTo(graphOrigin[0] + graphSize[0], y);
 				ctx.stroke();
 				ctx.closePath();
+				if (even) ctx.strokeStyle = '#202225';
+				previousY = [y, i * chosen_interval[0]];
 			}
 
 			// 30d mark
@@ -73,7 +99,7 @@ module.exports = {
 
 
 			function getYCoordinate(value) {
-				return ((1 - (value / maxValue)) * graphSize[1]) + graphOrigin[1];
+				return ((1 - (value / second_graph_top)) * graphSize[1]) + graphOrigin[1];
 			}
 
 			let lastCoords = [];
@@ -102,8 +128,8 @@ module.exports = {
 
 			// highest value
 			const maxx = graphOrigin[0] + graphSize[0] + textSize;
-			const maxy = graphOrigin[1] + (textSize / 3);
-			ctx.fillText(maxValue.toLocaleString('en-US'), maxx, maxy);
+			const maxy = previousY[0] + (textSize / 3);
+			ctx.fillText(previousY[1].toLocaleString('en-US'), maxx, maxy);
 
 			// lowest value
 			const lowx = graphOrigin[0] + graphSize[0] + textSize;
