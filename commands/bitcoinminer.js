@@ -1,8 +1,8 @@
 module.exports = {
     run: async (client, message, args) => {
-        message.channel.send('https://cdn.discordapp.com/attachments/838857610358292532/895348340726833192/unknown.png');
+        message.channel.send('https://media.discordapp.net/attachments/838857610358292532/919200191628849172/Bitcoin_PC_3.jpg');
     },
-	name: 'bitcoinminer',
+	name: 'miner',
 	description: 'Shows the current best bitcoin mining setup for only in-game money.',
 	category: 'PC Creator',
 	alias: ['bitcoin', 'btcpc'],
