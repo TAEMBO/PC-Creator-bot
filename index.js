@@ -18,7 +18,7 @@ client.on("ready", async () => {
 	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
 	MessageLogs(client);
 	setInterval(async () => {
-		await client.user.setActivity(`${config.prefix}help`, {
+		await client.user.setActivity(`${client.prefix}help`, {
 			type: "LISTENING",
 		})
 	}, 2000);
