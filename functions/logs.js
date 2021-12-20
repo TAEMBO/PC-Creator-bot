@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageActionRow, MessageButton, Client } = require("discord.js");
 module.exports = async (client) => {
-    const channel = await client.channels.fetch(require("../config.json").mainServer.channels.staffLogs)
-   client.on("messageDelete", async (msg)=>{
+    const channel = await client.channels.fetch(client.config.mainServer.channels.staffLogs)
+    client.on("messageDelete", async (msg)=>{
        if(msg.partial) return;
        if(msg.author.bot) return;
        if(msg.guild.id !== client.config.mainServer.id) return;
