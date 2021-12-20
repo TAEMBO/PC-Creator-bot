@@ -1,3 +1,4 @@
+const e = require("discord.js");
 function helpPage(pageNumber, client, message, args, toEdit = false) {
 	let pageIndex = pageNumber || 0;
 	const pageInfo = client.commands.pages[pageIndex];
@@ -12,28 +13,29 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 	if (toEdit) {
 		return embed;
 	} else {
-		message.channel.send(embed)
+		message.channel.send({embeds: [embed], components: [new e.MessageActionRow().addComponents(new e.MessageButton().setStyle("SECONDARY").setCustomId("back").setEmoji("⬅️"), new e.MessageButton().setStyle("SECONDARY").setCustomId("forward").setEmoji("➡️"))]})
 			// add reactions to go forward or backward pages
 			.then(async botMessage => {
 				let endTimestamp = Date.now() + 60000;
-				const collector = botMessage.createReactionCollector((reaction, user) => ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id);
-				collector.on('collect', async (reaction, user) => {
+				const filter = (interaction) => {
+					return message.author.id === interaction.user.id;
+				};
+				const collector = botMessage.createMessageComponentCollector({ filter, componentType: 'BUTTON', time: 1000 * 90 });;
+				collector.on('collect', async (button) => {
 					endTimestamp = Date.now() + 90000;
-					if (reaction.emoji.name === '◀️') {
+					if (button.customId === 'back') {
 						if (pageIndex - 1 < 0) pageIndex = client.commands.pages.length;
 						pageIndex--;
-					} else if (reaction.emoji.name === '▶️') {
+						button.reply({content: "** **"}).then((i)=>{button.deleteReply()})
+					} else if (button.customId === 'forward') {
 						if (pageIndex + 1 >= client.commands.pages.length) pageIndex = -1;
 						pageIndex++;
+						button.reply({content: "** **"}).then((i)=>{button.deleteReply()})
 					}
-					await Promise.all([botMessage.edit(helpPage(pageIndex, client, message, args, true)), botMessage.reactions.removeAll()]);
-					await botMessage.react('◀️');
-					await botMessage.react('▶️');
+					await Promise.all([botMessage.edit({embeds: [helpPage(pageIndex, client, message, args, true)]})]);
 				});
 				async function onEnd() {
-					await botMessage.edit('_Removed to save space._');
-					await botMessage.suppressEmbeds();
-					await botMessage.reactions.removeAll();
+					await botMessage.edit({content: '_Removed to save space._', embeds: [], components: []});
 				};
 				const interval = setInterval(() => {
 					if (Date.now() > endTimestamp) {
@@ -45,8 +47,6 @@ function helpPage(pageNumber, client, message, args, toEdit = false) {
 					onEnd();
 					clearInterval(interval);
 				});
-				await botMessage.react('◀️');
-				await botMessage.react('▶️');
 				
 			});
 	}
@@ -71,7 +71,7 @@ module.exports = {
 				.setTitle(`__Commands: ${command.name}__`)
 				.setDescription(client.commandInfo(client, command, { insertNewline: true, parts: ['name', 'usage', 'description', 'shortDescription', 'alias', 'category', 'autores', 'cooldown'], titles: ['name', 'usage', 'shortDescription', 'alias', 'category', 'autores', 'cooldown'] }))
 				.setColor(3971825)
-			return message.channel.send(embed);
+			return message.channel.send({embeds: [embed]});
 		} 
 		// if run() still hasnt been returned, send category 0 page 1
 		return helpPage(undefined, client, message, args);

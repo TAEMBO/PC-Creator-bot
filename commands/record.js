@@ -12,7 +12,7 @@ module.exports = {
 			.addField(':small_blue_diamond: Score Achieved', '\`207,231\`')
 			.setImage('https://cdn.discordapp.com/attachments/838857610358292532/905766073557729290/record.jpg')
 			.setColor(client.embedColor)
-		message.channel.send(embed);
+		message.channel.send({embeds: [embed]});
     },
 	name: 'record',
 	description: 'Shows the current World Record PC in the game',

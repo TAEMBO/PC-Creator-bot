@@ -1,22 +1,22 @@
-function chipsetEmbed(client, chipset, manufacturer) {
+async function chipsetEmbed(client, chipset, manufacturer) {
 	let color;
 	if (manufacturer.toLowerCase() === 'intel') color = 2793983;
 	else if (manufacturer.toLowerCase() === 'amd') color = 13582629;
-	const embed = new client.embed()
+	const embed = await new client.embed()
 		.setTitle(manufacturer.toUpperCase() + ' ' + chipset.name)
 		.addField('Supported CPUs', chipset.supported === 'N/A' ? 'N/A' : chipset.supported, true)
-		.addField('Core OC', chipset.coreOC === 'N/A' ? 'N/A' : chipset.coreOC, true)
-		.addField('Memory OC', chipset.memOC === 'N/A' ? 'N/A' : chipset.memOC, true)
-		.addField('Memory channels', chipset.memChan === 'N/A' ? 'N/A' : chipset.memChan, true)
-		.addField('PCIe lanes', chipset.pcieLanes === 'N/A' ? 'N/A' : chipset.pcieLanes, true)
-		.addField('PCIe generation', chipset.pcieGen === 'N/A' ? 'N/A' : chipset.pcieGen, true)
-		.addField('Socket', chipset.socket === 'N/A' ? 'N/A' : chipset.socket, true)
+		.addField('Core OC', chipset.coreOC === null ? 'N/A' : chipset.coreOC, true)
+		.addField('Memory OC', chipset.memOC === null ? 'N/A' : chipset.memOC, true)
+		.addField('Memory channels', chipset.memChan === null ? 'N/A' : chipset.memChan, true)
+		.addField('PCIe lanes', chipset.pcieLanes === null ? 'N/A' : chipset.pcieLanes, true)
+		.addField('PCIe generation', chipset.pcieGen === null ? 'N/A' : chipset.pcieGen, true)
+		.addField('Socket', chipset.socket === null ? 'N/A' : chipset.socket, true)
 		.setColor(color);
 	return embed;
 }
 
 module.exports = {
-	run: (client, message, args) => {
+	run: async (client, message, args) => {
 		// if no chipset was searched, tell user to do chipset help
 		if (!args[1]) return message.channel.send('You need to search for a chipset. For help, do `' + client.prefix + 'chipset help`');
 		// if they did help and didnt put anything else in the command, get help embed and send it
@@ -28,7 +28,7 @@ module.exports = {
 			.addField('Search Terms', 'Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.')
 			.addField('Manufacturer Search', 'Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `INTEL`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.')
 			.addField('I don\'t want to write this', 'so here are examples\n\`,chipset INTEL z490\`\n2 search terms, separated with a comma\nmanufacturer = INTEL (only INTEL chipsets will be searched)\nname search = z490\n\n\`,chipset z490\`\n1 search term\nno manufacturer, no filters\nnamesearch = z490\n\n\`,chipset INTEL -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = INTEL\nmultiple search: list is active (\`-s\` also works(\`,s\` allows you to choose a cpu based on numbering, \`,sl` just shows the list))')
-			return message.channel.send(embed);
+			return message.channel.send({embeds: [embed]});
 		}
 		const searchTerms = args.slice(1).join(' ').split(',');
 
@@ -205,12 +205,13 @@ module.exports = {
 			} else {
 				embed.setFooter(`Showing ${limit} of ${rankedChipsets.length} chipsets.`)
 			}
-			message.channel.send(embed);
+			message.channel.send({embeds: [embed]});
 			if (multipleSearch === 's') {
-				return message.channel.awaitMessages(x => x.author.id === message.author.id && parseInt(x.content), { max: 1, time: 20000, errors: ['time']}).then(responses => {
+				const filter = x => x.author.id === message.author.id && parseInt(x.content)
+				return message.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ['time']}).then(responses => {
 					const index = parseInt(responses.first()?.content) - 1;
 					if (isNaN(index)) return message.channel.send('That\'s not a valid number.');
-					message.channel.send(chipsetEmbed(client, rankedChipsets[index][1], manufacturer || getManufacturer(rankedChipsets[index][0])));
+					message.channel.send({embeds: [chipsetEmbed(client, rankedChipsets[index][1], manufacturer || getManufacturer(rankedChipsets[index][0]))]});
 				}).catch(() => message.channel.send('You failed.'))
 			}
 		} else {
@@ -239,7 +240,20 @@ module.exports = {
 			}
 			const bestMatch = Object.entries(matches).find((x, index) => (typeof x[1]?.score === 'number' ? x[1]?.score : -1) >= (typeof Object.entries(matches)[(!index) + 0][1]?.score === 'number' ? Object.entries(matches)[(!index) + 0][1]?.score : -1));
 			if (!bestMatch[1] || bestMatch[1].score < 0) return message.channel.send('That query returned `0` results.');
-			message.channel.send(chipsetEmbed(client, bestMatch[1], bestMatch[0]));
+			let color;
+	if (bestMatch[0].toLowerCase() === 'intel') color = 2793983;
+	else if (bestMatch[0].toLowerCase() === 'amd') color = 13582629;
+	const embed = await new client.embed()
+		.setTitle(bestMatch[0].toUpperCase() + ' ' + bestMatch[0].name)
+		.addField('Supported CPUs', bestMatch[1].supported === 'N/A' ? 'N/A' : bestMatch[1].supported, true)
+		.addField('Core OC', bestMatch[1].coreOC === "N/A" ? 'N/A' : bestMatch[1].coreOC, true)
+		.addField('Memory OC', bestMatch[1].memOC === "N/A" ? 'N/A' : bestMatch[1].memOC, true)
+		.addField('Memory channels', bestMatch[1].memChan === "N/A" ? 'N/A' : bestMatch[1].memChan, true)
+		.addField('PCIe lanes', bestMatch[1].pcieLanes === "N/A" ? 'N/A' : bestMatch[1].pcieLanes, true)
+		.addField('PCIe generation', bestMatch[1].pcieGen === "N/A" ? 'N/A' : bestMatch[1].pcieGen, true)
+		.addField('Socket', bestMatch[1].socket === "N/A" ? 'N/A' : bestMatch[1].socket, true)
+		.setColor(color);
+			message.channel.send({embeds: [embed]});
 		}
 	},
 	name: 'chipset',

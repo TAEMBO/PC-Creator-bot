@@ -7,5 +7,5 @@ module.exports = {
 	description: 'GuildMember deserialization with binary tree inversion.',
 	category: 'Moderation',
 	alias: ['amogus'],
-	usage: ['go', 'fuck', 'yourself', 'chikkenn']
+	usage: ['go', 'fuck', 'yourself']
 };

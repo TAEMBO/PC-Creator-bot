@@ -23,7 +23,7 @@ module.exports = {
 			}
 			if (punishment.expired) embed.addField(':small_blue_diamond: Expired', `This case has been overwritten by Case #${cancelledBy.id} for reason \`${cancelledBy.reason}\``)
 			if (punishment.cancels) embed.addField(':small_blue_diamond: Overwrites', `This case overwrites Case #${cancels.id} \`${cancels.reason}\``)
-			message.channel.send(embed);
+			message.channel.send({embeds: [embed]});
 		} else {
 			// if caseid is a user id, show their punishments, sorted by most recent
 			const userPunishments = client.punishments._content.filter(x => x.member === args[1]).sort((a, b) => a.time - b.time).map(punishment => {
@@ -43,7 +43,7 @@ module.exports = {
 				.setFooter(`${userPunishments.length} total punishments. Viewing page ${pageNumber} out of ${Math.ceil(userPunishments.length / 25)}.`)
 				.setColor(client.embedColor)
 			embed.addFields(userPunishments.slice((pageNumber - 1) * 25, pageNumber * 25));
-			return message.channel.send(embed);
+			return message.channel.send({embeds: [embed]});
 		}
 	},
 	name: 'case',

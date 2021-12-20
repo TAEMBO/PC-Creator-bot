@@ -1,11 +1,28 @@
-module.exports = (client, message, args) => {
+const { Client } = require("discord.js");
+
+async function cpuEmbed(client, options){
+	const { cpu, manufacturer, color } = options;
+	const embed = new client.embed()
+		.setTitle(manufacturer.charAt(0).toUpperCase() + manufacturer.slice(1).toLowerCase() + ' ' + cpu.name)
+		.addField('Cores', `${cpu.cores}`, true)
+		.addField('Base Clock Speed', `${cpu.base ? (cpu.base === 'N/A' ? 'N/A' : cpu.base + ' GHz') : 'N/A'}`, true)
+		.addField('TDP', `${cpu.tdp ? (cpu.tdp === 'N/A' ? 'N/A' : cpu.tdp + 'W') : 'N/A'}`, true)
+		.addField('Threads', `${cpu.threads ? (cpu.threads === 'N/A' ? 'N/A' : cpu.threads) : 'N/A'}`, true)
+		.addField('Boost Clock Speed', `${cpu.boost ? (cpu.boost === 'N/A' ? 'N/A' : cpu.boost + ' GHz') : 'N/A'}`, true)
+		.addField('Socket', `${cpu.socket ? (cpu.socket === 'N/A' ? 'N/A' : cpu.socket): 'N/A'}`, true)
+		.addField('MSRP', `${cpu.price ? (cpu.price === 'N/A' ? 'N/A' : '$' + cpu.price.toFixed(2)) : 'N/A'}`, true)
+		.setColor(color);
+		if (cpu.igpu) embed.addField('iGPU', cpu.igpu, true);
+	return embed;
+}
+module.exports = async (client, message, args) => {
 	if (!args[1]) return message.channel.send('You need to search for a CPU. For help, do `' + client.prefix + args[0] + ' help`');
 	const manufacturer = args[0].includes('intel') ? 'INTEL' : args[0].includes('amd') ? 'AMD' : undefined;
 	if (!manufacturer) return;
 	const color = manufacturer === 'INTEL' ? 2793983 : 13582629;
 	if (args[1].toLowerCase() === 'help' && args.length === 2) {
 		const embed = client.cpuCommandHelpEmbed(client, client.prefix + args[0].toLowerCase(), color);
-		return message.channel.send(embed);
+		return message.channel.send({embeds: [embed]});
 	}
 	const search = args.slice(1).join(' ').toLowerCase().split(',');
 	let matches = new client.collection();
@@ -75,11 +92,14 @@ module.exports = (client, message, args) => {
 	if (prematureError) return;
 	if (matches.filter(x => x).size === 0) return message.channel.send('That query returned `0` results!');
 	if (oneResult) {
-		const cpu = client.cpulist[manufacturer][matches.filter(x => x).sort((a, b) => b - a).firstKey()];
-		message.channel.send(client.cpuEmbed(client, { cpu, manufacturer, color }));
+		const cpu = await client.cpulist[manufacturer][matches.filter(x => x).sort((a, b) => b - a).firstKey()];
+		const e = await cpuEmbed(client, { cpu, manufacturer, color })
+		if(!e) return message.channel.send({content: "Embed is gae"})
+		message.channel.send({embeds: [e]});
 	} else {
 		const limit = 200;
-		const bestMatches = nameSearch ? matches.filter(x => x).sort((a, b) => b - a).firstKey(limit) : matches.filter(x => x).keyArray().sort().slice(0, limit);
+		const eeao = await matches.filter(x => x)
+		const bestMatches = nameSearch ? eeao.sort((a, b) => b - a).firstKey(limit) : eeao.sort((a, b) => b - a).firstKey(limit) //slice(0, limit);
 		let text = ['']
 		bestMatches.forEach((x, i) => {
 			const cpuName = `\`${i + 1}: ${client.cpulist[manufacturer][x].name}\`\n`;
@@ -93,13 +113,15 @@ module.exports = (client, message, args) => {
 		text.forEach((x, i) => {
 			embed.addField('Page ' + (i + 1), x, true);
 		});
-		message.channel.send(embed).then(embedMessage => {
+		message.channel.send({embeds: [embed]}).then(async embedMessage => {
 			if (!multipleResponseAsk) return;
-			message.channel.awaitMessages(numberMessage => numberMessage.author.id === message.author.id, { max: 1, time: 40000, errors: ['time'] }).then(collected => {
-				const index = parseInt(collected.first().content) - 1;
+			const filter = m => m.author.id === message.author.id;
+			message.channel.awaitMessages({ filter, max: 1, time: 40000, errors: ['time'] }).then(async collected => {
+				const index = parseInt(collected.first().content);
 				if (!index) return message.channel.send('Invalid number.');
-				const cpu = client.cpulist[manufacturer][bestMatches[index]];
-				message.channel.send(client.cpuEmbed(client, {cpu, manufacturer, color}));
+				const cpu = await client.cpulist[manufacturer][bestMatches[index]];
+				const ee = await cpuEmbed(client, {cpu, manufacturer, color})
+				message.channel.send({embeds: [ee]});
 			}).catch(err => message.channel.send('You failed to respond with a number.'));
 		});
 	}

@@ -6,7 +6,7 @@ module.exports = {
 		client.games.set(message.channel.id, message.author.tag);
 		await message.channel.send(`A hangman game has started. ${message.member.toString()}, DM me with the word(s) that you would like your opponents to guess. (60s)`);
 		const dmChannel = await message.member.createDM();
-		const collectedMessages = await dmChannel.awaitMessages(() => true, { errors: ['time'], max: 1, time: 60000 })
+		const collectedMessages = await dmChannel.awaitMessages({ errors: ['time'], max: 1, time: 60000 })
 			.catch(error => {
 				message.channel.send(`${message.member.toString()} failed to provide a word for me. The hangman game has been cancelled.`);
 				client.games.delete(message.channel.id);
@@ -61,10 +61,11 @@ module.exports = {
 			guessedWordsIndices.push(...guessedTextCharIndices.map(x => x + guessedTextStartIndex));
 			wordUpdate();
 		}
-
-		const guessCollector = message.channel.createMessageCollector(x => x.content.toLowerCase().startsWith('guess'));
+		const guessCollector = message.channel.createMessageCollector({});
 
 		guessCollector.on('collect', guessMessage => {
+			if(guessMessage.author.bot) return;
+			if(guessMessage.content.toLowerCase().startsWith('guess')){
 			const guess = guessMessage.content.slice(6).toLowerCase();
 			if (!guess || guess.length === 0) return guessMessage.reply('You\'re using the \`guess\` command wrong. Get good.');
 			if (guess.length > 1) {
@@ -72,10 +73,11 @@ module.exports = {
 			} else {
 				guessLetter(guess);
 			}
+		}
 		});
 
 		const interval = setInterval(() => {
-			if (Date.now() > latestActivity + 5 * 60 * 1000) {
+			if (Date.now() > latestActivity + 5 * 60 * 1000 && client.games.has(message.channel.id)) {
 				guessCollector.stop();
 				client.games.delete(message.channel.id);
 				message.channel.send('The hangman game has ended due to inactivity.');

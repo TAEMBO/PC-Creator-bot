@@ -18,5 +18,5 @@ module.exports = (data, client) => {
 	if (data.cancels) embed.addField(':small_blue_diamond: Overwrites', `This case overwrites Case #${cancels.id} \`${cancels.reason}\``);
 
 	// send embed in modlog channel
-	client.channels.cache.get(client.config.mainServer.channels.modlog).send(embed);
+	client.channels.cache.get(client.config.mainServer.channels.modlog).send({embeds: [embed]});
 };

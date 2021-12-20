@@ -24,7 +24,7 @@ module.exports = {
 		events.forEach(e => {
 			embed.addField(`On <t:${Math.floor(e.time / 1000)}:d>,`, e.text + `\n[Message](${e.url})`);
 		});
-		message.channel.send(embed);
+		message.channel.send({embeds: [embed]});
 	},
 	name: 'cost',
 	description: 'Is PC Creator 2 going to be free?',

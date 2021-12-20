@@ -6,7 +6,8 @@ module.exports = {
 		const players = [message.member];
 		await message.channel.send(`Who wants to play Rock Paper Scissors with ${message.member.toString()}? Respond with "me". (60s)`);
 		client.games.set(message.channel.id, message.author.tag);
-		const opponentMessages = await message.channel.awaitMessages(x => x.content.toLowerCase().startsWith('me'), { max: 1, time: 60000, errors: ['time'] }).catch(() => {
+		const filter = x => x.content.toLowerCase().startsWith('me');
+		const opponentMessages = await message.channel.awaitMessages({ filter, max: 1, time: 60000, errors: ['time'] }).catch(() => {
 			message.channel.send('Haha no one wants to play with you, lonely goblin.');
 			client.games.delete(message.channel.id);
 			});
@@ -21,12 +22,14 @@ module.exports = {
 		await message.channel.send('10 seconds have passed. **Send your message NOW!** You have 2 seconds to send your message.');
 		const plays = ['scissors', 'paper', 'rock'];
 		let timeError = false;
-		let homePlay = message.channel.awaitMessages(x => x.author.id === players[0].user.id, { max: 1, time: 2000, errors: ['time']}).catch((err) => {
+		const filter2 = x => x.author.id === players[0].user.id
+		let homePlay = message.channel.awaitMessages({ filter2, max: 1, time: 2000, errors: ['time']}).catch((err) => {
 			message.channel.send(`${players[0].toString()} failed to play their move in time.`);
 			timeError = true;
 			return '';
 		});
-		let guestPlay = message.channel.awaitMessages(x => x.author.id === players[1].user.id, { max: 1, time: 2000, errors: ['time'] }).catch((err) => {
+		const filter3 = x => x.author.id === players[1].user.id;
+		let guestPlay = message.channel.awaitMessages({ filter3, max: 1, time: 2000, errors: ['time'] }).catch((err) => {
 			message.channel.send(`${players[1].toString()} failed to play their move in time.`);
 			timeError = true;
 			return '';

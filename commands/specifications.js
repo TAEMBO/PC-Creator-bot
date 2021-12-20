@@ -10,7 +10,7 @@ module.exports = {
 					.addField('Viewing specs', `To view your own specs, you can do \`${client.prefix}specifications\`. To view specs of other people, you can do \`${client.prefix}specifications [user]\`. User can be a mention, id or username.`)
 					.addField('Editing specs', `To edit your own specs, you can do \`${client.prefix}specifications edit [component]: [new name]\`. Component capitalization doesn't matter. The old name will be overwritten by the new name. You cannot edit the component part, only the name.`)
 					.addField('Deleting specs', `To delete all your specs, you can do \`${client.prefix}specifications delete\`. To delete a single component from your specs you can do \`${client.prefix}specifications delete [component]\`. Component capitalization doesn't matter.`)
-				message.channel.send(embed);
+				message.channel.send({embeds: [embed]});
 			} else if (args[1].toLowerCase() === 'add') {
 				const endPart = args.slice(2).join(' ');
 				const colonIndex = endPart.indexOf(':') >= 0 ? endPart.indexOf(':') : endPart.indexOf(' ');
@@ -52,12 +52,12 @@ module.exports = {
 				if (!member) return message.channel.send('You failed to mention a user from this server.');
 				if (!client.specsDb.hasUser(member.user.id)) return message.channel.send('They haven\'t added any specs yet.');
 				const embed = client.displaySpecs(client, member);
-				return message.channel.send(embed);
+				return message.channel.send({embeds: [embed]});
 			}
 		} else {
 			if (!client.specsDb.hasUser(message.author.id)) return message.channel.send(`You haven\'t added any specs yet. Do \`${client.prefix}specifications help\` to learn more.`);
 			const embed = client.displaySpecs(client, message.member);
-			message.channel.send(embed);
+			message.channel.send({embeds: [embed]});
 		}
 	},
 	name: 'specifications',

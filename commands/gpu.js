@@ -28,7 +28,7 @@ module.exports = {
 			.addField('Search Terms', 'Search Terms narrow down search results. They are text after the command. A Search Term may consist of Manufacturer Search and Name search, or only one of the previously mentioned, or a Filter. Search Terms must be separated with a commad \`,\`.')
 			.addField('Manufacturer Search', 'Manufacturer Search is used to narrow down your search results to 1 brand instead of the existing 2. It should be `amd` or `nvidia`. It should be the first word in the first Search Term. Manufacturer Search is optional. If a manufacturer is not supplied, both manufacturers will be searched for search results and the first Search Term will be tested for Filter Operators. If Filter Operators are not found in the first Search Term, it will be tested for Name Search.')
 			.addField('i dont want to write this', 'so here are examples\n\`,gpu nvidia 3080, price > 1000\`\n2 search terms, separated with a comma\nmanufacturer = nvidia (only nvidia gpus will be searched)\nname search = 3080 (gpu name must include "3080")\nfilter: price > 1000 (gpu msrp must be more than 1000 usd)\n\n\`,gpu 6900\`\n1 search term\nno manufacturer, no filters\nnamesearch = 6900 (gpu name must include "6900")\n\n\`,gpu nvidia -sl\`\n1 search term\nno namesearch or filters\nmanufacturer = nvidia\nmultiple search: list is active (\`-s\` also works)')
-			return message.channel.send(embed);
+			return message.channel.send({embeds: [embed]});
 		}
 		const searchTerms = args.slice(1).join(' ').split(',');
 
@@ -205,12 +205,13 @@ module.exports = {
 			} else {
 				embed.setFooter(`Showing ${limit} of ${rankedGpus.length} GPUs.`)
 			}
-			message.channel.send(embed);
+			message.channel.send({embeds: [embed]});
 			if (multipleSearch === 's') {
-				return message.channel.awaitMessages(x => x.author.id === message.author.id && parseInt(x.content), { max: 1, time: 20000, errors: ['time']}).then(responses => {
+				const filter = x => x.author.id === message.author.id && parseInt(x.content)
+				return message.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ['time']}).then(responses => {
 					const index = parseInt(responses.first()?.content) - 1;
 					if (isNaN(index)) return message.channel.send('That\'s not a valid number.');
-					message.channel.send(gpuEmbed(client, rankedGpus[index][1], manufacturer || getManufacturer(rankedGpus[index][0])));
+					message.channel.send({embeds: [gpuEmbed(client, rankedGpus[index][1], manufacturer || getManufacturer(rankedGpus[index][0]))]});
 				}).catch(() => message.channel.send('You failed.'))
 			}
 		} else {
@@ -239,7 +240,7 @@ module.exports = {
 			}
 			const bestMatch = Object.entries(matches).find((x, index) => (typeof x[1]?.score === 'number' ? x[1]?.score : -1) >= (typeof Object.entries(matches)[(!index) + 0][1]?.score === 'number' ? Object.entries(matches)[(!index) + 0][1]?.score : -1));
 			if (!bestMatch[1] || bestMatch[1].score < 0) return message.channel.send('That query returned `0` results.');
-			message.channel.send(gpuEmbed(client, bestMatch[1], bestMatch[0]));
+			message.channel.send({embeds: [gpuEmbed(client, bestMatch[1], bestMatch[0])]});
 		}
 	},
 	name: 'gpu',

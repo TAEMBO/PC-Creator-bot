@@ -27,7 +27,7 @@ module.exports = {
 		})()]);
 		const bestUsersText = bestUsers.filter(x => typeof x[1] === 'number' && !isNaN(x[1])).sort((a, b) => b[1] - a[1]).slice(0, 5).map(x => `**${x[1]}** :star: <@${x[0]}>`);
 		embed.addField('Most Starred Users', bestUsersText.join('\n'));
-		message.channel.send(embed);
+		message.channel.send({embeds: [embed]});
 	},
 	name: 'starboardstats',
 	description: 'See statistics from starboard',

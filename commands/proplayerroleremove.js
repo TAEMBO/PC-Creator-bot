@@ -6,7 +6,8 @@ module.exports = {
 		if (args[1]) member = message.mentions.members?.first() || (await message.guild.members.fetch(args[1]).catch(() => undefined));
 		if (!member) {
 			await message.channel.send('Which member would you like to remove this role from? Reply with a mention or a user ID.').then(async x => {
-				await message.channel.awaitMessages(y => y.author.id === message.author.id, { time: 15000, errors: ['time', 'maxProcessed'], maxProcessed: 1 }).then(async z => {
+				const filter = m => m.author.id === message.author.id;
+				await message.channel.awaitMessages({ filter, time: 15000, errors: ['time', 'maxProcessed'], maxProcessed: 1 }).then(async z => {
 					member = z.first().mentions.members?.first() || (await message.guild.members.fetch(z.first().content).catch(() => undefined));
 				}).catch(async () => {
 					await message.channel.send('Command cancelled after 15 seconds of inactivity.');

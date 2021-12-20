@@ -20,21 +20,23 @@ module.exports = {
 					}
 				}
 			} else embed.setDescription('No memes have been added yet.');
-			return message.channel.send(embed);
+			return message.channel.send({embeds: [embed]});
 		} else {
 			if (args[1] === 'add') {
 				await message.channel.send('Creating your own meme...\nWhat is the name of your meme? (60s)');
 				const meme = { adder: `${message.author.tag} (${message.author.id})`, timestamp: Date.now() };
-
-				meme.name = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+				const filililil = x => x.author.id === message.author.id;
+				meme.name = (await message.channel.awaitMessages({ filililil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!meme.name) return failed();
 
 				await message.channel.send('Write a description for your meme. (120s)');
-				meme.description = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+				const fililili = x => x.author.id === message.author.id;
+				meme.description = (await message.channel.awaitMessages({ fililili, max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!meme.description) return failed();
 
 				await message.channel.send('Send a permanent URL to the meme image. (60s)');
-				const urlMessage = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first();
+				const fililil = x => x.author.id === message.author.id;
+				const urlMessage = (await message.channel.awaitMessages({ fililil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first();
 				if (urlMessage.content) {
 					if (!['jpg', 'png', 'webp', 'gif', 'jpeg'].some(x => urlMessage.content.endsWith(x))) {
 						return message.channel.send('Your log-headed ass didn\'t notice that that\'s not an image url. Your mishap has terminated the `meme add` process. Thanks.');
@@ -44,20 +46,23 @@ module.exports = {
 				if (!meme.url) return failed();
 
 				await message.channel.send('Is the creator of this meme a member of the PC Creator Discord server? Answer with y/n. (30s)');
-				const onDiscord = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 30000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+				const filili = x => x.author.id === message.author.id;
+				const onDiscord = (await message.channel.awaitMessages({ filili, max: 1, time: 30000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				if (!onDiscord) return failed();
 
 				meme.author = {};
 				if (onDiscord.toLowerCase() === 'y') {
 					meme.author.onDiscord = true;
 					await message.channel.send('What is the user ID of the creator of this meme? (60s)');
-					meme.author.name = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+					const filil = x => x.author.id === message.author.id;
+					meme.author.name = (await message.channel.awaitMessages({ filil, max: 1, time: 60000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 					if (meme.author.name.startsWith('<')) return failed();
 					if (meme.author.name === message.author.id) meme.adder = 'Self';
 				} else if (onDiscord.toLowerCase() === 'n') {
 					meme.author.onDiscord = false;
 					await message.channel.send('Supply a name for the creator of this meme, e.g. their username on the platform that you found this meme on. (90s)');
-					meme.author.name = (await message.channel.awaitMessages(x => x.author.id === message.author.id, { max: 1, time: 90000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+					const fili = x => x.author.id === message.author.id && ['y', 'n', 'cancel'].some(y => x.content.toLowerCase().startsWith(y));
+					meme.author.name = (await message.channel.awaitMessages({ fili, max: 1, time: 90000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 				} else {
 					return failed();
 				}
@@ -76,7 +81,7 @@ module.exports = {
 					.setTitle('A meme with the following info has been created:')
 					.setDescription('```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\nInform one of the following people so they can approve your meme:\n' + client.config.eval.whitelist.map(x => '<@' + x + '>').join('\n') + '\nWith the following information: ":clap: meme :clap: review ' + key + '"')
 					.setColor(color)
-				return message.channel.send(embed);
+				return message.channel.send({embeds: [embed]});
 			} else if (args[1] === 'review') {
 				if (!client.config.eval.whitelist.includes(message.author.id)) return message.channel.send('You\'re not allowed to do that.');
 				if (args[2]) {
@@ -129,7 +134,8 @@ module.exports = {
 						return;
 					}
 					await message.channel.send(':clap: Meme :clap: Review!\nDoes this look good to you? Respond with y/n. Type "cancel" to leave this meme in the queue. (120s)\n```js\n' + util.formatWithOptions({ depth: 1 }, '%O', meme) + '\n```\n' + (Math.random() < (1 / 3) ? '\`(TIP: You can add y/n to the end of the command to approve or decline a meme without seeing it.)\`\n' : '') + meme.url);
-					const approval = (await message.channel.awaitMessages(x => x.author.id === message.author.id && ['y', 'n', 'cancel'].some(y => x.content.toLowerCase().startsWith(y)), { max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
+					const fil = x => x.author.id === message.author.id && ['y', 'n', 'cancel'].some(y => x.content.toLowerCase().startsWith(y));
+					const approval = (await message.channel.awaitMessages({ fil, max: 1, time: 120000, errors: ['time'] }).catch(() => { }))?.first()?.content;
 					if (!approval) return failed();
 
 					if (approval.toLowerCase().startsWith('y'))
@@ -159,7 +165,7 @@ module.exports = {
 			} else {
 				embed.setAuthor('By ' + meme.author.name)
 			}
-			message.channel.send(embed);
+			message.channel.send({embeds: [embed]});
 		}
 	},
 	name: 'meme',

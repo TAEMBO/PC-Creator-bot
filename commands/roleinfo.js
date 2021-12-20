@@ -1,6 +1,6 @@
 module.exports = {
 	run: (client, message, args) => {
-		const role = message.guild.roles.cache.find(x => x.name.toLowerCase().startsWith(args.slice(1).join(' ')) || x.id === args[1] || x.id === message.mentions.roles?.first()?.id);
+		const role = message.guild.roles.cache.find(x => x.id === args[1] || x.id === message.mentions.roles?.first()?.id) || message.guild.roles.everyone;
 		if (!role) return message.channel.send('Role not found.');
 		const keyPermissions = ['ADMINISTRATOR', 'KICK_MEMBERS', 'BAN_MEMBERS', 'MANAGE_CHANNELS', 'MANAGE_GUILD', 'VIEW_AUDIT_LOG', 'MANAGE_MESSAGES', 'MENTION_EVERYONE', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES'];
 		const permissions = role.permissions.toArray();
@@ -14,7 +14,7 @@ module.exports = {
 				return x.split('_').map((y, i) => i === 0 ? y[0] + y.slice(1).toLowerCase() : y.toLowerCase()).join(' ')
 			}).join(', ') || 'None')
 			.setColor(role.color || '#fefefe')
-		message.channel.send(embed);
+		message.channel.send({embeds: [embed]});
 	},
 	name: 'roleinfo',
 	alias: ['role'],

@@ -30,8 +30,9 @@ module.exports = {
 				.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
 				.addField('Output', `\`\`\`\n${err}\n\`\`\``)
 				.setColor('ff0000');
-			message.channel.send(embed).then(errorEmbedMessage => {
-				const messagecollector = new client.messageCollector(message.channel, x => x.content === 'stack' && x.author.id === message.author.id, { max: 1, time: 60000 });
+			message.channel.send({embeds: [embed]}).then(errorEmbedMessage => {
+				const filter = x => x.content === 'stack' && x.author.id === message.author.id
+				const messagecollector = message.channel.createMessageCollector({ filter, max: 1, time: 60000 });
 				messagecollector.on('collect', collected => {
 					collected.channel.send(`\`\`\`\n${removeUsername(err.stack)}\n\`\`\``);
 				});
@@ -50,7 +51,7 @@ module.exports = {
 			.addField('Input', `\`\`\`js\n${code.slice(0, 1010)}\n\`\`\``)
 			.addField('Output', `\`\`\`${removeUsername(output).slice(0, 1016)}\n\`\`\``)
 			.setColor(3971825);
-		message.channel.send(embed);
+		message.channel.send({embeds: [embed]});
 	},
 	name: 'eval',
 	description: 'Run code for debugging purposes'

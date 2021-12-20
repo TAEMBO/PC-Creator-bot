@@ -14,7 +14,7 @@ module.exports = {
 				.setDescription(`A total of ${db.getTotalGames()} games have been played.`)
 				.setFooter(`Do "${client.prefix}ttt stats [username]" for player stats.`)
 				.setColor(client.embedColor)
-			await message.channel.send(embed);
+			await message.channel.send({embeds: [embed]});
 			await message.channel.send(`Recent Games\n\`\`\`\n${client.createTable(['Home', 'Guest', 'Time Ago'], db.getRecentGames(6).map(x => [...x.players, client.formatTime(Date.now() - x.startTime)]), { columnAlign: ['left', 'right', 'middle'], columnSeparator: ['-', '|'] }, client)}\n\`\`\`\nBest Players (>10 games played)\n\`\`\`\n${client.createTable(['Player', 'Win Percentage'], db.getBestPlayers(6).map(x => [x[0], db.calcWinPercentage(x[1])]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\`\nMost Active Players\n\`\`\`\n${client.createTable(['Player', 'Total Games'], db.getMostActivePlayers(6).map(x => [x[0], x[1].total.toString()]), { columnAlign: ['left', 'middle'], columnSeparator: [''] }, client)}\n\`\`\``);
 			return;
 		} else if (args[1] === 'stats') {
@@ -42,7 +42,7 @@ module.exports = {
 				.setTitle(`__Tic Tac Toe Statistics: ${username}__`)
 				.setDescription(`This user has played a total of ${playerStats.total} games.\n${playerStats.wins} of those were wins.\n${playerStats.losses} of those were losses.\n${playerStats.draws} of those were draws.\nThis user has a win percentage of \`${db.calcWinPercentage(playerStats)}\``)
 				.setColor(client.embedColor)
-			return message.channel.send(embed);
+			return message.channel.send({embeds: [embed]});
 		}
 		if (client.games.has(message.channel.id)) {
 			return message.channel.send(`There is already an ongoing game in this channel created by ${client.games.get(message.channel.id)}`);
@@ -58,13 +58,14 @@ module.exports = {
 		message.channel.send(request).then(a => {
 			client.games.set(message.channel.id, message.author.tag);
 			// wait until someone wants to be the opponent
-			message.channel.awaitMessages(x => {
+			const filter = x => {
 				if (challenge) {
 					return ['y', 'n'].some(y => x.content.toLowerCase().startsWith(y)) && x.author.id === message.mentions.members.first().user.id;
 				} else {
 					return x.content.toLowerCase().startsWith('me');
 				}
-			}, { max: 1, time: 60000, errors: ['time']}).then(async b => {
+			}
+			message.channel.awaitMessages({ filter, max: 1, time: 60000, errors: ['time']}).then(async b => {
 				if (challenge) {
 					if (b.first()?.content.toLowerCase().startsWith('n')) throw undefined;
 				}
@@ -152,7 +153,8 @@ module.exports = {
 					// result is what .then() returns. ask the player where they want to place their marker
 					const result = await message.channel.send(game.boardState() + `\n${game.participants[game.turn].toString()}, Where do you want to place your \`${game.markers[game.turn]}\`? (60s)`).then(async c => {
 						// returns what .then() returns. waits for the player to send coordinates. message must contain comma
-						return await message.channel.awaitMessages(d => d.author.id === game.participants[game.turn].user.id && d.content.includes(',') && d.content.indexOf(',') <= 1, { max: 1, time: 60000, errors: ['time'] }).then(async e => {
+						const filter2 = d => d.author.id === game.participants[game.turn].user.id && d.content.includes(',') && d.content.indexOf(',') <= 1;
+						return await message.channel.awaitMessages({ filter2, max: 1, time: 60000, errors: ['time'] }).then(async e => {
 							// ,end
 							if (e.first()?.content.startsWith(client.prefix + 'end')) {
 								await message.channel.send(`${game.participants[game.turn].toString()} (\`${game.markers[game.turn]}\`) wants to surrender!`);
@@ -162,7 +164,8 @@ module.exports = {
 							// ,draw
 							} else if (e.first()?.content.startsWith(client.prefix + 'draw')) {
 								await message.channel.send(`${game.participants[game.nextTurn].toString()} (\`${game.markers[game.nextTurn]}\`), do you want to end the game in a draw? Respond with y/n. (60s)`);
-								const opponentResponses = await message.channel.awaitMessages(x => x.author.id === game.participants[game.nextTurn].user.id && ['y', 'n'].some(y => x.content.toLowerCase().startsWith(y)), { max: 1, time: 60000, errors: ['time']}).catch(() => message.channel.send('Game does not end.'));
+								const fil = x => x.author.id === game.participants[game.nextTurn].user.id && ['y', 'n'].some(y => x.content.toLowerCase().startsWith(y));
+								const opponentResponses = await message.channel.awaitMessages({ fil, max: 1, time: 60000, errors: ['time']}).catch(() => message.channel.send('Game does not end.'));
 								
 								if (opponentResponses.first()) {
 									if (opponentResponses.first().content.toLowerCase().startsWith('y'))

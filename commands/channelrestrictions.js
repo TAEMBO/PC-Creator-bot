@@ -53,7 +53,7 @@ module.exports = {
 					.setDescription(client.categoryNames.join(', '))
 					.setFooter('Or any bot command name.')
 					.setColor(client.embedColor)
-				return message.channel.send(embed);
+				return message.channel.send({embeds: [embed]});
 			} else if (['how', 'why', 'what'].includes(args[1])) {
 				const embed = new client.embed()
 					.setTitle('Why can I not do bot commands?')
@@ -62,7 +62,7 @@ module.exports = {
 					.addField(':small_blue_diamond: This phenomenon is called _channel restrictions._', `<@&${client.config.mainServer.roles.moderator}>s restrict certain categories of commands from being used in different channels. Active restrictions are available for everyone to see with \`${client.prefix}channelrestrictions\`.`)
 					.addField(':small_blue_diamond: How come _you_ can use restricted commands?', `Anyone with the <@&${client.config.mainServer.roles.levels.three.id}> role can bypass channel restrictions.`)
 					.setColor(client.embedColor)
-				return message.channel.send(embed);
+				return message.channel.send({embeds: [embed]});
 		 	} else {
 
 				if (!message.mentions.channels.first()) return message.channel.send('You must mention a channel.');
@@ -146,7 +146,7 @@ module.exports = {
 						.setDescription(displayCr([channelId], client))
 						.setColor(client.embedColor)
 					if (embed.description.length === 0) embed.setDescription(`<#${channelId}> has no active channel restrictions.`);
-					return message.channel.send(embed);
+					return message.channel.send({embeds: [embed]});
 				}
 			}
 		} else {
@@ -155,7 +155,7 @@ module.exports = {
 				.setDescription(displayCr(Object.keys(client.channelRestrictions._content), client))
 				.setColor(client.embedColor)
 			if (embed.description.length === 0) embed.setDescription('None');
-			message.channel.send(embed);
+			message.channel.send({embeds: [embed]});
 		}
 	},
 	name: 'channelrestrictions',

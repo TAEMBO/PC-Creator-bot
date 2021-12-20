@@ -3,7 +3,8 @@ module.exports = {
 		if (!args[1]) {
 			let timedOut = false;
 			await message.channel.send('Which component\'s chart would you like to view? Respond with "CPU", "GPU" or "RAM" (20s)').then(async w => {
-				const x = await w.channel.awaitMessages(y => ['cpu', 'gpu', 'ram'].includes(y.content.toLowerCase()) && y.author.id === message.author.id, { time: 20000, max: 1, errors: ['time']}).catch(z => {
+				const filter = y => ['cpu', 'gpu', 'ram'].includes(y.content.toLowerCase()) && y.author.id === message.author.id;
+				const x = await w.channel.awaitMessages({ filter, time: 20000, max: 1, errors: ['time']}).catch(z => {
 					timedOut = true;
 					return message.channel.send('You failed to specify the component.');
 				});

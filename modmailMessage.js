@@ -1,5 +1,6 @@
 module.exports = async (message, modmailClient, client) => {
-	if (message.channel.type === 'dm') { // user has started new modmail
+	if (message.channel.type === "DM") { // user has started new modmail
+		console.log('beans')
 		if (message.author.bot) return;
 		if (client.dmForwardBlacklist._content.includes(message.author.id)) return; // if user is blocked, ignore
 		const modmailChannel = modmailClient.channels.cache.get(client.config.mainServer.channels.modmail);
@@ -21,7 +22,7 @@ module.exports = async (message, modmailClient, client) => {
 		let collectorEndTimestamp = Date.now() + 10 * 60 * 1000; // modmail will end in 10 minutes
 		if (unimportant) collectorEndTimestamp += 10 * 60 * 1000; // if unimportant, give mods 10 more minutes of time to reply
 		let timeWarning = false; // bot has not warned of low time remaining
-		const modReplyCollector = modmailChannel.createMessageCollector(() => true); // create message collector in modmail channel for moderators
+		const modReplyCollector = modmailChannel.createMessageCollector({}); // create message collector in modmail channel for moderators
 		
 		modReplyCollector.on('collect', async modReply => {
 			if (modReply.content.startsWith('et')) {
@@ -71,7 +72,7 @@ module.exports = async (message, modmailClient, client) => {
 				.setFooter('Starting Time')
 				.setTimestamp(modmailClient.threads.get(message.author.id).startTime)
 				.setColor(client.embedColor)
-			modmailChannel.send(embed);
+			modmailChannel.send({embeds: [embed]});
 			// remove from threads collection
 			if (!modmailClient.threads.get(message.author.id).messages.some(x => x.includes('] M ('))) {
 				message.channel.send(':x: The ModMail session ended automatically with no response from a moderator. Usually this means that there are no moderators online. Please wait patiently. The moderators will contact you when they come online.');
@@ -88,6 +89,6 @@ module.exports = async (message, modmailClient, client) => {
 			.addField(':small_blue_diamond: Don\'ts', 'Do not spam ModMail.\nDo not use ModMail unnecessarily.', true)
 			.addField(':small_blue_diamond: Small Things', 'If your concern is not urgent, start your ModMail message with "[Unimportant]". This way the moderators know that they don\'t need to rush.', true)
 			.setColor(client.embedColor)
-		message.channel.send(embed);
+		message.channel.send({embeds: [embed]});
 	}
 };

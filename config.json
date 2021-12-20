@@ -3,7 +3,7 @@
 		"pccb": true,
 		"modmail": true
 	},
-	"prefix": ",",
+	"prefix": "m",
 	"eval": {
 		"allowed": true,
 		"whitelist": [
