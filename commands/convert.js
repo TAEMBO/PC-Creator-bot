@@ -54,17 +54,17 @@ const quantities = {
 		},
 		{
 			name: 'US Dollar :flag_us:',
-			value: 0.86,
+			value: 0.89,
 			short: ['USD', '$'],
 		},
 		{
 			name: 'pound sterling :flag_gb:',
-			value: 1.17,
+			value: 1.18,
 			short: ['GBP', '£']
 		},
 		{
 			name: 'Turkish Lira :flag_tr:',
-			value: 0.097,
+			value: 0.072,
 			short: ['TRY', 'TL', '₺']
 		},
 		{
@@ -74,7 +74,7 @@ const quantities = {
 		},
 		{
 			name: 'Canadian Dollar :flag_ca:',
-			value: 0.68,
+			value: 0.69,
 			short: ['CAD']
 		},
 		{
@@ -94,22 +94,22 @@ const quantities = {
 		},
 		{
 			name: 'Indonesian Rupiah :flag_id:',
-			value: 0.00006,
+			value: 0.000062,
 			short: ['IDR', 'Rp']
 		},
 		{
 			name: 'Chinese Yuan Renminbi :flag_cn:',
-			value: 0.13,
+			value: 0.14,
 			short: ['CN¥', 'CNY', 'RMB', '元']
 		},
 		{
 			name: 'Swedish krona :flag_se:',
-			value: 0.099,
+			value: 0.097,
 			short: ['SEK', 'kr']
 		},
 		{
 			name: 'Norwegian krone :flag_no:',
-			value: 0.01,
+			value: 0.099,
 			short: ['NOK']
 		},
 		{
@@ -119,22 +119,22 @@ const quantities = {
 		},
 		{
 			name: 'Icelandic króna :flag_is:',
-			value: 0.0067,
+			value: 0.0068,
 			short: ['ISK']
 		},
 		{
 			name: 'Czech koruna :flag_cz:',
-			value: 0.039,
+			value: 0.04,
 			short: ['CZK', 'Kč']
 		},
 		{
 			name: 'Swiss franc :flag_sw:',
-			value: 0.93,
+			value: 0.96,
 			short: ['CFH', 'fr']
 		},
 		{
 			name: 'Ukrainian hryvnia :flag_ua:',
-			value: 0.032,
+			value: 0.033,
 			short: ['UAH', '₴', 'грн']
 		},
 		{
@@ -143,15 +143,20 @@ const quantities = {
 			short: ['INR', '₹']
 		},
 		{
+			name: 'United Arab Emirates dirham :flag_ae:',
+			value: 0.24,
+			short: ['AED', 'د.إ']
+		},
+		{
+			name: 'Sri Lankan Rupee :flag_lk:',
+			value: 0.0044,
+			short: ['LKR', 'රු', 'ரூ']
+		},
+		{
 			name: 'Among Us ඞ:red_square:',
 			value: NaN,
 			short: ['SUS']
 		},
-		{
-			name: 'United Arab Emirates dirham :flag_ae:',
-			value: 0.23,
-			short: ['AED', 'د.إ']
-		}
 	],
 	mass: [
 		{
