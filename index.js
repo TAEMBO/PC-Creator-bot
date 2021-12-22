@@ -21,7 +21,7 @@ client.on("ready", async () => {
 		await client.user.setActivity(`${client.prefix}help`, {
 			type: "LISTENING",
 		})
-	}, 2000);
+	}, 6000);
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
 });
 modmailClient.on("ready", async () => {
@@ -29,7 +29,7 @@ modmailClient.on("ready", async () => {
 		await modmailClient.user.setActivity("only moderation uses, do not message ModMail for any other reason.", {
 			type: "LISTENING",
 		});
-	}, 30000);
+	}, 60000);
 	console.log(`Modmail Bot active as ${modmailClient.user.tag}`);
 });
 // global properties
