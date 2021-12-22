@@ -46,5 +46,5 @@ module.exports = async (client) => {
     .setColor(client.embedColor)
     channel.send({embeds: [embed]})
 })
- channel.send(':warning: Bot restarted :warning:')
+ channel.send(`:warning: Bot restarted :warning:\n${client.config.eval.whitelist.map(x => `<@${x}>`).join(', ')}`)
 };
