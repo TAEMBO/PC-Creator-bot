@@ -21,7 +21,7 @@ client.on("ready", async () => {
 		await client.user.setActivity(`${client.prefix}help`, {
 			type: "LISTENING",
 		})
-	}, 6000);
+	}, 60000);
 	console.log(`Bot active as ${client.user.tag} with prefix ${client.prefix}`);
 });
 modmailClient.on("ready", async () => {
