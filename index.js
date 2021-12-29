@@ -553,6 +553,8 @@ client.on("messageDelete", async message => {
 
 // repeated messages
 client.repeatedMessages = {};
+client.repeatedMessagesContent = new database("./databases/repeatedMessagesContent.json", "array");
+client.repeatedMessagesContent.initLoad();
 
 // event loop, for punishments and daily msgs
 setInterval(() => {
@@ -713,7 +715,8 @@ client.on("messageCreate", async (message) => {
 		}
 
 		// repeated messages
-		if (message.content.length > 10 && ["https://", "http://", "@everyone", "@here", ".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
+		const topleveldomains = ['com', 'ru', 'org', 'net'].map(x => '.' + x);
+		if (message.content.length > 10 && ["https://", "http://", "@everyone", "@here", ...topleveldomains].some(x => message.content.toLowerCase().includes(x)) && message.guild.id === client.config.mainServer.id) {
 			const thisContent = message.content.slice(0, 32);
 			if (client.repeatedMessages[message.author.id]) {
 				// add this message to the list
@@ -727,7 +730,7 @@ client.on("messageCreate", async (message) => {
 				const threshold = 60000;
 
 				// message mustve been sent after (now - threshold), so purge those that were sent earlier
-				client.repeatedMessages[message.author.id] = client.repeatedMessages[message.author.id].filter((x, i) => i >= Date.now() - threshold)
+				client.repeatedMessages[message.author.id] = client.repeatedMessages[message.author.id].filter((x, i) => i >= Date.now() - threshold);
 
 				// if user has sent the same message 2 times in the last threshold milliseconds, change their nickname
 				if (client.repeatedMessages[message.author.id]?.find(x => {
@@ -757,8 +760,25 @@ client.on("messageCreate", async (message) => {
 					// timestamp of first spammed message
 					const spamOriginTimestamp = client.repeatedMessages[message.author.id].firstKey();
 
+					// store args in json
+					client.repeatedMessagesContent.addData(message.content.split(' ')).forceSave();
+					const index = client.repeatedMessagesContent._content.length - 1;
+
 					// send info about this user and their spamming
-					client.channels.cache.get(client.config.mainServer.channels.pccbtesting).send({content: `Anti-spam triggered, here are the details:\n\`https://\` ${message.content.toLowerCase().includes("https://") ? ":white_check_mark:" : ":x:"}\n\`http://\` ${message.content.toLowerCase().includes("http://") ? ":white_check_mark:" : ":x:"}\n\`@everyone/@here\` ${(message.content.toLowerCase().includes("@everyone") || message.content.toLowerCase().includes("@here")) ? ":white_check_mark:" : ":x:"}\n\`top-level domain\` ${[".com", ".ru", ".org", ".net"].some(x => message.content.toLowerCase().includes(x))}\nMessage Information:\n${client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join("\n")}\nThreshold: ${threshold}ms\nLRS Message Count: ${client.userLevels.getUser(message.author.id)}`});
+					client.channels.cache.get(client.config.mainServer.channels.pccbtesting).send([
+						'Anti-spam triggered, here are the details:',
+						'`https://` ' + (message.content.toLowerCase().includes("https://") ? ":white_check_mark:" : ":x:"),
+						'`http://` ' + (message.content.toLowerCase().includes("http://") ? ":white_check_mark:" : ":x:"),
+						'`@everyone/@here` ' + ((message.content.toLowerCase().includes("@everyone") || message.content.toLowerCase().includes("@here")) ? ":white_check_mark:" : ":x:"),
+						'`top-level domain` ' + (topleveldomains.some(x => message.content.toLowerCase().includes(x)) ? (
+							":white_check_mark: " + topleveldomains.filter(x => message.content.toLowerCase().includes(x)).map(x => '`' + x + '`').join(', ')
+						) : ":x:"),
+						'Message Information:',
+						client.repeatedMessages[message.author.id].map((x, i) => `: ${i - spamOriginTimestamp}ms, <#${x.ch}>`).map((x, i) => `\`${i + 1}\`` + x).join("\n"), /* do map twice cuz first time i is unix epoch and 2nd time its the index */
+						'Threshold: ' + threshold + 'ms',
+						'LRS Message Count: ' + client.userLevels.getUser(message.author.id),
+						'Index in JSON DB: ' + index
+					].join('\n'));
 
 					// and clear their list of long messages
 					delete client.repeatedMessages[message.author.id];
