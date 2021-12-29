@@ -15,7 +15,9 @@ try {
 }
 client.prefix = client.config.prefix;
 client.on("ready", async () => {
-	client.guilds.cache.forEach(async (e)=>{await e.members.fetch();});
+	client.guilds.cache.forEach(async (e) =>{
+		await e.members.fetch();
+	});
 	if (!client.config.disableLogs) MessageLogs(client);
 	setInterval(async () => {
 		await client.user.setActivity(`${client.prefix}help`, {
