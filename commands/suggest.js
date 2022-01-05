@@ -7,10 +7,10 @@ module.exports = {
         }
         await message.delete();
         if (!args[1]) {
-            return message.reply('You need to suggest something.').then(x => setTimeout(() => x.delete(), 6000));
+            return message.channel.send('You need to suggest something.').then(x => setTimeout(() => x.delete(), 6000));
         }
         if (args[1].length > 2048) {S
-            return message.reply('Your suggestion must be less than or equal to 2048 characters in length.').then(x => setTimeout(() => x.delete(), 6000));
+            return message.channel.send('Your suggestion must be less than or equal to 2048 characters in length.').then(x => setTimeout(() => x.delete(), 6000));
         }
         const embed = new MessageEmbed()
             .setAuthor(`${message.member.displayName} (${message.author.id})`, message.author.avatarURL({ format: 'png', size: 128 }))
