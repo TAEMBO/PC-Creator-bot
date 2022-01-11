@@ -794,7 +794,8 @@ client.on("messageCreate", async (message) => {
 
 		const BLACKLISTED_CHANNELS = [
 			"748122380383027210", /* bot-commands */
-			"572673322891083776" /* staff-logs */
+			"572673322891083776", /* staff-logs */
+			"870068988254756894" /* counting-channel */
 		];
 		// if message was not sent in a blacklisted channel and this is the right server, count towards user level
 		if (!BLACKLISTED_CHANNELS.includes(message.channel.id) && message.guild.id === client.config.mainServer.id) client.userLevels.incrementUser(message.author.id);
