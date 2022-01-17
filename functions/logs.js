@@ -29,7 +29,7 @@ module.exports = async (client) => {
     .addField('🔹 Account Creation Date', `${member.user.createdAt.getUTCFullYear()}-${('0' + (member.user.createdAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.user.createdAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.user.createdTimestamp, 1, { longNames: true })} ago`)
     .addField('🔹 Join Date', `${member.joinedAt.getUTCFullYear()}-${('0' + (member.joinedAt.getUTCMonth() + 1)).slice(-2)}-${('0' + member.joinedAt.getUTCDate()).slice(-2)} (YYYY-MM-DD), ${client.formatTime(Date.now() - member.joinedTimestamp, 1, { longNames: true })} ago`)
     .addField('🔹 ID and Mention', `ID: ${member.user.id}\nMention: <@${member.user.id}>`)
-    .addField('🔹 Roles', `${member.roles.cache.map(x => x).join(", ")}`)
+    .addField('🔹 Roles', `${member.roles.cache.map(x => x).join(" ")}`)
     .setColor(14495300)
     .setThumbnail(member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 2048}))
     channel.send({embeds: [embed]})
